@@ -128,7 +128,7 @@ const centerSymbolMat = new THREE.MeshStandardMaterial({
  
   color: colors[Math.floor(Math.random()*4)],
   alphaMap: symbolTextures[Math.floor(Math.random()*4)],
-  alphaTest: .05,
+  alphaTest: .001,
   transparent: true,
   // side: THREE.DoubleSide
 })
@@ -138,9 +138,48 @@ const centerSymbolMesh = new THREE.Mesh(centerSymbolGeom, centerSymbolMat)
 scene.add(centerSymbolMesh)
 centerSymbolMesh.position.set(0,1,0)
 
-// const placeSymbols = () => {
 
-// }
+// grid chips 
+
+const gridChipsGeom = new THREE.BufferGeometry()
+const chipCount = 16
+
+const positions = new Float32Array(chipCount * 3)
+
+
+
+for (let i = 0; i < chipCount; i++) {
+    const pos = i * 3
+  
+    const x = (Math.floor(Math.random() * 16) - 8) + .5
+    const y = .2
+    const z = (Math.floor(Math.random() * 16) - 8) + .5
+    positions[pos] = x
+    positions[pos + 1] = y
+    positions[pos+2] = z
+}
+
+gridChipsGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3)) 
+
+// particlesGeometry.setAttribute('color', new THREE.BufferAttribute(gridChipsColors,3)) 
+
+
+const gridChipsMat = new THREE.PointsMaterial({
+  size: .5,
+    sizeAttenuation: true 
+})
+gridChipsMat.color = new THREE.Color('red')
+// particlesMaterial.vertexColors = true
+gridChipsMat.transparent = true
+gridChipsMat.alphaMap = symbol1
+
+
+gridChipsMat.depthWrite = false
+ 
+
+const gridChips = new THREE.Points(gridChipsGeom, gridChipsMat)
+
+scene.add(gridChips)
 
 
 // Center Chip
