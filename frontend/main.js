@@ -55,15 +55,32 @@ scene.add(centerSquareMesh)
 
 //Robot Piece
 
-
+const robotColors = ['red', 'yellow', 'green', 'blue']
 const robotGeom = new THREE.CylinderGeometry(.01, .3, 1) 
-const robotMat = new THREE.MeshBasicMaterial({
-  color: 'red' 
-})
-const robotMesh = new THREE.Mesh(robotGeom, robotMat)
-scene.add(robotMesh)
 
-robotMesh.position.set(4.5, .5, .5)
+const robotPieces = []
+function placeRobots() {
+  for (const robotColor of robotColors) {
+    const robotMesh = new THREE.Mesh(robotGeom, new THREE.MeshBasicMaterial({ 
+      color: robotColor
+    }))
+    const x = (Math.floor(Math.random()*16) - 8) +.5
+    const y = .5
+    const z = (Math.floor(Math.random() * 16) - 8) + .5
+    console.log(robotMesh)
+   
+    robotMesh.position.set(x, y, z)
+    scene.add(robotMesh)
+    robotPieces.push(robotMesh)
+  }
+}
+placeRobots()
+
+
+
+
+
+
 
 // Wall 
 
@@ -81,7 +98,7 @@ wallPieceMesh2.rotation.y = Math.PI * .5
 
 const wallGroup = new THREE.Group()
 
-wallGroup.position.add(new THREE.Vector3(-5, .5, .5))
+wallGroup.position.set(-5, .5, .5)
 
 
 wallGroup.add(wallPieceMesh1)
@@ -147,19 +164,19 @@ const tick = () => {
   // raycaster
   raycaster.setFromCamera(mouse, camera)
  
-  if (robotMesh) {
-    const robotIntersects = 
-      raycaster.intersectObject(robotMesh)
+  // if (robotMesh) {
+  //   const robotIntersects = 
+  //     raycaster.intersectObject(robotMesh)
       
-    if (robotIntersects.length > 0) {
-      robotMesh.scale.set(1.5, 2, 1.5)
-      console.log(robotIntersects)
-    }
+  //   if (robotIntersects.length > 0) {
+  //     robotMesh.scale.set(1.5, 2, 1.5)
+  //     console.log(robotIntersects)
+  //   }
 
-    else {
-      robotMesh.scale.set(1,1,1)
-    }
-  }
+  //   else {
+  //     robotMesh.scale.set(1,1,1)
+  //   }
+  // }
 
   // For orbit controls damping
   controls.update()
