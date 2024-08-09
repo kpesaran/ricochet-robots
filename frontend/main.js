@@ -2,7 +2,7 @@
 import javascriptLogo from './javascript.svg'
 import viteLogo from '/vite.svg'
 import { setupCounter } from './counter.js'
-
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 import * as THREE from 'three'
 
@@ -18,10 +18,18 @@ const sizes = {
 
 // Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, .1, 100)
-camera.position.z = 3
+camera.position.y = 20
+// camera.position.y = Math.PI * .5
 
 scene.add(camera)
 
+// Controls
+const controls = new OrbitControls(camera, canvas)
+controls.enableDamping = true
+
+// Grid Helper 
+const gridhelper = new THREE.GridHelper(16,16)
+scene.add(gridhelper)
 // Renderer 
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas
