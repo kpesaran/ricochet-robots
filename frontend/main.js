@@ -27,6 +27,11 @@ scene.add(camera)
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 
+// Axes Helper 
+const axesHelper = new THREE.AxesHelper( 5 );
+scene.add( axesHelper );
+
+
 // Grid Helper 
 const gridhelper = new THREE.GridHelper(16,16)
 scene.add(gridhelper)
@@ -48,7 +53,7 @@ const centerSquareMat = new THREE.MeshStandardMaterial({
 const centerSquareMesh = new THREE.Mesh(centerSquareGeom, centerSquareMat)
 scene.add(centerSquareMesh)
 
-// Mock Pieces 
+//Robot Piece
 
 
 const robotGeom = new THREE.CylinderGeometry(.01, .3, 1) 
@@ -59,6 +64,36 @@ const robotMesh = new THREE.Mesh(robotGeom, robotMat)
 scene.add(robotMesh)
 
 robotMesh.position.set(4.5, .5, .5)
+
+// Wall 
+
+const wallPieceGeom = new THREE.BoxGeometry(1, 1, .1) 
+const wallPieceMat = new THREE.MeshStandardMaterial()
+
+const wallPieceMesh1 = new THREE.Mesh(wallPieceGeom, wallPieceMat)
+const wallPieceMesh2 = new THREE.Mesh(wallPieceGeom, wallPieceMat)
+
+wallPieceMesh1.position.z = -.5
+wallPieceMesh1.position.x = -.5
+
+wallPieceMesh2.rotation.y = Math.PI * .5
+
+
+const wallGroup = new THREE.Group()
+
+wallGroup.position.add(new THREE.Vector3(-5, .5, .5))
+
+
+wallGroup.add(wallPieceMesh1)
+wallGroup.add(wallPieceMesh2)
+scene.add(wallGroup)
+
+
+
+
+
+
+// Token
 
 
 
