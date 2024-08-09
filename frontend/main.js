@@ -117,22 +117,26 @@ scene.add(wallGroup)
 
 
 // Chips
+
+// Center Symbol Chip 
 const symbolTextures = [symbol1, symbol2, symbol3, symbol4]
+
+
 
 const centerSymbolGeom = new THREE.BoxGeometry(1, 1, 1)
 const centerSymbolMat = new THREE.MeshStandardMaterial({
  
-  color:'red',
-  alphaMap: symbol3,
-  alphaTest: .5,
+  color: colors[Math.floor(Math.random()*4)],
+  alphaMap: symbolTextures[Math.floor(Math.random()*4)],
+  alphaTest: .05,
   transparent: true,
-  side: THREE.DoubleSide
+  // side: THREE.DoubleSide
 })
 
 
 const centerSymbolMesh = new THREE.Mesh(centerSymbolGeom, centerSymbolMat)
 scene.add(centerSymbolMesh)
-centerSymbolMesh.position.set(0,2,0)
+centerSymbolMesh.position.set(0,1,0)
 
 // const placeSymbols = () => {
 
