@@ -8,6 +8,16 @@ import * as THREE from 'three'
 
 const canvas = document.querySelector('canvas.webgl')
 
+// symbol texture loader 
+const textureLoader = new THREE.TextureLoader()
+const symbol1 = textureLoader.load('/textures/symbols/2.png');
+
+
+const symbol2 = textureLoader.load('/textures/symbols/3.png')
+const symbol3 = textureLoader.load('/textures/symbols/9.png')
+const symbol4 = textureLoader.load('/textures/symbols/13.png')
+
+console.log(symbol1)
 // Scene 
 const scene = new THREE.Scene()
 
@@ -55,12 +65,12 @@ scene.add(centerSquareMesh)
 
 //Robot Piece
 
-const robotColors = ['red', 'yellow', 'green', 'blue']
+const colors = ['red', 'yellow', 'green', 'blue']
 const robotGeom = new THREE.CylinderGeometry(.01, .3, 1) 
 
 const robotPieces = []
 function placeRobots() {
-  for (const robotColor of robotColors) {
+  for (const robotColor of colors) {
     const robotMesh = new THREE.Mesh(robotGeom, new THREE.MeshBasicMaterial({ 
       color: robotColor
     }))
@@ -84,7 +94,7 @@ placeRobots()
 
 // Wall 
 
-const wallPieceGeom = new THREE.BoxGeometry(1, 1, .1) 
+const wallPieceGeom = new THREE.BoxGeometry(1, .5, .1) 
 const wallPieceMat = new THREE.MeshStandardMaterial()
 
 const wallPieceMesh1 = new THREE.Mesh(wallPieceGeom, wallPieceMat)
@@ -98,7 +108,7 @@ wallPieceMesh2.rotation.y = Math.PI * .5
 
 const wallGroup = new THREE.Group()
 
-wallGroup.position.set(-5, .5, .5)
+wallGroup.position.set(-5, .25, .5)
 
 
 wallGroup.add(wallPieceMesh1)
@@ -106,16 +116,37 @@ wallGroup.add(wallPieceMesh2)
 scene.add(wallGroup)
 
 
+// Chips
+const symbolTextures = [symbol1, symbol2, symbol3, symbol4]
+
+const centerSymbolGeom = new THREE.BoxGeometry(1, 1, 1)
+const centerSymbolMat = new THREE.MeshStandardMaterial({
+ 
+  color:'red',
+  alphaMap: symbol3,
+  alphaTest: .5,
+  transparent: true,
+  side: THREE.DoubleSide
+})
 
 
+const centerSymbolMesh = new THREE.Mesh(centerSymbolGeom, centerSymbolMat)
+scene.add(centerSymbolMesh)
+centerSymbolMesh.position.set(0,2,0)
+
+// const placeSymbols = () => {
+
+// }
 
 
-// Token
+// Center Chip
+
+
 
 
 
 // Lights 
-const ambientLight = new THREE.AmbientLight('#ffffff', .7)
+const ambientLight = new THREE.AmbientLight('#ffffff', 2)
 scene.add(ambientLight)
 // Render
 renderer.setSize(sizes.width, sizes.height)
