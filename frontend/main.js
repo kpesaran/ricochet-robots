@@ -4,7 +4,12 @@ import viteLogo from '/vite.svg'
 import { setupCounter } from './counter.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
+import Positions from './positions.js'
+import { placeWalls, onMouseDown,onMouseMove} from './utilites.js'
 import * as THREE from 'three'
+
+
+const boardPositions = new Positions
 
 const canvas = document.querySelector('canvas.webgl')
 
@@ -41,6 +46,24 @@ controls.enableDamping = true
 const axesHelper = new THREE.AxesHelper( 5 );
 scene.add( axesHelper );
 
+// Define Grid
+const gridSize = 16
+const cellSize = 1
+
+const planeGeometry = new THREE.PlaneGeometry(gridSize, gridSize); 
+
+// Create a material for the plane. We'll make it invisible but still interactable
+const planeMaterial = new THREE.MeshBasicMaterial({
+  color: 0x000000,
+  transparent: true,
+  opacity: .4
+});
+
+
+const gridPlane = new THREE.Mesh(planeGeometry, planeMaterial);
+gridPlane.rotation.x = -Math.PI / 2;
+gridPlane.position.y = 0;
+scene.add(gridPlane);
 
 // Grid Helper 
 const gridhelper = new THREE.GridHelper(16,16)
@@ -70,16 +93,17 @@ const robotGeom = new THREE.CylinderGeometry(.01, .3, 1)
 
 const robotPieces = []
 function placeRobots() {
-  for (const robotColor of colors) {
+  for (const robot of boardPositions.robots) {
     const robotMesh = new THREE.Mesh(robotGeom, new THREE.MeshBasicMaterial({ 
-      color: robotColor
+      color: robot.color
     }))
-    const x = (Math.floor(Math.random()*16) - 8) +.5
-    const y = .5
-    const z = (Math.floor(Math.random() * 16) - 8) + .5
+    robotMesh.position.set(robot.pos[0]-8.5, .5 , robot.pos[1]-8.5)
+    // const x = (Math.floor(Math.random()*16) - 8) +.5
+    // const y = .5
+    // const z = (Math.floor(Math.random() * 16) - 8) + .5
     console.log(robotMesh)
    
-    robotMesh.position.set(x, y, z)
+    
     scene.add(robotMesh)
     robotPieces.push(robotMesh)
   }
@@ -87,33 +111,33 @@ function placeRobots() {
 placeRobots()
 
 
-
+placeWalls(scene, boardPositions.walls)
 
 
 
 
 // Wall 
 
-const wallPieceGeom = new THREE.BoxGeometry(1, .5, .1) 
-const wallPieceMat = new THREE.MeshStandardMaterial()
+// const wallPieceGeom = new THREE.BoxGeometry(1, .5, .1) 
+// const wallPieceMat = new THREE.MeshStandardMaterial()
 
-const wallPieceMesh1 = new THREE.Mesh(wallPieceGeom, wallPieceMat)
-const wallPieceMesh2 = new THREE.Mesh(wallPieceGeom, wallPieceMat)
+// const wallPieceMesh1 = new THREE.Mesh(wallPieceGeom, wallPieceMat)
+// const wallPieceMesh2 = new THREE.Mesh(wallPieceGeom, wallPieceMat)
 
-wallPieceMesh1.position.z = -.5
-wallPieceMesh1.position.x = -.5
+// wallPieceMesh1.position.z = -.5
+// wallPieceMesh1.position.x = -.5
 
-wallPieceMesh2.rotation.y = Math.PI * .5
-
-
-const wallGroup = new THREE.Group()
-
-wallGroup.position.set(-5, .25, .5)
+// wallPieceMesh2.rotation.y = Math.PI * .5
 
 
-wallGroup.add(wallPieceMesh1)
-wallGroup.add(wallPieceMesh2)
-scene.add(wallGroup)
+// const wallGroup = new THREE.Group()
+
+// wallGroup.position.set(-5, .25, .5)
+
+
+// wallGroup.add(wallPieceMesh1)
+// wallGroup.add(wallPieceMesh2)
+// scene.add(wallGroup)
 
 
 // Chips
@@ -126,8 +150,8 @@ const symbolTextures = [symbol1, symbol2, symbol3, symbol4]
 const centerSymbolGeom = new THREE.BoxGeometry(1, 1, 1)
 const centerSymbolMat = new THREE.MeshStandardMaterial({
  
-  color: colors[Math.floor(Math.random()*4)],
-  alphaMap: symbolTextures[Math.floor(Math.random()*4)],
+  color: boardPositions.target.color,
+  alphaMap: symbolTextures[0],
   alphaTest: .001,
   transparent: true,
   // side: THREE.DoubleSide
@@ -151,9 +175,9 @@ const positions = new Float32Array(chipCount * 3)
 for (let i = 0; i < chipCount; i++) {
     const pos = i * 3
   
-    const x = (Math.floor(Math.random() * 16) - 8) + .5
+    const x = (boardPositions.target.pos[0]) - 8.5
     const y = .2
-    const z = (Math.floor(Math.random() * 16) - 8) + .5
+    const z = (boardPositions.target.pos[1]) - 8.5
     positions[pos] = x
     positions[pos + 1] = y
     positions[pos+2] = z
@@ -165,10 +189,10 @@ gridChipsGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3))
 
 
 const gridChipsMat = new THREE.PointsMaterial({
-  size: .5,
+  size: 1,
     sizeAttenuation: true 
 })
-gridChipsMat.color = new THREE.Color('red')
+gridChipsMat.color = new THREE.Color(boardPositions.target.color)
 // particlesMaterial.vertexColors = true
 gridChipsMat.transparent = true
 gridChipsMat.alphaMap = symbol1
@@ -210,6 +234,12 @@ window.addEventListener('mousedown', (event) => {
 })
 
 
+// Mouse Interactions
+const grid = [gridPlane]
+
+window.addEventListener('click', (event) => onMouseDown(event, robotPieces, gridPlane, raycaster, camera));
+window.addEventListener('mousemove', (event) => onMouseMove(event, gridPlane, raycaster, camera));
+// window.addEventListener('dblclick', (event) => onMouseUp(event)); 
 
 const raycaster = new THREE.Raycaster()
 console.log(raycaster)
@@ -230,6 +260,7 @@ window.addEventListener('resize', () => {
   renderer.setSize(sizes.width, sizes.height)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
+console.log(robotPieces)
 // render next frame
 const tick = () => {
   renderer.render(scene, camera)
@@ -238,22 +269,26 @@ const tick = () => {
   // raycaster
   raycaster.setFromCamera(mouse, camera)
  
-  // if (robotMesh) {
-  //   const robotIntersects = 
-  //     raycaster.intersectObject(robotMesh)
+  if (robotPieces.length > 0) {
+    const robotIntersects = 
+      raycaster.intersectObjects(robotPieces)
+    
       
-  //   if (robotIntersects.length > 0) {
-  //     robotMesh.scale.set(1.5, 2, 1.5)
-  //     console.log(robotIntersects)
-  //   }
+    if (robotIntersects.length > 0) {
+      robotPieces.forEach(piece => piece.scale.set(1, 1, 1));
+      const selectedPiece = robotIntersects[0].object
+      selectedPiece.scale.set(1.5, 2, 1.5)
+      console.log(robotIntersects)
+    }
 
-  //   else {
-  //     robotMesh.scale.set(1,1,1)
-  //   }
-  // }
+    else {
+      robotPieces.forEach(piece => piece.scale.set(1, 1, 1));
+    }
+  }
 
   // For orbit controls damping
   controls.update()
 }
 tick()
+
 
