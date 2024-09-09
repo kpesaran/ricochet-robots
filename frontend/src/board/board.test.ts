@@ -24,9 +24,9 @@ test(
     for (let row = 0; row < BOARD_SIZE; row++) {
       for (let col = 0; col < BOARD_SIZE; col++) {
         if (center_cells.includes(row) && center_cells.includes(col)) {
-          expect(board.cells[row][col].isObstructed).toBe(true);
+          expect(board.cells[row]?.[col]?.isObstructed).toBe(true);
         } else {
-          expect(board.cells[row][col].isObstructed).toBe(false);
+          expect(board.cells[row]?.[col]?.isObstructed).toBe(false);
         }
       }
     }

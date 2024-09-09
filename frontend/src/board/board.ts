@@ -1,24 +1,17 @@
 import { Cell } from './cell';
 import { Color } from './color';
 import { Robot } from './robot';
+import type { Position } from './position';
 
 /*
  * The height and width of the board
  */
 export const BOARD_SIZE = 16;
 
-/*
- * Describes the location of an object on the board
- */
-type Position = {
-  row: number,
-  column: number,
-};
-
 export class Board {
   cells: Cell[][] ;
-  robots: Robot[];
-  robotPositions: Position[];
+  robots: [Robot, Robot, Robot, Robot];
+  robotPositions: [Position, Position, Position, Position];
 
   constructor() {
     let cells = new Array(BOARD_SIZE)
