@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "esbuild.target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "isolatedModules": true,
     "outDir": "./dist",
     "rootDir": "./src",
