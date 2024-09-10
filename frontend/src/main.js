@@ -1,6 +1,6 @@
 
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
+import javascriptLogo from '/assets/javascript.svg'
+import viteLogo from '/assets/vite.svg'
 import { setupCounter } from './counter.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
