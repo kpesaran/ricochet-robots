@@ -54,5 +54,25 @@ test('Checking eligible moves in the North direction', () => {
     { row: 0, column: 15 })
 }
 )
+test('Checking eligible moves in the South direction', () => {
+  let board = new Board();
+  expect(board.checkDirections(6, 15, 'South')).toStrictEqual(
+    { row: 15, column: 15 })
+}
+)
+
+test('Checking eligible moves in the East direction', () => {
+  let board = new Board();
+  expect(board.checkDirections(6, 14, 'East')).toStrictEqual(
+    {row: 6, column: 15})
+}
+)
+test('Checking eligible moves in the West direction', () => {
+  let board = new Board();
+  expect(board.checkDirections(6, 15, 'West')).toStrictEqual(
+  {row: 6, column: 0})
+}
+)
+
 
 
