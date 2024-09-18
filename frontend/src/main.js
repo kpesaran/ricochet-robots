@@ -1,16 +1,19 @@
 
 import javascriptLogo from '/assets/javascript.svg'
 import viteLogo from '/assets/vite.svg'
-import { setupCounter } from './counter.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 import Positions from './positions.js'
-import { placeWalls, onMouseDown,onMouseMove} from './utilites.js'
+import { placeWalls, onMouseDown, onMouseMove } from './utilites.js'
+import { BoardBuilder } from './util/boardBuilder.ts'
 import * as THREE from 'three'
 
-
-const boardPositions = new Positions
-
+const boardBuilder = new BoardBuilder()
+console.log(boardBuilder)
+const boardPos = boardBuilder.build()
+console.log(boardPos)
+const boardPositions = new Positions()
+console.log(boardPositions)
 const canvas = document.querySelector('canvas.webgl')
 
 // symbol texture loader 

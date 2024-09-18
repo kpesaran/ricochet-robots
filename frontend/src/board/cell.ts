@@ -1,4 +1,4 @@
-import { Wall } from './wall';
+import { Direction } from './direction';
 
 /**
  * Encapsulates the state of a cell on the board including:
@@ -7,7 +7,7 @@ import { Wall } from './wall';
  *   - Is it the current target?
  */
 export class Cell {
-  public walls: Wall[];
+  public walls: Direction[];
   public isTarget: boolean;
   public isObstructed: boolean;
 
@@ -21,7 +21,7 @@ export class Cell {
    * Adds a wall to the cell if it isn't already present
    * @param wall - The wall to be added to the cell
    */
-  public addWall(wall: Wall) {
+  public addWall(wall: Direction) {
     if (!this.walls.includes(wall)) {
       this.walls.push(wall);
     }
@@ -31,7 +31,7 @@ export class Cell {
    * Removes a wall from the cell if it is present
    * @param wall - The wall to be removed from the cell
    */
-  public removeWall(wall: Wall) {
+  public removeWall(wall: Direction) {
     let i = this.walls.indexOf(wall);
     if (i > -1) {
       this.walls.splice(i, 1);

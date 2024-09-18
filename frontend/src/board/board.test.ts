@@ -46,3 +46,13 @@ test(
     ])
   },
 );
+
+
+test('Checking eligible moves in the North direction', () => {
+  let board = new Board();
+  expect(board.checkDirections(6, 15, 'North')).toStrictEqual(
+    { row: 0, column: 15 })
+}
+)
+
+

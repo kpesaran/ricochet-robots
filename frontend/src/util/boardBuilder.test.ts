@@ -3,7 +3,7 @@ import { BoardBuilder } from './boardBuilder'
 import { Board } from '../board/board';
 import { Color } from '../board/color';
 import { Robot } from '../board/robot';
-import { Wall } from '../board/wall';
+import { Direction } from '../board/direction';
 
 test(
   'Empty builder returns default board',
@@ -35,13 +35,13 @@ test(
   'Builder adds walls appropriately',
   () => {
     let board = new BoardBuilder()
-      .withWall(Wall.North,{ row: 1, column: 0 })
-      .withWall(Wall.East, { row: 1, column: 0 })
+      .withWall(Direction.North,{ row: 1, column: 0 })
+      .withWall(Direction.East, { row: 1, column: 0 })
       .build();
 
-    expect(board.cells[1]?.[0]?.walls).toStrictEqual([Wall.North, Wall.East]);
-    expect(board.cells[0]?.[0]?.walls).toStrictEqual([Wall.South]);
-    expect(board.cells[1]?.[1]?.walls).toStrictEqual([Wall.West]);
+    expect(board.cells[1]?.[0]?.walls).toStrictEqual([Direction.North, Direction.East]);
+    expect(board.cells[0]?.[0]?.walls).toStrictEqual([Direction.South]);
+    expect(board.cells[1]?.[1]?.walls).toStrictEqual([Direction.West]);
   }
 )
 
@@ -49,13 +49,13 @@ test(
   "Builder doesn't crash when border walls are added",
   () => {
     let board = new BoardBuilder()
-      .withWall(Wall.North, { row: 0, column: 0 })
-      .withWall(Wall.West, { row: 0, column: 0 })
-      .withWall(Wall.East, { row: 15, column: 15 })
-      .withWall(Wall.South, { row: 15, column: 15 })
+      .withWall(Direction.North, { row: 0, column: 0 })
+      .withWall(Direction.West, { row: 0, column: 0 })
+      .withWall(Direction.East, { row: 15, column: 15 })
+      .withWall(Direction.South, { row: 15, column: 15 })
       .build();
 
-    expect(board.cells[0]?.[0]?.walls).toStrictEqual([Wall.North, Wall.West]);
-    expect(board.cells[15]?.[15]?.walls).toStrictEqual([Wall.East, Wall.South]);
+    expect(board.cells[0]?.[0]?.walls).toStrictEqual([Direction.North, Direction.West]);
+    expect(board.cells[15]?.[15]?.walls).toStrictEqual([Direction.East, Direction.South]);
   }
 )
