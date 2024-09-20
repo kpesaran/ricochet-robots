@@ -67,12 +67,23 @@ test('Checking eligible moves in the East direction', () => {
     {row: 6, column: 15})
 }
 )
-test('Checking eligible moves in the West direction', () => {
+test('Checking eligible move in the West direction', () => {
   let board = new Board();
   expect(board.checkDirections(6, 15, 'West')).toStrictEqual(
   {row: 6, column: 0})
 }
 )
+
+test("Should return target cell in path", () => {
+  let board = new Board();
+  if (board.cells[15] && board.cells[15][15]) {
+    board.cells[15][15].isObstructed = true;
+  }
+  expect(board.checkDirections(9,15,"South")).toStrictEqual({row:15,column:15})
+  expect(board.checkDirections(15,9,"East")).toStrictEqual({row:15,column:15})
+})
+
+
 
 
 

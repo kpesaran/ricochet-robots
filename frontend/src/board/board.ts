@@ -75,10 +75,11 @@ export class Board {
     while (row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE) {
 
       // check if target, add position
-      // if (this.cells[row]?.[col]?.isTarget) {
-      //   this.eligibleMoves[direction].push({ row: row, column: col })
-      //   break
-      // }
+
+      if (this.cells[row]?.[col]?.isTarget) {
+        legalMove = {row: row, column: col}
+        break
+      }
 
       // let robotEncountered = false 
       // // robots 
