@@ -95,11 +95,23 @@ test("Checking eligible move position if another robot is in the path", () => {
   expect(board.checkDirections(0, 0, 'South')).toStrictEqual({ row: 10, column: 0 })
 })
 
-// test("Checking elgible move does not return an isObstructed cell position", () => {
-//   let board = new Board();
-//   expect(board.checkDirections(0,8,'South')).toStrictEqual({row: 6, column: 8})
-
-// } )
+test("Checking elgible move does not return an isObstructed cell position", () => {
+  let board = new Board();
+  // from South
+  expect(board.checkDirections(0, 8, 'South')).toStrictEqual({ row: 6, column: 8  })
+  expect(board.checkDirections(3, 7, 'South')).toStrictEqual({ row: 6, column: 7 })
+  // from North
+  expect(board.checkDirections(15, 7, 'North')).toStrictEqual({ row: 9, column: 7 })
+  expect(board.checkDirections(15, 8, 'North')).toStrictEqual({ row: 9, column: 8 })
+  // from East
+  expect(board.checkDirections(7, 0, 'East')).toStrictEqual({ row: 7, column: 6 })
+  expect(board.checkDirections(8, 4, 'East')).toStrictEqual({ row: 8, column: 6 })
+  // from West
+  expect(board.checkDirections(7, 10, 'West')).toStrictEqual({ row: 7, column: 9 })
+  expect(board.checkDirections(8, 13, 'West')).toStrictEqual({ row: 8, column: 9 })
+  
+  
+} )
 
 
 

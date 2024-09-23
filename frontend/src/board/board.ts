@@ -100,9 +100,9 @@ export class Board {
 
       
       // check if obstructed
-      // if (this.cells[row]?.[col]?.isObstructed) {
-      //   break
-      // }
+      if (this.cells[row]?.[col]?.isObstructed) {
+        break
+      }
       // check if wall exists
       // if (this.cells[row]?.[col]?.walls?.length! > 0) {
       //   this.cells[row]?.[col]?.walls.forEach(wall => {
