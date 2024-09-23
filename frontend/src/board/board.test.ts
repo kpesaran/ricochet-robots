@@ -76,11 +76,11 @@ test('Checking eligible move in the West direction', () => {
 
 test("Should return target cell in path", () => {
   let board = new Board();
-  if (board.cells[15] && board.cells[15][15]) {
-    board.cells[15][15].isObstructed = true;
+  if (board.cells[15] && board.cells[15][14]) {
+    board.cells[15][14].isTarget = true;
   }
-  expect(board.checkDirections(9,15,"South")).toStrictEqual({row:15,column:15})
-  expect(board.checkDirections(15,9,"East")).toStrictEqual({row:15,column:15})
+  expect(board.checkDirections(9,14,"South")).toStrictEqual({row:15,column:14})
+  expect(board.checkDirections(15,9,"East")).toStrictEqual({row:15,column:14})
 })
 
 test("Checking eligible move position if another robot is in the path", () => {
@@ -94,6 +94,12 @@ test("Checking eligible move position if another robot is in the path", () => {
   expect(board.checkDirections(0, 0, 'East')).toStrictEqual(null)
   expect(board.checkDirections(0, 0, 'South')).toStrictEqual({ row: 10, column: 0 })
 })
+
+// test("Checking elgible move does not return an isObstructed cell position", () => {
+//   let board = new Board();
+//   expect(board.checkDirections(0,8,'South')).toStrictEqual({row: 6, column: 8})
+
+// } )
 
 
 
