@@ -83,6 +83,18 @@ test("Should return target cell in path", () => {
   expect(board.checkDirections(15,9,"East")).toStrictEqual({row:15,column:15})
 })
 
+test("Checking eligible move position if another robot is in the path", () => {
+  let board = new Board();
+  board.robotPositions = [
+    { row: 0, column: 0},
+    { row: 0, column: 1},
+    { row: 11, column: 0},
+    { row: 0, column: 3},
+  ];
+  expect(board.checkDirections(0, 0, 'East')).toStrictEqual(null)
+  expect(board.checkDirections(0, 0, 'South')).toStrictEqual({ row: 10, column: 0 })
+})
+
 
 
 

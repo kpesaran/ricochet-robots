@@ -76,26 +76,29 @@ export class Board {
 
       // check if target, add position
 
+      let robotEncountered = false 
+      // robots 
+      this.robotPositions.forEach(robot => {
+        // designated robot does not check its own position
+        if (robot.row === startRow && robot.column === startCol) {
+          return 
+        }
+        if (row === robot.row && col === robot.column) {
+          robotEncountered = true 
+        }
+      })
+
+      if (robotEncountered) {
+        break; 
+      }
+
+
       if (this.cells[row]?.[col]?.isTarget) {
         legalMove = {row: row, column: col}
         break
       }
 
-      // let robotEncountered = false 
-      // // robots 
-      // this.robotPositions.forEach(robot => {
-      //   if (robot.row == startRow && robot.column == startCol) {
-      //     return 
-      //   }
-      //   if (row === robot.row && col === robot.column) {
-      //     robotEncountered = true 
-      //   }
-      // })
-
-      // if (robotEncountered) {
-      //   break; 
-      // }
-
+      
       // check if obstructed
       // if (this.cells[row]?.[col]?.isObstructed) {
       //   break
