@@ -1,6 +1,7 @@
 import { Board, BOARD_SIZE } from './board';
 
 import { expect, test } from 'vitest';
+import { Direction } from './direction';
 
 test(
   'Board is constructed with a 16x16 array of wall-less cells',
@@ -95,7 +96,7 @@ test("Checking eligible move position if another robot is in the path", () => {
   expect(board.checkDirections(0, 0, 'South')).toStrictEqual({ row: 10, column: 0 })
 })
 
-test("Checking elgible move does not return an isObstructed cell position", () => {
+test("Checking eligibleMove method does not return an isObstructed cell position", () => {
   let board = new Board();
   // from South
   expect(board.checkDirections(0, 8, 'South')).toStrictEqual({ row: 6, column: 8  })
@@ -109,10 +110,29 @@ test("Checking elgible move does not return an isObstructed cell position", () =
   // from West
   expect(board.checkDirections(7, 10, 'West')).toStrictEqual({ row: 7, column: 9 })
   expect(board.checkDirections(8, 13, 'West')).toStrictEqual({ row: 8, column: 9 })
-  
-  
 } )
 
+test("Checking eligibleMove method handles walls correctly", () => {
+  let board = new Board()
+  board.cells[1]?.[1]?.addWall(Direction.West)
+  board.cells[1]?.[1]?.addWall(Direction.South)
+  board.cells[1]?.[0]?.addWall(Direction.East)
+  board.cells[2]?.[1]?.addWall(Direction.North)
+  // if robot already at a cell with a wall
+  expect(board.checkDirections(2, 1, 'North')).toStrictEqual(null)
+  expect(board.checkDirections(1, 0, 'East')).toStrictEqual(null)
+  expect(board.checkDirections(1, 1, 'West')).toStrictEqual(null)
+  expect(board.checkDirections(1, 1, 'South')).toStrictEqual(null)
+  expect(board.checkDirections(1, 1, 'East')).toStrictEqual({row:1, column: 15})
+
+
+  expect(board.checkDirections(5, 1, 'North')).toStrictEqual({row:2, column: 1})
+  expect(board.checkDirections(1, 2, 'West')).toStrictEqual({ row: 1, column: 1 })
+  expect(board.checkDirections(1, 8, 'West')).toStrictEqual({ row: 1, column: 1 })
+  expect(board.checkDirections(0, 1, 'South')).toStrictEqual({ row: 1, column: 1 })
+ 
+
+})
 
 
 

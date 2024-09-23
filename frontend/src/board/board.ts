@@ -2,6 +2,7 @@ import { Cell } from './cell';
 import { Color } from './color';
 import { Robot } from './robot';
 import type { Position } from './position';
+import { Direction } from './direction';
 // import { Direction } from './direction'
 
 /*
@@ -103,20 +104,30 @@ export class Board {
       if (this.cells[row]?.[col]?.isObstructed) {
         break
       }
+
+      let wallPreventsEntrance = false 
       // check if wall exists
-      // if (this.cells[row]?.[col]?.walls?.length! > 0) {
-      //   this.cells[row]?.[col]?.walls.forEach(wall => {
-      //     // Add position if the cell does NOT contain a wall
-      //     if ((direction === 'North' && wall !== Wall.South) || 
-      //       (direction === 'South' && wall !== Wall.North) ||
-      //       (direction === 'East' && wall !== Wall.West) ||
-      //       (direction === 'West' && wall !== Wall.East)) {
-      //       this.eligibleMoves[direction].push({ row: row, column: col })
-      //     }
+      if (this.cells[row]?.[col]?.walls?.length! > 0) {
+  
+        this.cells[row]?.[col]?.walls.forEach(wall => {
+          // Wall prevents entrance into next cell
+          if ((direction === 'North' && wall === Direction.North) || 
+            (direction === 'South' && wall === Direction.South) ||
+            (direction === 'East' && wall === Direction.East) ||
+            (direction === 'West' && wall === Direction.West)) {
+            wallPreventsEntrance = true
+
+            if (!(row === startRow && col === startCol))
+            legalMove = {row: row, column:col}
+          } 
           
-      //   })
-      //   break
-      // }
+    
+        })
+      }
+      if (wallPreventsEntrance) {
+        
+        break
+      }
   
       
       if (!(row === startRow && col === startCol)) {
