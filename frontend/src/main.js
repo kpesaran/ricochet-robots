@@ -140,7 +140,7 @@ function placeRobots() {
 placeRobots()
 
 
-placeWalls(scene, boardPositions.walls)
+placeWalls(scene, board)
 
 
 

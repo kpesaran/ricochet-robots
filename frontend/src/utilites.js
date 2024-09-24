@@ -1,43 +1,78 @@
 import * as THREE from 'three'
+import { Direction } from './board/direction';
 
-function placeWalls(scene, positions) {
+function placeWalls(scene, board) {
     const wallPieceGeom = new THREE.BoxGeometry(1, 0.5, 0.1);
-    const wallPieceMat = new THREE.MeshStandardMaterial({ color: 'white'});
-
-    for (let i = 0; i < 16; i++) {
-        for (let j = 0; j < 16; j++) {
-            const wallDirections = positions[i][j];
+    const wallPieceMat = new THREE.MeshStandardMaterial({ color: 'white' });
+    console.log(board)
+    
+    for (let row = 0; row < board.cells.length; row++) {
+        
+        for (let col = 0; col < board.cells[row].length; col++) {
             
-            if (wallDirections !== null) {
-                const wallGroup = new THREE.Group();
-
-                wallDirections.forEach(direction => {
+            if (board.cells[row][col].walls.length > 0) {
+                console.log('hey')
+                for (const direction of board.cells[row][col].walls) {
+                    
                     const wallPieceMesh = new THREE.Mesh(wallPieceGeom, wallPieceMat);
-
-                    if (direction === "N") {
-                        wallPieceMesh.position.set(j - 7.5, 0.25, i - 8);
-                        wallPieceMesh.rotation.x = Math.PI ;
+                    if (direction) {
+                        if (direction === Direction.North) {
+                            wallPieceMesh.position.set(col - 7.5, 0.25, row - 8);
+                            wallPieceMesh.rotation.x = Math.PI ;
+                        }
+                        if (direction === Direction.South) {
+                            wallPieceMesh.position.set(col - 7.5, 0.25, row - 7);
+                            wallPieceMesh.rotation.x = Math.PI ;
+                        }
+                        if (direction === Direction.West) {
+                            wallPieceMesh.position.set(col - 8, 0.25, row - 7.5);
+                            wallPieceMesh.rotation.y = Math.PI * 0.5;
+                        }
+                        if (direction === Direction.East) {
+                            wallPieceMesh.position.set(col - 7, 0.25, row - 7.5);
+                            wallPieceMesh.rotation.y = Math.PI * 0.5;
+                        }
+                        scene.add(wallPieceMesh)
                     }
-                    if (direction === "S") {
-                        wallPieceMesh.position.set(j - 7.5, 0.25, i - 7);
-                        wallPieceMesh.rotation.x = Math.PI ;
-                    }
-                    if (direction === "W") {
-                        wallPieceMesh.position.set(j - 8, 0.25, i - 7.5);
-                        wallPieceMesh.rotation.y = Math.PI * 0.5;
-                    }
-                    if (direction === "E") {
-                        wallPieceMesh.position.set(j - 7, 0.25, i - 7.5);
-                        wallPieceMesh.rotation.y = Math.PI * 0.5;
-                    }
-
-                    wallGroup.add(wallPieceMesh);
-                });
-
-                scene.add(wallGroup);
+                }
             }
         }
     }
+
+    // for (let i = 0; i < 16; i++) {
+    //     for (let j = 0; j < 16; j++) {
+    //         const wallDirections = positions[i][j];
+            
+    //         if (wallDirections !== null) {
+    //             const wallGroup = new THREE.Group();
+
+    //             wallDirections.forEach(direction => {
+    //                 const wallPieceMesh = new THREE.Mesh(wallPieceGeom, wallPieceMat);
+
+    //                 if (direction === "N") {
+    //                     wallPieceMesh.position.set(j - 7.5, 0.25, i - 8);
+    //                     wallPieceMesh.rotation.x = Math.PI ;
+    //                 }
+    //                 if (direction === "S") {
+    //                     wallPieceMesh.position.set(j - 7.5, 0.25, i - 7);
+    //                     wallPieceMesh.rotation.x = Math.PI ;
+    //                 }
+    //                 if (direction === "W") {
+    //                     wallPieceMesh.position.set(j - 8, 0.25, i - 7.5);
+    //                     wallPieceMesh.rotation.y = Math.PI * 0.5;
+    //                 }
+    //                 if (direction === "E") {
+    //                     wallPieceMesh.position.set(j - 7, 0.25, i - 7.5);
+    //                     wallPieceMesh.rotation.y = Math.PI * 0.5;
+    //                 }
+
+    //                 wallGroup.add(wallPieceMesh);
+    //             });
+
+    //             scene.add(wallGroup);
+    //         }
+    //     }
+    // }
 }
 
 // Selecting & Moving Robots

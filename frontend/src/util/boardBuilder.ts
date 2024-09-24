@@ -10,7 +10,8 @@ export class BoardBuilder {
 
   constructor() {
     this.robots = []
-    this.walls = []
+    // come back and check north with row 0
+    this.walls = [[Direction.North, {row:1,column:7}],[Direction.East, {row:0,column:7}],[Direction.North, {row:13,column:9}],[Direction.West, {row:13,column:9}]]
   }
 
   public withRobot(newRobot: Robot, newPosition: Position): BoardBuilder {
