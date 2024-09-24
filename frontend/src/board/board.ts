@@ -105,17 +105,17 @@ export class Board {
         break
       }
 
-      let wallPreventsEntrance = false 
+      let wallPreventsExit = false 
       // check if wall exists
       if (this.cells[row]?.[col]?.walls?.length! > 0) {
   
         this.cells[row]?.[col]?.walls.forEach(wall => {
-          // Wall prevents entrance into next cell
+          // Wall prevents exit into next cell
           if ((direction === 'North' && wall === Direction.North) || 
             (direction === 'South' && wall === Direction.South) ||
             (direction === 'East' && wall === Direction.East) ||
             (direction === 'West' && wall === Direction.West)) {
-            wallPreventsEntrance = true
+            wallPreventsExit = true
 
             if (!(row === startRow && col === startCol))
             legalMove = {row: row, column:col}
@@ -124,7 +124,7 @@ export class Board {
     
         })
       }
-      if (wallPreventsEntrance) {
+      if (wallPreventsExit) {
         
         break
       }

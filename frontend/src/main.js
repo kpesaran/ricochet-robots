@@ -6,12 +6,12 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import Positions from './positions.js'
 import { placeWalls, onMouseDown, onMouseMove } from './utilites.js'
 import { BoardBuilder } from './util/boardBuilder.ts'
+import { Color } from './board/color.ts'
+
 import * as THREE from 'three'
 
-const boardBuilder = new BoardBuilder()
-console.log(boardBuilder)
-const boardPos = boardBuilder.build()
-console.log(boardPos)
+
+
 const boardPositions = new Positions()
 console.log(boardPositions)
 const canvas = document.querySelector('canvas.webgl')
@@ -89,6 +89,12 @@ const centerSquareMat = new THREE.MeshStandardMaterial({
 const centerSquareMesh = new THREE.Mesh(centerSquareGeom, centerSquareMat)
 scene.add(centerSquareMesh)
 
+// Add board class
+const boardBuilder = new BoardBuilder()
+const board = boardBuilder.build()
+
+
+
 //Robot Piece
 
 const colors = ['red', 'yellow', 'green', 'blue']
@@ -96,11 +102,31 @@ const robotGeom = new THREE.CylinderGeometry(.01, .3, 1)
 
 const robotPieces = []
 function placeRobots() {
-  for (const robot of boardPositions.robots) {
+  for (let i = 0; i < board.robots.length; i++) {
+
+    let robotColor = null
+   
+
+    switch (board.robots[i].color) {
+      case Color.Red:
+        robotColor = 'red'
+        break;
+      case Color.Blue:
+        robotColor = 'blue'
+        break;
+      case Color.Green:
+        robotColor = 'green'
+        break;
+      case Color.Yellow:
+        robotColor = 'yellow'
+        break;
+      }
+
     const robotMesh = new THREE.Mesh(robotGeom, new THREE.MeshBasicMaterial({ 
-      color: robot.color
+      color: robotColor
     }))
-    robotMesh.position.set(robot.pos[0]-8.5, .5 , robot.pos[1]-8.5)
+    
+    robotMesh.position.set(board.robotPositions[i].column-7.5, .5 , board.robotPositions[i].row-7.5)
     // const x = (Math.floor(Math.random()*16) - 8) +.5
     // const y = .5
     // const z = (Math.floor(Math.random() * 16) - 8) + .5
