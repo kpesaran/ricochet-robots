@@ -15,6 +15,7 @@ export class Board {
   robots: [Robot, Robot, Robot, Robot];
   robotPositions: [Position, Position, Position, Position];
 
+
   constructor() {
     let cells = new Array(BOARD_SIZE)
 
@@ -47,8 +48,27 @@ export class Board {
       { row: 0, column: 2},
       { row: 0, column: 3},
     ];
+  
+
 
   }
+
+  findTargetCell() {
+    for (let row = 0; row < this.cells.length; row++) {
+      if (this.cells[row]) {
+        const len = this.cells[row]?.length || 0
+        for (let col = 0; col < len; col++) {
+          if (this.cells[row]?.[col]?.isTarget) {
+            return { row: row, column: col };
+          }
+        }
+      }
+    }
+    return null
+  }
+  
+  
+
 
   findMoves() {
     return {

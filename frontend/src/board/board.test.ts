@@ -134,6 +134,15 @@ test("Checking eligibleMove method handles walls correctly", () => {
 
 })
 
+test('Checking findTargetCell method returns target cell position', () => {
+  let board = new Board();
+  if (board.cells[15] && board.cells[15][14]) {
+    board.cells[15][14].isTarget = true;
+  }
+  expect(board.findTargetCell()).toStrictEqual({row:15,column: 14})
+
+})
+
 
 
 
