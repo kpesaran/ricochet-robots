@@ -34,6 +34,8 @@ export class Board {
     cells[8][7].isObstructed = true;
     cells[8][8].isObstructed = true;
 
+ 
+
     this.cells = cells;
     this.robots = [
       new Robot(Color.Red),
@@ -64,7 +66,6 @@ export class Board {
         }
       }
     }
-    return null
   }
   
   

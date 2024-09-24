@@ -194,30 +194,31 @@ centerSymbolMesh.position.set(0,1,0)
 
 // grid chips 
 
-const gridChipsGeom = new THREE.BufferGeometry()
-const chipCount = 16
-
-const positions = new Float32Array(chipCount * 3)
 
 
 
-for (let i = 0; i < chipCount; i++) {
-    const pos = i * 3
-  
-    const x = (boardPositions.target.pos[0]) - 8.5
+
+function generateTargetChip(position) {
+  console.log(position)
+  if (position) {
+    const gridChipsGeom = new THREE.BufferGeometry()
+    
+
+    const positions = new Float32Array(3)
+    const x = (position.row) - 8.5
     const y = .2
-    const z = (boardPositions.target.pos[1]) - 8.5
-    positions[pos] = x
-    positions[pos + 1] = y
-    positions[pos+2] = z
-}
+    const z = (position.column) - 8.5
+    positions[0] = x
+    positions[1] = y
+    positions[2] = z
 
-gridChipsGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3)) 
+
+  gridChipsGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3)) 
 
 // particlesGeometry.setAttribute('color', new THREE.BufferAttribute(gridChipsColors,3)) 
 
 
-const gridChipsMat = new THREE.PointsMaterial({
+  const gridChipsMat = new THREE.PointsMaterial({
   size: 1,
     sizeAttenuation: true 
 })
@@ -234,6 +235,13 @@ const gridChips = new THREE.Points(gridChipsGeom, gridChipsMat)
 
 scene.add(gridChips)
 
+}
+
+}
+  
+
+board.cells[15][15].isTarget = true 
+generateTargetChip(board.findTargetCell())
 
 // Center Chip
 
