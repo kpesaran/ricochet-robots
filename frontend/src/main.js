@@ -97,11 +97,8 @@ const board = boardBuilder.build()
 
 //Robot Piece
 
-const colors = ['red', 'yellow', 'green', 'blue']
-const robotGeom = new THREE.CylinderGeometry(.01, .3, 1) 
-
-const robotPieces = []
-function placeRobots() {
+function placeRobots(board) {
+  const robotGeom = new THREE.CylinderGeometry(.01, .3, 1) 
   for (let i = 0; i < board.robots.length; i++) {
 
     let robotColor = null

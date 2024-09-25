@@ -7,6 +7,7 @@ import type { Position } from '../board/position';
 export class BoardBuilder {
   robots: [Robot, Position][];
   walls: [Direction, Position][];
+    static build: any;
 
   constructor() {
     this.robots = []
