@@ -97,6 +97,10 @@ const board = boardBuilder.build()
 
 //Robot Piece
 
+const colors = ['red', 'yellow', 'green', 'blue']
+
+
+const robotPieces = []
 function placeRobots(board) {
   const robotGeom = new THREE.CylinderGeometry(.01, .3, 1) 
   for (let i = 0; i < board.robots.length; i++) {
@@ -134,7 +138,7 @@ function placeRobots(board) {
     robotPieces.push(robotMesh)
   }
 }
-placeRobots()
+placeRobots(board)
 
 
 placeWalls(scene, board)
