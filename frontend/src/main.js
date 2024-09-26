@@ -55,11 +55,10 @@ const cellSize = 1
 
 const planeGeometry = new THREE.PlaneGeometry(gridSize, gridSize); 
 
-// Create a material for the plane. We'll make it invisible but still interactable
 const planeMaterial = new THREE.MeshBasicMaterial({
   color: 0x000000,
   transparent: true,
-  opacity: .4
+  opacity: .10
 });
 
 

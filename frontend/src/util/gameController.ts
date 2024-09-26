@@ -1,6 +1,6 @@
 import { Board } from "../board/board"
 import { BoardBuilder } from "./boardBuilder"
-import { Robot } from "../board/robot"
+
 
 
 export class GameController {
@@ -9,11 +9,26 @@ export class GameController {
         this.board = new BoardBuilder.build()
     }
 
+    // Methods to update game state based on user choices
 
+    slideNorth() {
 
-    // updateRobotsUI() {
-        
-    // }
+    }
+
+    slideSouth() {
+
+    }
+
+    slideEast() {
+
+    }
+
+    slideWest() {
+
+    }
+
+   
+    // Move a non-target Robot
 
     // moveRobotNorth() {
     //     const currentPosition = this.board.robotPositions[0]
