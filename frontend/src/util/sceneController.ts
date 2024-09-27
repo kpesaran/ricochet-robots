@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Position } from '../board/position';
-
+import { Board } from '../board/board';
+import { Color } from 'three';
 
 interface Size {
     width: number;
@@ -40,17 +41,10 @@ export class SceneController {
 
         // Renderer
         this.renderer = new THREE.WebGLRenderer()
-        if (this.canvas) {
-            this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true });
-            this.renderer.setSize(this.sizes.width, this.sizes.height);
-            this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        } else {
-            console.error('Canvas element not found');
-            // Handle the case where the canvas is not available
-        }
-     
         
-
+        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas!, alpha: true });
+        this.renderer.setSize(this.sizes.width, this.sizes.height);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         // Orbital Controls
         this.controls = new OrbitControls(this.camera, this.canvas);
         this.controls.enableDamping = true;
@@ -70,13 +64,17 @@ export class SceneController {
         this.setUpAxesHelpers()
         
         this.setUpEventListeners()
+        
+        this.tick = this.tick.bind(this);
         this.tick()
     }
 
     setUpBoard() {
         // placeWalls()
         // placeBoard()
-
+        this.generateTargetChip({ row: 12, column: 14 })
+        // this.placeCellMeshes()
+        
         // Grid Plane
 
         const planeGeometry = new THREE.PlaneGeometry(this.gridSize, this.gridSize); 
@@ -105,11 +103,6 @@ export class SceneController {
         this.scene.add(centerSquareMesh)
 
         // Center - Chip
-      
-
-
-
-
         const centerSymbolGeom = new THREE.BoxGeometry(1, 1, 1)
         const centerSymbolMat = new THREE.MeshStandardMaterial({
             color: 'red',
@@ -121,21 +114,25 @@ export class SceneController {
         this.scene.add(centerSymbolMesh)
         centerSymbolMesh.position.set(0,1,0)
     }
+
+
     setUpAxesHelpers() {
         // AxesHelper 
         const axesHelper = new THREE.AxesHelper(5);
         this.scene.add(axesHelper);
-
         // GridHelper
         const gridHelper = new THREE.GridHelper(16, 16);
         this.scene.add(gridHelper);
     }
+
+
+
+
+
     generateTargetChip(position: Position) {
         console.log(position)
         if (position) {
           const gridChipsGeom = new THREE.BufferGeometry()
-          
-      
           const positions = new Float32Array(3)
           const x = (position.row) - 8.5
           const y = .2
@@ -217,10 +214,11 @@ export class SceneController {
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     }
 
-    tick() {
+    tick = () => {
+        
         this.renderer.render(this.scene, this.camera)
         window.requestAnimationFrame(this.tick)
-      
+        // this.controls.update()
         // raycaster
         // raycaster.setFromCamera(mouse, camera)
        
@@ -242,7 +240,7 @@ export class SceneController {
         // }
       
         // For orbit controls damping
-        this.controls.update()
+        
       }
       
 
