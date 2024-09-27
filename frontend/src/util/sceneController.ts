@@ -20,8 +20,9 @@ export class SceneController {
     // need to change
     symbol1: THREE.Texture
     robotPieces: []
-    
+    cellArea: number
     gridSize: number
+    cells: THREE.Mesh[]
 
    
 
@@ -57,6 +58,10 @@ export class SceneController {
 
         this.robotPieces = []
         this.gridSize = 16
+        this.cellArea = 1
+
+        // Cells 
+        this.cells = []
 
         // Set Up The Scene
         this.setUpBoard()
@@ -73,7 +78,7 @@ export class SceneController {
         // placeWalls()
         // placeBoard()
         this.generateTargetChip({ row: 12, column: 14 })
-        // this.placeCellMeshes()
+        this.placeCellMeshes()
         
         // Grid Plane
 
@@ -121,7 +126,7 @@ export class SceneController {
         const axesHelper = new THREE.AxesHelper(5);
         this.scene.add(axesHelper);
         // GridHelper
-        const gridHelper = new THREE.GridHelper(16, 16);
+        const gridHelper = new THREE.GridHelper(16, 16,'red','red');
         this.scene.add(gridHelper);
     }
 
@@ -157,10 +162,46 @@ export class SceneController {
       }
     setUpLights() {
         const ambientLight = new THREE.AmbientLight('#ffffff', 2);
+        const directionalLight = new THREE.DirectionalLight('#ffffff',3 )
         this.scene.add(ambientLight);
+        directionalLight.position.y = 10
+        this.scene.add(directionalLight)
+        
     }
     
+    placeCellMeshes() {
+        const cellGeometry = new THREE.BoxGeometry(.8, .1,.8); 
 
+        const cellMaterial = new THREE.MeshPhysicalMaterial({
+            color: new THREE.Color("rgb(240, 240, 240)"),
+            roughness: .3,
+            metalness: 1
+            
+         
+        });
+
+     
+        for (let i = 0; i < this.gridSize; i++){
+            for (let j = 0; j < this.gridSize; j++) {
+               
+                
+                const cellMesh = new THREE.Mesh(cellGeometry, cellMaterial);
+                cellMesh.position.x = i + -7.5 
+                cellMesh.position.z = j + -7.5   
+                cellMesh.position.y = -.1
+                this.cells.push(cellMesh)
+                this.scene.add(cellMesh)
+            
+            }
+        }
+
+        
+
+
+
+     
+
+    }
     // placeRobots(board: Board) {
         
     //     const robotGeom = new THREE.CylinderGeometry(.01, .3, 1)
@@ -213,6 +254,8 @@ export class SceneController {
         this.renderer.setSize(this.sizes.width, this.sizes.height)
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     }
+
+
 
     tick = () => {
         
