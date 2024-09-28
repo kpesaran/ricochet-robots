@@ -6,9 +6,10 @@ import { BoardBuilder } from "./boardBuilder"
 export class GameController {
     board: Board
     constructor() {
-        this.board = new BoardBuilder.build()
+        const newBoard = new BoardBuilder()
+        this.board = newBoard.build()
     }
-    
+
 
 
     // Methods to update game state based on user choices

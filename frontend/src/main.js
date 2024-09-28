@@ -13,12 +13,17 @@ import { BoardBuilder } from './util/boardBuilder.ts'
 import { Color } from './board/color.ts'
 import { SceneController } from '../src/util/sceneController.ts'
 import * as THREE from 'three'
-
+import { Board } from './board/board.ts'
+import { GameController } from '../src/util/gameController.ts'
 
 const canvas = document.querySelector('canvas.webgl')
 
+const gameController = new GameController()
 
-const sceneController = new SceneController('canvas.webgl')
+const sceneController = new SceneController('canvas.webgl', gameController.board)
+
+
+
 
 
 
