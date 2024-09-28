@@ -11,10 +11,10 @@ import {
 } from './utilites.js'
 import { BoardBuilder } from './util/boardBuilder.ts'
 import { Color } from './board/color.ts'
-import { SceneController } from '../src/util/sceneController.ts'
+import { SceneController } from './scene/sceneController.ts'
 import * as THREE from 'three'
 import { Board } from './board/board.ts'
-import { GameController } from '../src/util/gameController.ts'
+import { GameController } from './game/gameController.ts'
 
 const canvas = document.querySelector('canvas.webgl')
 

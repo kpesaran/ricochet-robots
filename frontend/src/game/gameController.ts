@@ -1,5 +1,5 @@
 import { Board } from "../board/board"
-import { BoardBuilder } from "./boardBuilder"
+import { BoardBuilder } from "../util/boardBuilder"
 
 
 
