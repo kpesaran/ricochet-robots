@@ -52,14 +52,14 @@ export class Board {
 
   findMoves() {
     return {
-      north: this.checkDirections(this.robotPositions[0].row, this.robotPositions[0].column, 'North'),
-    south: this.checkDirections(this.robotPositions[0].row, this.robotPositions[0].column, 'South'),
-    east: this.checkDirections(this.robotPositions[0].row, this.robotPositions[0].column, 'East'),
-    west: this.checkDirections(this.robotPositions[0].row, this.robotPositions[0].column, 'West')
+      north: this.checkDirections(this.robotPositions[0], Direction.North),
+      south: this.checkDirections(this.robotPositions[0], Direction.South),
+      east: this.checkDirections(this.robotPositions[0], Direction.East),
+      west: this.checkDirections(this.robotPositions[0], Direction.West)
     }
   }
 
-  checkDirections(startRow:number, startCol: number, direction: 'North' | 'South' | 'East' | 'West' ) : null | Position {
+  checkDirections(startPos: Position, direction: Direction) : null | Position {
     // Gets the position of the target robot
     // Checks the north, south, east, and west path
     // Path ends if
@@ -68,10 +68,8 @@ export class Board {
     // - or the cell is the target cell
 
     let legalMove: Position | null = null 
-    
-    
-    let row = startRow
-    let col = startCol
+    let row = startPos.row
+    let col = startPos.column
  
     while (row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE) {
 
@@ -81,7 +79,7 @@ export class Board {
       // robots 
       this.robotPositions.forEach(robot => {
         // designated robot does not check its own position
-        if (robot.row === startRow && robot.column === startCol) {
+        if (robot.row === startPos.row && robot.column === startPos.column) {
           return 
         }
         if (row === robot.row && col === robot.column) {
@@ -111,13 +109,13 @@ export class Board {
   
         this.cells[row]?.[col]?.walls.forEach(wall => {
           // Wall prevents entrance into next cell
-          if ((direction === 'North' && wall === Direction.North) || 
-            (direction === 'South' && wall === Direction.South) ||
-            (direction === 'East' && wall === Direction.East) ||
-            (direction === 'West' && wall === Direction.West)) {
+          if ((direction === Direction.North && wall === Direction.North) || 
+            (direction === Direction.South && wall === Direction.South) ||
+            (direction === Direction.East && wall === Direction.East) ||
+            (direction === Direction.West && wall === Direction.West)) {
             wallPreventsEntrance = true
 
-            if (!(row === startRow && col === startCol))
+            if (!(row === startPos.row && col === startPos.column))
             legalMove = {row: row, column:col}
           } 
           
@@ -130,17 +128,17 @@ export class Board {
       }
   
       
-      if (!(row === startRow && col === startCol)) {
+      if (!(row === startPos.row && col === startPos.column)) {
         legalMove = {row: row, column: col}
       }
 
-      if (direction === 'North') {
+      if (Direction.North) {
         row--;
-      } else if (direction === 'South') {
+      } else if (Direction.South) {
         row++;
-      } else if (direction === 'East') {
+      } else if (Direction.East) {
         col++;
-      } else if (direction === 'West') {
+      } else if (Direction.West) {
         col--;
       }
     
