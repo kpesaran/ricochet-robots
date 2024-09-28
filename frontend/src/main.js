@@ -20,11 +20,7 @@ import { Direction } from './board/direction.ts'
 const canvas = document.querySelector('canvas.webgl')
 
 const gameController = new GameController()
-gameController.board.cells[1]?.[1]?.addWall(Direction.West)
-gameController.board.cells[1]?.[1]?.addWall(Direction.South)
-gameController.board.cells[1]?.[0]?.addWall(Direction.East)
-gameController.board.cells[0]?.[3]?.addWall(Direction.East)
-gameController.board.cells[0]?.[3]?.addWall(Direction.South)
+
 // gameController.board.cells[2]?.[1]?.addWall(Direction.North)
 console.log(gameController.board)
 
