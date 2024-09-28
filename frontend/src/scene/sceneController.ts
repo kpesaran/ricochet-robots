@@ -308,7 +308,10 @@ export class SceneController {
           this.scene.add(robotMesh)
           this.robotPieces.push(robotMesh)
         }
-      }
+    }
+    
+    
+
     setUpEventListeners() {
         window.addEventListener('resize', () => this.onResize());
     }
