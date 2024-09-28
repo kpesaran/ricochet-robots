@@ -45,6 +45,7 @@ test(
   }
 )
 
+
 test(
   "Builder doesn't crash when border walls are added",
   () => {
@@ -59,3 +60,4 @@ test(
     expect(board.cells[15]?.[15]?.walls).toStrictEqual([Direction.East, Direction.South]);
   }
 )
+

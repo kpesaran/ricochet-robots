@@ -67,10 +67,32 @@ export class BoardBuilder {
       board.robotPositions[botIndex] = position;
     }
   }
+ 
+  generateEdgeWalls(){
+    //edge pieces
+    
+    // NW quadrant
+    this.withWall(Direction.East, { row: 0, column: 5 }) 
+    this.withWall(Direction.South, { row: 5, column: 0 }) 
+
+    // NE quadrant
+    this.withWall(Direction.East, { row: 0, column: 10 }) 
+    this.withWall(Direction.South, { row: 3, column: 15 }) 
+
+    // SE quadrant
+    this.withWall(Direction.East, { row: 15, column: 10 })
+    this.withWall(Direction.South, { row: 8, column: 15 }) 
+
+    //SW quadrant
+    this.withWall(Direction.South, { row: 10, column: 0 }) 
+    this.withWall(Direction.East, { row: 15, column: 4 })
+
+  }
+
 
   public build() {
     let board = new Board();
-
+    this.generateEdgeWalls()
     this.addWalls(board);
     this.addRobots(board);
 
