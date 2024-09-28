@@ -65,7 +65,7 @@ export class Board {
     // Path ends if
     // - it is the last cell in the direction
     // - or the cell is obstructed with either another robot, a wall, or the center pieces
-    // - or the cell is the target cell
+    
 
     let legalMove: Position | null = null 
     let row = startPos.row
@@ -89,11 +89,6 @@ export class Board {
 
       if (robotEncountered) {
         break; 
-      }
-
-      if (this.cells[row]?.[col]?.isTarget) {
-        legalMove = {row: row, column: col}
-        break
       }
 
       // check if obstructed
