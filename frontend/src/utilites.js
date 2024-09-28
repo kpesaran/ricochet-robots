@@ -125,7 +125,7 @@ function placeWalls(scene, board) {
         for (let col = 0; col < board.cells[row].length; col++) {
             
             if (board.cells[row][col].walls.length > 0) {
-                console.log('hey')
+            
                 for (const direction of board.cells[row][col].walls) {
                     
                     const wallPieceMesh = new THREE.Mesh(wallPieceGeom, wallPieceMat);

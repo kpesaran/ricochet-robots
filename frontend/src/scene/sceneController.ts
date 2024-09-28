@@ -4,6 +4,7 @@ import { Position } from '../board/position';
 import { Board } from '../board/board';
 // import { Board } from '../board/board';
 import { Color }  from '../board/color'
+import WallPiece from './wallPiece';
 
 interface Size {
     width: number;
@@ -72,6 +73,7 @@ export class SceneController {
     setUpBoard() {
         // placeWalls()
         // placeBoard()
+        this.placeWalls(this.board)
         this.placeRobots(this.board)
         this.generateTargetChip({ row: 12, column: 14 })
         this.placeCellMeshes()
@@ -310,7 +312,23 @@ export class SceneController {
         }
     }
     
-    
+    placeWalls(board: Board) {
+        
+        for (let row = 0; row < board.cells.length; row++) {
+        
+            for (let col = 0; col < board.cells[row]!.length; col++) {
+                
+                if (board.cells[row]![col]!.walls.length > 0) {
+        
+                    for (const direction of board.cells[row]![col]!.walls) {
+                            const wallPiece = new WallPiece(direction, {row: row, column: col})
+                        
+                            this.scene.add(wallPiece.mesh!)
+                        }
+                    }
+                }
+            }
+        }
 
     setUpEventListeners() {
         window.addEventListener('resize', () => this.onResize());
