@@ -72,7 +72,7 @@ export class Board {
     let col = startPos.column
  
     while (row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE) {
-
+     
       // check if target, add position
 
       let robotEncountered = false 
@@ -91,13 +91,11 @@ export class Board {
         break; 
       }
 
-
       if (this.cells[row]?.[col]?.isTarget) {
         legalMove = {row: row, column: col}
         break
       }
 
-      
       // check if obstructed
       if (this.cells[row]?.[col]?.isObstructed) {
         break
@@ -118,32 +116,26 @@ export class Board {
             if (!(row === startPos.row && col === startPos.column))
             legalMove = {row: row, column:col}
           } 
-          
-    
         })
       }
       if (wallPreventsEntrance) {
-        
         break
       }
-  
-      
       if (!(row === startPos.row && col === startPos.column)) {
         legalMove = {row: row, column: col}
       }
-
-      if (Direction.North) {
+ 
+      if (direction === Direction.North) {
         row--;
-      } else if (Direction.South) {
+      } else if (direction === Direction.South) {
         row++;
-      } else if (Direction.East) {
+      } else if (direction === Direction.East) {
         col++;
-      } else if (Direction.West) {
+      } else if (direction === Direction.West) {
         col--;
       }
-    
     }
+
     return legalMove 
-    
   }
 }
