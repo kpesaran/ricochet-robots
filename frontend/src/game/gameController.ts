@@ -67,7 +67,8 @@ export class GameController {
         }
         
     }
-    updateMousePosition(x: number, y:number) {
+    
+    updateMousePosition(x: number, y: number) {
         this.mouse.x = x;
         this.mouse.y = y;
     }
