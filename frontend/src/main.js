@@ -1,30 +1,11 @@
-
-import javascriptLogo from '/assets/javascript.svg'
-import viteLogo from '/assets/vite.svg'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-
-
-import Positions from './positions.js'
-import {
-  generateGridPlane,
-  generateCenterChip, generateTargetChip, generateCenterBlock, placeRobots, placeWalls, onMouseDown, onMouseMove
-} from './utilites.js'
-import { BoardBuilder } from './util/boardBuilder.ts'
-import { Color } from './board/color.ts'
 import { SceneController } from './scene/sceneController.ts'
-import * as THREE from 'three'
-import { Board } from './board/board.ts'
 import { GameController } from './game/gameController.ts'
-import { Direction } from './board/direction.ts'
 
 const canvas = document.querySelector('canvas.webgl')
-
 const gameController = new GameController()
-
-// gameController.board.cells[2]?.[1]?.addWall(Direction.North)
 console.log(gameController.board)
 
-const sceneController = new SceneController('canvas.webgl', gameController.board)
+
 
 
 

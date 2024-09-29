@@ -1,13 +1,16 @@
 import { Board } from "../board/board"
 import { BoardBuilder } from "../util/boardBuilder"
+import { SceneController } from "../scene/sceneController"
 
 
 
 export class GameController {
     board: Board
+    sceneController: SceneController
     constructor() {
         const newBoard = new BoardBuilder()
         this.board = newBoard.build()
+        this.sceneController = new SceneController('canvas.webgl', this.board)
     }
 
 
