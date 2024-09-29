@@ -23,7 +23,7 @@ export class SceneController {
     cells: THREE.Mesh[]
     rayCaster: THREE.Raycaster
     mouse: THREE.Vector2
-    gridPlane: THREE.Mesh | undefined
+    gridPlane: THREE.Object3D | undefined
     
     constructor(canvas: string, board: Board) {
         this.board = board
@@ -75,6 +75,7 @@ export class SceneController {
         this.placeRobots(this.board)
         this.generateTargetChip({ row: 12, column: 14 })
         this.placeCellMeshes()
+        this.setUpGridPlane();
 
         // Grid Plane
         const planeGeometry = new THREE.PlaneGeometry(this.gridSize, this.gridSize); 
@@ -87,7 +88,7 @@ export class SceneController {
 
         const gridPlane = new THREE.Mesh(planeGeometry, planeMaterial);
         gridPlane.rotation.x = -Math.PI / 2;
-        gridPlane.position.y = 0;
+        gridPlane.position.y = .2;
         this.scene.add(gridPlane);
 
         // Center - Squre 
