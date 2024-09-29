@@ -2,21 +2,18 @@ import { Board } from "../board/board"
 import { BoardBuilder } from "../util/boardBuilder"
 import { SceneController } from "../scene/sceneController"
 import InputController from "../util/inputController"
-import { MousePosition } from "./mousePosition"
-
-
 
 export class GameController {
     board: Board
     sceneController: SceneController
     inputController: InputController
-    mouse: MousePosition
+    
     constructor() {
         const newBoard = new BoardBuilder()
         this.board = newBoard.build()
         this.inputController = new InputController(this)
         this.sceneController = new SceneController('canvas.webgl', this.board)
-        this.mouse = {x:0,y:0}
+        
     }
     // Methods to update game state based on user choices
     slideNorth() {
@@ -71,10 +68,7 @@ export class GameController {
   
     // Move a non-target Robot 
 
-    updateMousePosition(x: number, y: number) {
-        this.mouse.x = x;
-        this.mouse.y = y;
-    }
+  
 
     
 }

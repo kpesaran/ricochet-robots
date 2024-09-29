@@ -5,8 +5,7 @@ import { Board } from '../board/board';
 // import { Board } from '../board/board';
 import { Color }  from '../board/color'
 import WallPiece from './wallPiece';
-
-
+import { MousePosition } from './mousePosition';
 
 export class SceneController {
     scene: THREE.Scene;
@@ -23,7 +22,9 @@ export class SceneController {
     cellArea: number
     gridSize: number
     cells: THREE.Mesh[]
-
+    rayCaster: THREE.Raycaster
+    mouse: THREE.Vector2
+    
     constructor(canvas: string, board: Board) {
         this.board = board
         this.canvas = document.querySelector(canvas)
@@ -36,6 +37,8 @@ export class SceneController {
         this.camera = new THREE.PerspectiveCamera(75, this.sizes.width / this.sizes.height, .1, 100)
         this.camera.position.y = 15
         this.scene.add(this.camera);
+        this.rayCaster = new THREE.Raycaster()
+        this.mouse = new THREE.Vector2()
         
 
         // Renderer
@@ -276,10 +279,6 @@ export class SceneController {
         }
     }
 
-    
-
-
-
     placeRobots(board: Board) {
         const robotGeom = new THREE.CylinderGeometry(.01, .3, 1)
         for (let i = 0; i < board.robots.length; i++) {
@@ -340,6 +339,10 @@ export class SceneController {
     setUpEventListeners() {
         window.addEventListener('resize', () => this.onResize());
     }
+    updateMousePosition(x: number, y: number) {
+        this.mouse.x = x;
+        this.mouse.y = y;
+    }
     
     onResize() {
         this.sizes.width = window.innerWidth
@@ -351,11 +354,12 @@ export class SceneController {
     }
     
     tick = () => {
+        this.controls.update()
         this.renderer.render(this.scene, this.camera)
         window.requestAnimationFrame(this.tick)
-        // this.controls.update()
+        
         // raycaster
-        // raycaster.setFromCamera(mouse, camera)
+        this.rayCaster.setFromCamera(this.mouse, this.camera)
         // if (robotPieces.length > 0) {
         //   const robotIntersects = 
         //     raycaster.intersectObjects(robotPieces)  
