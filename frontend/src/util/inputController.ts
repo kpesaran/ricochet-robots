@@ -25,7 +25,7 @@ export default class InputController {
   }
   handleMouseMove(event: MouseEvent, gameController: GameController) {
     let x = (event.clientX / gameController.sceneController.sizes.width) * 2 - 1;
-    let y = (event.clientY / gameController.sceneController.sizes.width) * 2 - 1;
+    let y = -(event.clientY / gameController.sceneController.sizes.height) * 2 + 1;
     gameController.sceneController.
     updateMousePosition(x, y);
   }

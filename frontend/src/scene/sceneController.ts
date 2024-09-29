@@ -5,7 +5,6 @@ import { Board } from '../board/board';
 // import { Board } from '../board/board';
 import { Color }  from '../board/color'
 import WallPiece from './wallPiece';
-import { MousePosition } from './mousePosition';
 
 export class SceneController {
     scene: THREE.Scene;
@@ -38,7 +37,7 @@ export class SceneController {
         this.camera.position.y = 15
         this.scene.add(this.camera);
         this.rayCaster = new THREE.Raycaster()
-        this.mouse = new THREE.Vector2()
+        this.mouse = new THREE.Vector2(0,0)
         
 
         // Renderer
@@ -66,13 +65,11 @@ export class SceneController {
         
         this.setUpEventListeners()
         
-        this.tick = this.tick.bind(this);
+        // this.tick = this.tick.bind(this);
         this.tick()
     }
 
     setUpBoard() {
-        // placeWalls()
-        // placeBoard()
         this.placeWalls(this.board)
         this.placeRobots(this.board)
         this.generateTargetChip({ row: 12, column: 14 })
@@ -342,6 +339,7 @@ export class SceneController {
     updateMousePosition(x: number, y: number) {
         this.mouse.x = x;
         this.mouse.y = y;
+        console.log(this.mouse)
     }
     
     onResize() {
@@ -354,25 +352,30 @@ export class SceneController {
     }
     
     tick = () => {
-        this.controls.update()
-        this.renderer.render(this.scene, this.camera)
-        window.requestAnimationFrame(this.tick)
+        
         
         // raycaster
         this.rayCaster.setFromCamera(this.mouse, this.camera)
-        // if (robotPieces.length > 0) {
-        //   const robotIntersects = 
-        //     raycaster.intersectObjects(robotPieces)  
-        //   if (robotIntersects.length > 0) {
-        //     robotPieces.forEach(piece => piece.scale.set(1, 1, 1));
-        //     const selectedPiece = robotIntersects[0].object
-        //     selectedPiece.scale.set(1.5, 2, 1.5)
-        //     console.log(robotIntersects)
-        //   }
-        //   else {
-        //     robotPieces.forEach(piece => piece.scale.set(1, 1, 1));
-        //   }
-        // } 
+        
+        if (this.robotPieces.length > 0) {
+            
+          const robotIntersects = 
+                this.rayCaster.intersectObjects(this.robotPieces)  
+                
+            if (robotIntersects.length > 0) {
+                console.log(robotIntersects)
+            this.robotPieces.forEach(piece => piece.scale.set(1, 1, 1));
+            const selectedPiece = robotIntersects[0]!.object
+            selectedPiece.scale.set(1.5, 2, 1.5)
+            console.log(robotIntersects)
+          }
+          else {
+            this.robotPieces.forEach(piece => piece.scale.set(1, 1, 1));
+          }
+        } 
         // For orbit controls damping 
+        this.controls.update()
+        this.renderer.render(this.scene, this.camera)
+        window.requestAnimationFrame(this.tick)
       }
 }
