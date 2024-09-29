@@ -23,6 +23,7 @@ export class SceneController {
     cells: THREE.Mesh[]
     rayCaster: THREE.Raycaster
     mouse: THREE.Vector2
+    gridPlane: THREE.Mesh | undefined
     
     constructor(canvas: string, board: Board) {
         this.board = board
@@ -219,20 +220,20 @@ export class SceneController {
     //                 if (currRow >= 0) {
     //                     console.log(currRow, currCol, 'you')
     //                     cellsToLight.push({ row: currRow, column: currCol })
-    //                 }         
+    //                 }
     //                 if (currRow > 100 || currRow < -100 ||currCol > 100 || currCol < -100 ) {
     //                     break
     //                 }
-    //             }        
+    //             }
     //     }
     //     //     // Light North
             
-    //     })  
+    //     })
     //     console.log('path positios:' ,cellsToLight)
     //     return cellsToLight
     // }
     // lightPaths() {
-    //     // 
+    //     //
     //     const cellsToLight: Position[] = this.findPathPositions({ row: 4, column: 4 }, [
     //         // { row: 4, column: 2 },
     //         { row: 15, column: 4 },
@@ -242,17 +243,35 @@ export class SceneController {
     //     for (let i = 0; i < cellsToLight.length; i++) {
     //         // switched
     //         let position_col = cellsToLight[i]!.row
-    //         let position_row = cellsToLight[i]!.column    
+    //         let position_row = cellsToLight[i]!.column
     //         let index = (position_row * 16) + (position_col)
     //         if (this.cells[index]) {
     //             const mesh = this.cells[index]
     //             const material = mesh.material as THREE.MeshStandardMaterial;
-    //             material.color = new THREE.Color("rgb(30, 100, 70)")      
+    //             material.color = new THREE.Color("rgb(30, 100, 70)")
     //         }
-    //         console.log(this.cells) 
+    //         console.log(this.cells)
     //     }
     //     // remove target lit
     // }
+    setUpGridPlane() {
+        const gridSize = this.gridSize
+        
+    
+    const planeGeometry = new THREE.PlaneGeometry(gridSize, gridSize); 
+    
+    const planeMaterial = new THREE.MeshBasicMaterial({
+      color: 0x000000,
+      transparent: true,
+      opacity: .10
+    });
+    
+    const gridPlane = new THREE.Mesh(planeGeometry, planeMaterial);
+    gridPlane.rotation.x = -Math.PI / 2;
+        gridPlane.position.y = 0;
+        this.scene.add(gridPlane)
+        this.gridPlane = gridPlane
+    }
     placeCellMeshes() {
         const cellGeometry = new THREE.BoxGeometry(.7, .3,.7); 
         for (let i = 0; i < this.gridSize; i++){
@@ -339,7 +358,6 @@ export class SceneController {
     updateMousePosition(x: number, y: number) {
         this.mouse.x = x;
         this.mouse.y = y;
-        console.log(this.mouse)
     }
     
     onResize() {
@@ -363,11 +381,10 @@ export class SceneController {
                 this.rayCaster.intersectObjects(this.robotPieces)  
                 
             if (robotIntersects.length > 0) {
-                console.log(robotIntersects)
             this.robotPieces.forEach(piece => piece.scale.set(1, 1, 1));
             const selectedPiece = robotIntersects[0]!.object
             selectedPiece.scale.set(1.5, 2, 1.5)
-            console.log(robotIntersects)
+
           }
           else {
             this.robotPieces.forEach(piece => piece.scale.set(1, 1, 1));
