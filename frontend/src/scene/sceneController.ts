@@ -27,8 +27,6 @@ export class SceneController {
     gridSize: number
     cells: THREE.Mesh[]
 
-   
-
     constructor(canvas: string, board: Board) {
         this.board = board
         this.canvas = document.querySelector(canvas)
