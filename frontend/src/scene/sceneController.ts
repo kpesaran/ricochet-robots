@@ -278,6 +278,11 @@ export class SceneController {
             }
         }
     }
+
+    
+
+
+
     placeRobots(board: Board) {
         const robotGeom = new THREE.CylinderGeometry(.01, .3, 1)
         for (let i = 0; i < board.robots.length; i++) {
@@ -310,6 +315,11 @@ export class SceneController {
           this.scene.add(robotMesh)
           this.robotPieces.push(robotMesh)
         }
+    }
+    updateTargetRobot() {
+        const robotPosition = this.board.robotPositions[0]
+        const robotMesh = this.robotPieces[0]
+        robotMesh?.position.set(robotPosition.column-7.5, .5 , robotPosition.row-7.5)
     }
     
     placeWalls(board: Board) {

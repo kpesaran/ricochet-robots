@@ -50,9 +50,6 @@ export class Board {
       { row: 0, column: 2},
       { row: 0, column: 3},
     ];
-  
-
-
   }
 
   findTargetCell() {
@@ -68,16 +65,18 @@ export class Board {
     }
     return null
   }
-  
+
+
+ 
   
 
 
   findMoves() {
     return {
       north: this.checkDirections(this.robotPositions[0].row, this.robotPositions[0].column, 'North'),
-    south: this.checkDirections(this.robotPositions[0].row, this.robotPositions[0].column, 'South'),
-    east: this.checkDirections(this.robotPositions[0].row, this.robotPositions[0].column, 'East'),
-    west: this.checkDirections(this.robotPositions[0].row, this.robotPositions[0].column, 'West')
+      south: this.checkDirections(this.robotPositions[0].row, this.robotPositions[0].column, 'South'),
+      east: this.checkDirections(this.robotPositions[0].row, this.robotPositions[0].column, 'East'),
+      west: this.checkDirections(this.robotPositions[0].row, this.robotPositions[0].column, 'West')
     }
   }
 

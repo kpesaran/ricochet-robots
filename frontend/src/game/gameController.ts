@@ -16,27 +16,53 @@ export class GameController {
         this.sceneController = new SceneController('canvas.webgl', this.board)
 
     }
-
-
-
     // Methods to update game state based on user choices
-
     slideNorth() {
-        
+        let newPos = this.board.findMoves().north
+       
+        if (newPos) {
+             // update board state
+            this.board.robotPositions[0].row = newPos.row
+            this.board.robotPositions[0].column = newPos.column
+            // update scene
+            this.sceneController.updateTargetRobot()
+        }
     }
 
     slideSouth() {
-        // let newPos = { row: 5, column: 0 }
-        // this.board.robotPositions[0] = newPos
-        // this.sceneController.placeRobots(this.board)
+        let newPos = this.board.findMoves().south
+       
+        if (newPos) {
+             // update board state
+            this.board.robotPositions[0].row = newPos.row
+            this.board.robotPositions[0].column = newPos.column
+            // update scene
+            this.sceneController.updateTargetRobot()
+        }
     }
-
     slideEast() {
+        let newPos = this.board.findMoves().east
+       
+        if (newPos) {
+             // update board state
+            this.board.robotPositions[0].row = newPos.row
+            this.board.robotPositions[0].column = newPos.column
+            // update scene
+            this.sceneController.updateTargetRobot()
+        }
 
     }
 
     slideWest() {
-
+        let newPos = this.board.findMoves().west
+       
+        if (newPos) {
+             // update board state
+            this.board.robotPositions[0].row = newPos.row
+            this.board.robotPositions[0].column = newPos.column
+            // update scene
+            this.sceneController.updateTargetRobot()
+        }
     }
 
    
