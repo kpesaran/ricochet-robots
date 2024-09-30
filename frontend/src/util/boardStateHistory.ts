@@ -6,8 +6,8 @@ import { Position } from "../board/position"
 export default class RobotStateHistory {
     history: [Position, Position,Position,Position][]
     constructor() {
-        this.history = []
         
+        this.history = []
     }
 
     public addState(board: Board) {
@@ -17,7 +17,7 @@ export default class RobotStateHistory {
     }
 
     public undoState(board:Board) {
-        if (this.history.length > 1) {
+        if (this.history.length >= 0) {
             const prevState = this.history.pop()
             
             if (prevState) {

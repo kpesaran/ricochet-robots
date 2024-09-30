@@ -19,7 +19,7 @@ export class GameController {
         this.sceneController = new SceneController('canvas.webgl', this.board)
         this.UIController = new UIController(this)
         this.boardHistory = new BoardStateHistory()
-        this.boardHistory.addState(this.board)
+        
         
     }
     // Methods to update game state based on user choices
@@ -39,6 +39,8 @@ export class GameController {
         let newPos = this.board.findMoves().north
        
         if (newPos) {
+            // store history
+            this.boardHistory.addState(this.board)
              // update board state
             this.board.robotPositions[0].row = newPos.row
             this.board.robotPositions[0].column = newPos.column
@@ -46,7 +48,7 @@ export class GameController {
             this.sceneController.updateTargetRobot()
             // Update UI counter
             this.UIController.increaseMoveCount()
-            this.boardHistory.addState(this.board)
+            
         }
     }
 
@@ -54,6 +56,8 @@ export class GameController {
         let newPos = this.board.findMoves().south
        
         if (newPos) {
+            // store history
+            this.boardHistory.addState(this.board)
              // update board state
             this.board.robotPositions[0].row = newPos.row
             this.board.robotPositions[0].column = newPos.column
@@ -61,13 +65,15 @@ export class GameController {
             this.sceneController.updateTargetRobot()
             // Update UI counter
             this.UIController.increaseMoveCount()
-            this.boardHistory.addState(this.board)
+            
         }
     }
     slideEast() {
         let newPos = this.board.findMoves().east
        
         if (newPos) {
+            // store history
+            this.boardHistory.addState(this.board)
              // update board state
             this.board.robotPositions[0].row = newPos.row
             this.board.robotPositions[0].column = newPos.column
@@ -75,7 +81,6 @@ export class GameController {
             this.sceneController.updateTargetRobot()
             // Update UI counter
             this.UIController.increaseMoveCount()
-            this.boardHistory.addState(this.board)
         }
 
     }
@@ -84,6 +89,8 @@ export class GameController {
         let newPos = this.board.findMoves().west
        
         if (newPos) {
+            // store history
+            this.boardHistory.addState(this.board)
              // update board state
             this.board.robotPositions[0].row = newPos.row
             this.board.robotPositions[0].column = newPos.column
@@ -92,17 +99,10 @@ export class GameController {
             // Update UI counter
             this.UIController.increaseMoveCount()
             // Update board history
-            this.boardHistory.addState(this.board)
         }
         
     }
-    
-  
     // Move a non-target Robot 
-
-  
-
-    
 }
    
     
