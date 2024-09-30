@@ -1,13 +1,12 @@
-import { GameController } from "../game/gameController"
 
+// Manages the display of the move count, and potentially least moves possible display
 
 
 export default class UIController {
 
     moveCount: number
-    constructor(gameController: GameController) {
+    constructor() {
         this.moveCount = 0
-        document.getElementById('reverse-move-button')!.addEventListener('click', () => gameController.reverseLastMove())
     }
 
     increaseMoveCount() {

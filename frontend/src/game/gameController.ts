@@ -17,10 +17,8 @@ export class GameController {
         this.board = newBoard.build()
         this.inputController = new InputController(this)
         this.sceneController = new SceneController('canvas.webgl', this.board)
-        this.UIController = new UIController(this)
+        this.UIController = new UIController()
         this.boardHistory = new RobotStateHistory()
-        
-        
     }
     // Methods to update game state based on user choices
     reverseLastMove() {
@@ -31,7 +29,6 @@ export class GameController {
         // Update scene
         this.sceneController.placeRobots(this.board)
         console.log(this.board.robotPositions)
-        
     }
     
     slideNorth() {
@@ -47,7 +44,6 @@ export class GameController {
             this.sceneController.updateTargetRobot()
             // Update UI counter
             this.UIController.increaseMoveCount()
-            
         }
     }
 
@@ -63,8 +59,7 @@ export class GameController {
             // update scene
             this.sceneController.updateTargetRobot()
             // Update UI counter
-            this.UIController.increaseMoveCount()
-            
+            this.UIController.increaseMoveCount()  
         }
     }
     slideEast() {
@@ -81,7 +76,6 @@ export class GameController {
             // Update UI counter
             this.UIController.increaseMoveCount()
         }
-
     }
 
     slideWest() {
@@ -97,11 +91,17 @@ export class GameController {
             this.sceneController.updateTargetRobot()
             // Update UI counter
             this.UIController.increaseMoveCount()
-            // Update board history
         }
         
     }
     // Move a non-target Robot 
+    moveNonTargetRobot() {
+        // add to history
+        this.boardHistory.addState(this.board) 
+        
+
+        this.UIController.increaseMoveCount()
+    }
 }
    
     

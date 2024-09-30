@@ -1,17 +1,4 @@
 
-
-// const positions = {
-
-//     // "redRobot": [1, 2],
-//     // "blueRobot": [16, 4],
-//     // "greenRobot": [12, 8],
-//     // "yellowRobot": [11, 15],
-//     "robots" : [(1,2),(16,4),(12,8),(11,15)],
-//     "targetCell": [8, 9],
-//     "walls": [,['N','W'],,,['E','S'],,,,,]
-
-// }
-
 export default class Positions {
     constructor() {
         this.redRobot = {

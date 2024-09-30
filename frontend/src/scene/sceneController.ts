@@ -359,7 +359,6 @@ export class SceneController {
           }
           this.scene.add(robotMesh)
             this.robotPieces.push(robotMesh)
-            console.log(this.robotPieces)
         }
     }
     updateTargetRobot() {

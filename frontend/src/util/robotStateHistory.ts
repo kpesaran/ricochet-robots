@@ -24,7 +24,6 @@ export default class RobotStateHistory {
         return        
     }
     
-
     public initialBoardState() {
         return this.history[0]
     }

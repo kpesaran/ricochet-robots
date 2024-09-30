@@ -1,5 +1,8 @@
+// Responsible for handling user inputs through event listeners 
+
 import { GameController } from "../game/gameController";
 import * as THREE from 'three'
+
 
 export default class InputController {
   selectedPiece: THREE.Object3D | undefined
@@ -7,6 +10,7 @@ export default class InputController {
     document.addEventListener('keydown', (event) => this.handleKeydown(event, gameController));
     document.addEventListener('mousemove', (event) => this.handleMouseMove(event, gameController));
     document.addEventListener('mousedown', (event) => this.handleMouseDown(event, gameController))
+    document.getElementById('reverse-move-button')!.addEventListener('click', () => gameController.reverseLastMove())
   }
     
   handleKeydown(event: KeyboardEvent, gameController: GameController) {
@@ -55,38 +59,33 @@ export default class InputController {
     
   } 
   // If clicked on grid and a piece is selected
-  else if (this.selectedPiece) {
-      const gridIntersects = rayCaster.intersectObject(gameController.sceneController.gridPlane!);
-      if (gridIntersects.length > 0) {
-        const intersectPoint = gridIntersects[0]!.point;
-        console.log(intersectPoint)
-          this.selectedPiece.position.copy(this.snapToGrid(intersectPoint));
-          this.selectedPiece = undefined;
-      }
-  }
+  // else if (this.selectedPiece) {
+  //     const gridIntersects = rayCaster.intersectObject(gameController.sceneController.gridPlane!);
+  //     if (gridIntersects.length > 0) {
+  //       const intersectPoint = gridIntersects[0]!.point;
+  //       console.log(intersectPoint)
+  //       // here will call gamecontroller method moveNonTargetRobot()
+  //         console.log(intersectPoint)
+  //         // this.selectedPiece.position.copy(intersectPoint);
+  //         this.selectedPiece = undefined;
+  //     }
+  // }
   }
   
-  
-  snapToGrid(position: THREE.Vector3) {
-    // cellsize is 1
-    const snappedX = Math.round(position.x / 1) * 1 ;
-    const snappedZ = Math.round(position.z / 1) * 1;
-    
-    const clampedX = Math.max(0, Math.min(15, snappedX));
-    const clampedZ = Math.max(0, Math.min(15, snappedZ));
-  
-  return new THREE.Vector3(clampedX, .5, clampedZ);
-  }
   moveRobot(gameController: GameController) {
     const rayCaster = gameController.sceneController.rayCaster
     const mouse = gameController.sceneController.mouse
     const camera = gameController.sceneController.camera
+    console.log(mouse.y)
     if (this.selectedPiece) {
+      
       rayCaster.setFromCamera(mouse, camera);
       // Ensures robot will be moved to position on plane
         const gridIntersects = rayCaster.intersectObject(gameController.sceneController.gridPlane!);
-        if (gridIntersects.length > 0) {
-            const intersectPoint = gridIntersects[0]!.point;
+      if (gridIntersects.length > 0) {
+          
+        const intersectPoint = gridIntersects[0]!.point;
+        console.log(intersectPoint)
           this.selectedPiece.position.copy(intersectPoint);
           this.selectedPiece.position.y = .5
         }
