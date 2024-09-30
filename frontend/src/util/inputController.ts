@@ -1,11 +1,11 @@
-// Responsible for handling user inputs through event listeners 
+// Responsible for handling event listeners for user inputs  
 
 import { GameController } from "../game/gameController";
 import * as THREE from 'three'
 
 
 export default class InputController {
-  selectedPiece: THREE.Object3D | undefined
+  selectedPiece: THREE.Mesh| undefined
   constructor(gameController: GameController) {
     document.addEventListener('keydown', (event) => this.handleKeydown(event, gameController));
     document.addEventListener('mousemove', (event) => this.handleMouseMove(event, gameController));
@@ -47,29 +47,22 @@ export default class InputController {
 
   const robotIntersects = rayCaster.intersectObjects(gameController.sceneController.robotPieces);
 
-  if (robotIntersects.length > 0) {
+    if (robotIntersects.length > 0) {
+    console.log(robotIntersects)
       // Select the robot
       if (!this.selectedPiece) {
-          this.selectedPiece = robotIntersects[0]!.object;
-      } 
+        const intersectedObject = robotIntersects[0]!.object
+        if (intersectedObject instanceof THREE.Mesh) {
+          
+          this.selectedPiece = intersectedObject
+          console.log(this.selectedPiece)
+        }
+      }
       // Place the robot
       else if (this.selectedPiece) {
           this.selectedPiece = undefined;
       }
-    
   } 
-  // If clicked on grid and a piece is selected
-  // else if (this.selectedPiece) {
-  //     const gridIntersects = rayCaster.intersectObject(gameController.sceneController.gridPlane!);
-  //     if (gridIntersects.length > 0) {
-  //       const intersectPoint = gridIntersects[0]!.point;
-  //       console.log(intersectPoint)
-  //       // here will call gamecontroller method moveNonTargetRobot()
-  //         console.log(intersectPoint)
-  //         // this.selectedPiece.position.copy(intersectPoint);
-  //         this.selectedPiece = undefined;
-  //     }
-  // }
   }
   
   moveRobot(gameController: GameController) {
@@ -87,7 +80,8 @@ export default class InputController {
         const intersectPoint = gridIntersects[0]!.point;
         console.log(intersectPoint)
           this.selectedPiece.position.copy(intersectPoint);
-          this.selectedPiece.position.y = .5
+        this.selectedPiece.position.y = .5
+        gameController.moveNonTargetRobot(intersectPoint, this.selectedPiece)
         }
     }
   }

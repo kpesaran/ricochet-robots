@@ -1,5 +1,5 @@
 
-// Manages the display of the move count, and potentially least moves possible display
+// Manages the display of the move count, and probably least moves possible display and newGame 
 
 
 export default class UIController {
