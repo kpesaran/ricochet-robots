@@ -3,7 +3,7 @@ import { BoardBuilder } from "../util/boardBuilder"
 import { SceneController } from "../scene/sceneController"
 import InputController from "../util/inputController"
 import UIController from "../util/uiController"
-import BoardStateHistory from "../util/boardStateHistory"
+import BoardStateHistory from "../util/robotStateHistory"
 
 export class GameController {
     board: Board
