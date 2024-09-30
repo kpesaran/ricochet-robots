@@ -90,8 +90,8 @@ export class BoardBuilder {
   }
   generatePairedWalls() {
     // NW quadrant
-    this.withWall(Direction.West, {row: 1, column: 1})
-    this.withWall(Direction.South, { row: 1, column: 1 })
+    this.withWall(Direction.West, {row: 3, column: 1})
+    this.withWall(Direction.South, { row: 3, column: 1 })
     this.withWall(Direction.East, { row: 6, column: 3 })
     this.withWall(Direction.South, { row: 6, column: 3 })
     this.withWall(Direction.North, { row: 4, column: 6 })

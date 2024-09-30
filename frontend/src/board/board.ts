@@ -16,6 +16,7 @@ export class Board {
   robotPositions: [Position, Position, Position, Position];
 
 
+
   constructor() {
     let cells = new Array(BOARD_SIZE)
 
@@ -79,6 +80,21 @@ export class Board {
       west: this.checkDirections(this.robotPositions[0].row, this.robotPositions[0].column, 'West')
     }
   }
+  copy() {
+    const newBoard = new Board();
+    
+    newBoard.cells = this.cells.map(row =>
+      row.map(cell => {
+        const newCell = new Cell();
+        newCell.isObstructed = cell.isObstructed;
+        newCell.isTarget = cell.isTarget;
+        newCell.walls = [...cell.walls];
+        return newCell;
+      })
+    );
+    return newBoard
+  }
+
 
   checkDirections(startRow:number, startCol: number, direction: 'North' | 'South' | 'East' | 'West' ) : null | Position {
     // Gets the position of the target robot
@@ -166,6 +182,7 @@ export class Board {
       }
     
     }
+
     return legalMove 
     
   }
