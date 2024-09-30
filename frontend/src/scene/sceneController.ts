@@ -120,8 +120,8 @@ export class SceneController {
         // const axesHelper = new THREE.AxesHelper(5);
         // this.scene.add(axesHelper);
         // GridHelper
-        const gridHelper = new THREE.GridHelper(16, 16,'white','white');
-        this.scene.add(gridHelper);
+        // const gridHelper = new THREE.GridHelper(16, 16,'white','white');
+        // this.scene.add(gridHelper);
     }
 
     generateTargetChip(position: Position) {
@@ -150,12 +150,16 @@ export class SceneController {
         }
       }
     setUpLights() {
-        const ambientLight = new THREE.AmbientLight('#ffffff', 2);
-        const directionalLight = new THREE.DirectionalLight('#ffffff',4 )
+        const ambientLight = new THREE.AmbientLight('#ffffff', 4);
+        const directionalLight = new THREE.DirectionalLight('#ffffff',1)
         this.scene.add(ambientLight);
-        directionalLight.position.y = 5
+        directionalLight.position.y = 1
         this.scene.add(directionalLight)
-        
+        const pointLight = new THREE.PointLight('cyan', 13);
+        // target light
+        pointLight.position.set(4, 3, 6.6); 
+        pointLight.castShadow = true
+        this.scene.add(pointLight)
     }
     // findPathPositions(startingPos: Position, endingPositions: Position[]): Position[]  {
     //     const cellsToLight: Position[] = []
@@ -280,7 +284,7 @@ export class SceneController {
             for (let j = 0; j < this.gridSize; j++) {
                 const cellMaterial = new THREE.MeshStandardMaterial({
                     // "rgb(30, 100, 70)")
-                    color: new THREE.Color("rgb(0, 100, 70)"),
+                    color: new THREE.Color("rgb(30, 100, 130)"),
                     roughness: .3,
                     metalness: 1
                 });
