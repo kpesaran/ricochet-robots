@@ -35,8 +35,6 @@ export class GameController {
     }
     
     slideNorth() {
-        // update history
-        
         let newPos = this.board.findMoves().north
        
         if (newPos) {

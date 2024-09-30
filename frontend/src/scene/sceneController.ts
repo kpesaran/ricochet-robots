@@ -120,8 +120,8 @@ export class SceneController {
         // const axesHelper = new THREE.AxesHelper(5);
         // this.scene.add(axesHelper);
         // GridHelper
-        // const gridHelper = new THREE.GridHelper(16, 16,'white','white');
-        // this.scene.add(gridHelper);
+        const gridHelper = new THREE.GridHelper(16, 16,'white','white');
+        this.scene.add(gridHelper);
     }
 
     generateTargetChip(position: Position) {
@@ -305,8 +305,20 @@ export class SceneController {
         
         this.robotPieces.forEach(robotMesh => {
             robotMesh.geometry.dispose()
-            
-            
+            // If robotMesh.material is an array of materials
+            if (Array.isArray(robotMesh.material)) {
+                robotMesh.material.forEach(mat => {
+                    if (mat && typeof mat.dispose === 'function') {
+                        mat.dispose()
+                    }
+                })
+            }
+            //   Else robotMesh.material is a single material
+            else {
+                if (robotMesh.material && typeof robotMesh.material.dispose === 'function') {
+                    robotMesh.material.dispose()
+                }
+            }
             this.scene.remove(robotMesh)
         })
 
