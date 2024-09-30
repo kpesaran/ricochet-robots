@@ -18,17 +18,19 @@ export class GameController {
         this.inputController = new InputController(this)
         this.sceneController = new SceneController('canvas.webgl', this.board)
         this.UIController = new UIController(this)
-        this.boardHistory = new BoardStateHistory(this.board)
+        this.boardHistory = new BoardStateHistory()
+        this.boardHistory.addState(this.board)
         
     }
     // Methods to update game state based on user choices
     reverseLastMove() {
+        // Update display
         this.UIController.reduceMoveCount()
-        const prevBoardState = this.boardHistory.undoState()
-        if (prevBoardState) {
-            this.board = prevBoardState
-            this.sceneController.placeRobots(this.board)
-        }
+        // Update board history
+        this.boardHistory.undoState(this.board)
+        // Update scene
+        this.sceneController.placeRobots(this.board)
+        
     }
     
     slideNorth() {

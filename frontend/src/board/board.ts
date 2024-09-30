@@ -67,11 +67,6 @@ export class Board {
     return null
   }
 
-
- 
-  
-
-
   findMoves() {
     return {
       north: this.checkDirections(this.robotPositions[0].row, this.robotPositions[0].column, 'North'),

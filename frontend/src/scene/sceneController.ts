@@ -151,10 +151,11 @@ export class SceneController {
       }
     setUpLights() {
         const ambientLight = new THREE.AmbientLight('#ffffff', 2);
-        const directionalLight = new THREE.DirectionalLight('#ffffff',1 )
+        const directionalLight = new THREE.DirectionalLight('#ffffff',4 )
         this.scene.add(ambientLight);
         directionalLight.position.y = 5
         this.scene.add(directionalLight)
+        
     }
     // findPathPositions(startingPos: Position, endingPositions: Position[]): Position[]  {
     //     const cellsToLight: Position[] = []
@@ -297,6 +298,7 @@ export class SceneController {
     }
 
     placeRobots(board: Board) {
+
         const robotGeom = new THREE.CylinderGeometry(.01, .3, 1)
         for (let i = 0; i < board.robots.length; i++) {
             let robotColor: string | undefined

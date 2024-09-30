@@ -1,29 +1,45 @@
-// BoardStateHistory stores the previous board states
+// RobotStateHistory stores and manages the previous robot positions
 
 import { Board } from "../board/board"
+import { Position } from "../board/position"
 
-// Right now passing around references of a board. Need to make a deep copy.
-export default class BoardStateHistory {
-    history: Board[]
-    constructor(board: Board) {
-        this.history = [board]
+export default class RobotStateHistory {
+    history: [Position, Position,Position,Position][]
+    constructor() {
+        this.history = []
+        
     }
 
-    addState(board: Board) {
+    public addState(board: Board) {
         console.log(this.history)
-        this.history.push(board)
+        this.history.push(this.copyRobotPositions(board.robotPositions))
+        console.log(board.robotPositions)
     }
 
-    undoState() {
+    public undoState(board:Board) {
         if (this.history.length > 1) {
-            return this.history.pop()
+            const prevState = this.history.pop()
+            
+            if (prevState) {
+                board.robotPositions = this.copyRobotPositions(prevState)
+            }
         }
-        return this.history[0]        
+        return        
     }
+    
 
-
-    initialBoardState() {
+    public initialBoardState() {
         return this.history[0]
     }
+
+    private copyRobotPositions(robotPositions: [Position,Position,Position,Position]):[Position,Position,Position,Position] {
+        let copiedRobotPositions: [Position, Position, Position, Position] = robotPositions.map(pos => ({
+            row: pos.row,
+            column: pos.column
+        })) as [Position, Position, Position, Position];
+        
+        return copiedRobotPositions
+      }
+    
 
 }
