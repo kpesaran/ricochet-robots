@@ -17,7 +17,7 @@ export default class RobotStateHistory {
     }
 
     public undoState(board:Board) {
-        if (this.history.length >= 0) {
+        if (this.history.length > 0) {
             const prevState = this.history.pop()
             
             if (prevState) {
