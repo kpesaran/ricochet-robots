@@ -1,4 +1,4 @@
-export enum Wall {
+export enum Direction {
   North,
   South,
   East,

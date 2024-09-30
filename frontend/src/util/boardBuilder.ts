@@ -1,12 +1,12 @@
 import { Board } from '../board/board';
 import { Robot } from '../board/robot';
-import { Wall } from '../board/wall';
+import { Direction } from '../board/direction';
  
 import type { Position } from '../board/position';
 
 export class BoardBuilder {
   robots: [Robot, Position][];
-  walls: [Wall, Position][];
+  walls: [Direction, Position][];
 
   constructor() {
     this.robots = []
@@ -26,7 +26,7 @@ export class BoardBuilder {
     return this;
   }
 
-  public withWall(newWall: Wall, newPosition: Position): BoardBuilder {
+  public withWall(newWall: Direction, newPosition: Position): BoardBuilder {
     let wallPosition = this.walls.find(
       ([oldWall, oldPosition]) => oldWall === newWall &&  oldPosition === newPosition,
     );
@@ -43,17 +43,17 @@ export class BoardBuilder {
       board.cells[row]?.[column]?.addWall(wall);
 
       switch(wall) {
-        case Wall.North:
-          board.cells[row - 1]?.[column]?.addWall(Wall.South);
+        case Direction.North:
+          board.cells[row - 1]?.[column]?.addWall(Direction.South);
           break;
-        case Wall.South:
-          board.cells[row + 1]?.[column]?.addWall(Wall.North);
+        case Direction.South:
+          board.cells[row + 1]?.[column]?.addWall(Direction.North);
           break;
-        case Wall.East:
-          board.cells[row]?.[column + 1]?.addWall(Wall.West);
+        case Direction.East:
+          board.cells[row]?.[column + 1]?.addWall(Direction.West);
           break;
-        case Wall.West:
-          board.cells[row]?.[column - 1]?.addWall(Wall.East);
+        case Direction.West:
+          board.cells[row]?.[column - 1]?.addWall(Direction.East);
           break;
       }
     }
