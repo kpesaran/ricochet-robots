@@ -301,8 +301,22 @@ export class SceneController {
         }
     }
 
-    placeRobots(board: Board) {
+    destroyRobotMeshes() {
+        
+        this.robotPieces.forEach(robotMesh => {
+            robotMesh.geometry.dispose()
+            
+            
+            this.scene.remove(robotMesh)
+        })
 
+    }
+
+    placeRobots(board: Board) {
+        if (this.robotPieces.length > 0) {
+            this.destroyRobotMeshes()
+            this.robotPieces = []
+        }
         const robotGeom = new THREE.CylinderGeometry(.01, .3, 1)
         for (let i = 0; i < board.robots.length; i++) {
             let robotColor: string | undefined
@@ -332,7 +346,8 @@ export class SceneController {
                 robotMesh.position.set(robotPosition.column-7.5, .5 , robotPosition.row-7.5)
           }
           this.scene.add(robotMesh)
-          this.robotPieces.push(robotMesh)
+            this.robotPieces.push(robotMesh)
+            console.log(this.robotPieces)
         }
     }
     updateTargetRobot() {

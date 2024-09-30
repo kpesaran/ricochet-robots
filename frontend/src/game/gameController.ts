@@ -30,6 +30,7 @@ export class GameController {
         this.boardHistory.undoState(this.board)
         // Update scene
         this.sceneController.placeRobots(this.board)
+        console.log(this.board.robotPositions)
         
     }
     
