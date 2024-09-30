@@ -9,7 +9,7 @@ export default class InputController {
   constructor(gameController: GameController) {
     document.addEventListener('keydown', (event) => this.handleKeydown(event, gameController));
     document.addEventListener('mousemove', (event) => this.handleMouseMove(event, gameController));
-    document.addEventListener('mousedown', (event) => this.handleMouseDown(event, gameController))
+    document.addEventListener('mousedown', () => this.handleMouseDown(gameController))
     document.getElementById('reverse-move-button')!.addEventListener('click', () => gameController.reverseLastMove())
   }
     
@@ -38,7 +38,7 @@ export default class InputController {
     }
   }
 
-  handleMouseDown(event: MouseEvent, gameController: GameController) {
+  handleMouseDown(gameController: GameController) {
     const rayCaster = gameController.sceneController.rayCaster
     const mouse = gameController.sceneController.mouse
     const camera = gameController.sceneController.camera
@@ -60,6 +60,7 @@ export default class InputController {
       }
       // Place the robot
       else if (this.selectedPiece) {
+        // gameController.placeNonTargetRobot(intersectPoint, this.selectedPiece)
           this.selectedPiece = undefined;
       }
   } 
@@ -79,9 +80,9 @@ export default class InputController {
           
         const intersectPoint = gridIntersects[0]!.point;
         console.log(intersectPoint)
-          this.selectedPiece.position.copy(intersectPoint);
+        this.selectedPiece.position.copy(intersectPoint);
         this.selectedPiece.position.y = .5
-        gameController.moveNonTargetRobot(intersectPoint, this.selectedPiece)
+        
         }
     }
   }

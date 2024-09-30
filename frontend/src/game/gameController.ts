@@ -5,8 +5,6 @@ import { SceneController } from "../scene/sceneController"
 import InputController from "../util/inputController"
 import UIController from "../util/uiController"
 import RobotStateHistory from "../util/RobotStateHistory"
-import * as THREE from 'three'
-import { Position } from "../board/position"
 
 export class GameController {
     board: Board
@@ -98,7 +96,7 @@ export class GameController {
         
     }
     // Move a non-target Robot 
-    moveNonTargetRobot(point: THREE.Vector3, selectedPiece:THREE.Object3D) {
+    moveNonTargetRobot() {
         // add to history
         this.boardHistory.addState(this.board) 
 
