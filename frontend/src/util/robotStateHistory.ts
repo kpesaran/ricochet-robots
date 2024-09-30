@@ -6,14 +6,11 @@ import { Position } from "../board/position"
 export default class RobotStateHistory {
     history: [Position, Position,Position,Position][]
     constructor() {
-        
         this.history = []
     }
 
     public addState(board: Board) {
-        console.log(this.history)
         this.history.push(this.copyRobotPositions(board.robotPositions))
-        console.log(board.robotPositions)
     }
 
     public undoState(board:Board) {
@@ -33,6 +30,7 @@ export default class RobotStateHistory {
     }
 
     private copyRobotPositions(robotPositions: [Position,Position,Position,Position]):[Position,Position,Position,Position] {
+        
         let copiedRobotPositions: [Position, Position, Position, Position] = robotPositions.map(pos => ({
             row: pos.row,
             column: pos.column

@@ -3,14 +3,14 @@ import { BoardBuilder } from "../util/boardBuilder"
 import { SceneController } from "../scene/sceneController"
 import InputController from "../util/inputController"
 import UIController from "../util/uiController"
-import BoardStateHistory from "../util/robotStateHistory"
+import RobotStateHistory from "../util/RobotStateHistory"
 
 export class GameController {
     board: Board
     sceneController: SceneController
     inputController: InputController
     UIController: UIController
-    boardHistory: BoardStateHistory
+    boardHistory: RobotStateHistory
     
     constructor() {
         const newBoard = new BoardBuilder()
@@ -18,7 +18,7 @@ export class GameController {
         this.inputController = new InputController(this)
         this.sceneController = new SceneController('canvas.webgl', this.board)
         this.UIController = new UIController(this)
-        this.boardHistory = new BoardStateHistory()
+        this.boardHistory = new RobotStateHistory()
         
         
     }
