@@ -3,24 +3,37 @@ import { BoardBuilder } from "../util/boardBuilder"
 import { SceneController } from "../scene/sceneController"
 import InputController from "../util/inputController"
 import UIController from "../util/uiController"
+import BoardStateHistory from "../util/boardStateHistory"
 
 export class GameController {
     board: Board
     sceneController: SceneController
     inputController: InputController
     UIController: UIController
+    boardHistory: BoardStateHistory
     
     constructor() {
         const newBoard = new BoardBuilder()
         this.board = newBoard.build()
         this.inputController = new InputController(this)
         this.sceneController = new SceneController('canvas.webgl', this.board)
-        this.UIController = new UIController()
+        this.UIController = new UIController(this)
+        this.boardHistory = new BoardStateHistory(this.board)
         
     }
     // Methods to update game state based on user choices
+    reverseLastMove() {
+        this.UIController.reduceMoveCount()
+        const prevBoardState = this.boardHistory.undoState()
+        if (prevBoardState) {
+            this.board = prevBoardState
+            this.sceneController.placeRobots(this.board)
+        }
+    }
     
     slideNorth() {
+        // update history
+        
         let newPos = this.board.findMoves().north
        
         if (newPos) {
@@ -30,7 +43,8 @@ export class GameController {
             // update scene
             this.sceneController.updateTargetRobot()
             // Update UI counter
-            this.UIController.updateMoveCount()
+            this.UIController.increaseMoveCount()
+            this.boardHistory.addState(this.board)
         }
     }
 
@@ -44,7 +58,8 @@ export class GameController {
             // update scene
             this.sceneController.updateTargetRobot()
             // Update UI counter
-            this.UIController.updateMoveCount()
+            this.UIController.increaseMoveCount()
+            this.boardHistory.addState(this.board)
         }
     }
     slideEast() {
@@ -57,7 +72,8 @@ export class GameController {
             // update scene
             this.sceneController.updateTargetRobot()
             // Update UI counter
-            this.UIController.updateMoveCount()
+            this.UIController.increaseMoveCount()
+            this.boardHistory.addState(this.board)
         }
 
     }
@@ -72,7 +88,9 @@ export class GameController {
             // update scene
             this.sceneController.updateTargetRobot()
             // Update UI counter
-            this.UIController.updateMoveCount()
+            this.UIController.increaseMoveCount()
+            // Update board history
+            this.boardHistory.addState(this.board)
         }
         
     }

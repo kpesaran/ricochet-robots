@@ -21,6 +21,7 @@ body
     top: 0;
     left: 0;
     outline: none;
+    z-index: -9999;
 }
 
 h1 {
@@ -31,11 +32,9 @@ h1 {
 .game-controls-container {
   color: white;
   /* position: absolute; */
-  
   bottom: 10%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
 
