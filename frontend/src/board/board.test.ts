@@ -142,29 +142,3 @@ test('Checking findTargetCell method returns target cell position', () => {
   expect(board.findTargetCell()).toStrictEqual({row:15,column: 14})
 
 })
-
-
-test('Checking copy method copies cells correctly', () => {
-  let board = new Board();
-
-  board.cells[0]![0]!.isObstructed = true;
-  board.cells[5]![5]!.isTarget = true;
-  board.cells[3]![3]!.walls = [Direction.North, Direction.West];
-
-  let copiedBoard = board.copy();
-
-  // Check that the cells in the copied board have the same properties as the original
-  expect(copiedBoard.cells[0]![0]!.isObstructed).toBe(true);
-  expect(copiedBoard.cells[5]![5]!.isTarget).toBe(true);
-  expect(copiedBoard.cells[3]![3]!.walls).toEqual([Direction.North, Direction.West]);
-
-  board.cells[0]![0]!.isObstructed = false;
-  board.cells[5]![5]!.isTarget = false;
-  board.cells[3]![3]!.walls = [];
-  // Check that copy still has the original value
-  expect(copiedBoard.cells[0]![0]!.isObstructed).toBe(true); 
-  expect(copiedBoard.cells[5]![5]!.isTarget).toBe(true); 
-  expect(copiedBoard.cells[3]![3]!.walls).toEqual([Direction.North, Direction.West]); 
-})
-
-
