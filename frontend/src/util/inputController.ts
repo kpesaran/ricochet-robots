@@ -80,6 +80,11 @@ export default class InputController {
           
         const intersectPoint = gridIntersects[0]!.point;
         console.log(intersectPoint)
+        const placedRow = Math.round(intersectPoint.x + 7.5)
+        const placedCol = Math.round(intersectPoint.z + 7.5)
+
+
+        
         this.selectedPiece.position.copy(intersectPoint);
         this.selectedPiece.position.y = .5
         

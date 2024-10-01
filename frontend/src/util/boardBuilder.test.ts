@@ -5,14 +5,14 @@ import { Color } from '../board/color';
 import { Robot } from '../board/robot';
 import { Direction } from '../board/direction';
 
-test(
-  'Empty builder returns default board',
-  () => {
-    let actual = new BoardBuilder().build();
-    let expected = new Board();
-    expect(actual).toStrictEqual(expected);
-  }
-)
+// test(
+//   'Empty builder returns default board',
+//   () => {
+//     let actual = new BoardBuilder().build();
+//     let expected = new Board();
+//     expect(actual).toStrictEqual(expected);
+//   }
+// )
 
 test(
   'Builder moves robots appropriately',

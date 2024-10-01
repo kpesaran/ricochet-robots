@@ -289,9 +289,9 @@ export class SceneController {
                     metalness: 1
                 });
                 const cellMesh = new THREE.Mesh(cellGeometry, cellMaterial);
-                // if (i === 15 && j == 0) {
-                //     cellMaterial.color = new THREE.Color('white')
-                // }
+                if (i === 15 && j == 15) {
+                    cellMaterial.color = new THREE.Color('white')
+                }
                 cellMesh.position.x = i + -7.5 
                 cellMesh.position.z = j + -7.5   
                 cellMesh.position.y = -.1
@@ -366,6 +366,7 @@ export class SceneController {
         const robotMesh = this.robotPieces[0]
         robotMesh?.position.set(robotPosition.column-7.5, .5 , robotPosition.row-7.5)
     }
+    
     
     placeWalls(board: Board) {
         

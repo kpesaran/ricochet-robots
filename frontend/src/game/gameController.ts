@@ -96,16 +96,15 @@ export class GameController {
         
     }
     // Move a non-target Robot 
-    moveNonTargetRobot() {
+    handleNonTargetRobotMove() {
         // add to history
         this.boardHistory.addState(this.board) 
 
         // Update board state
       
+        // Update Scene
 
-        // Update Scene 
-
-
+        // Update score
         this.UIController.increaseMoveCount()
     }
 }
