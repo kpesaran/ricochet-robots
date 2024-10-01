@@ -5,6 +5,7 @@ import { SceneController } from "../scene/sceneController"
 import InputController from "../util/inputController"
 import UIController from "../util/uiController"
 import RobotStateHistory from "../util/RobotStateHistory"
+import { Position } from "../board/position"
 
 export class GameController {
     board: Board
@@ -29,7 +30,7 @@ export class GameController {
         this.boardHistory.undoState(this.board)
         // Update scene
         this.sceneController.placeRobots(this.board)
-        console.log(this.board.robotPositions)
+        
     }
     
     slideNorth() {
@@ -96,13 +97,18 @@ export class GameController {
         
     }
     // Move a non-target Robot 
-    handleNonTargetRobotMove() {
+    handleNonTargetRobotMove(newPosition: Position,robotIndex: number | null) {
         // add to history
         this.boardHistory.addState(this.board) 
 
-        // Update board state
+        // Update board state 
       
+      if (robotIndex) {
+        this.board.robotPositions[robotIndex] = { row: newPosition.row, column: newPosition.column }
+        
+      }
         // Update Scene
+        this.sceneController.placeRobots(this.board)
 
         // Update score
         this.UIController.increaseMoveCount()

@@ -365,8 +365,7 @@ export class SceneController {
         const robotPosition = this.board.robotPositions[0]
         const robotMesh = this.robotPieces[0]
         robotMesh?.position.set(robotPosition.column-7.5, .5 , robotPosition.row-7.5)
-    }
-    
+    } 
     
     placeWalls(board: Board) {
         

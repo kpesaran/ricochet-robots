@@ -60,7 +60,7 @@ export default class InputController {
       }
       // Place the robot
       else if (this.selectedPiece) {
-         
+        
         rayCaster.setFromCamera(mouse, camera);
         // Ensures robot will be moved to position on plane
         const gridIntersects = rayCaster.intersectObject(gameController.sceneController.gridPlane!);
@@ -69,9 +69,10 @@ export default class InputController {
           const intersectPoint = gridIntersects[0]!.point;
           const placedCol = Math.round(intersectPoint.x + 7.5)
           const placedRow = Math.round(intersectPoint.z + 7.5)
+          const newPosition = {row: placedRow, column: placedCol}
         
         // find robot by position 
-          let robotIndex
+          let robotIndex: number | null = null
           for (let i = 0; i < gameController.sceneController.robotPieces.length; i++) {
           
             if (this.selectedPiece === gameController.sceneController.robotPieces[i]) {
@@ -80,9 +81,9 @@ export default class InputController {
         }
         if (robotIndex) {
           gameController.board.robotPositions[robotIndex] = { row: placedRow, column: placedCol }
-          gameController.sceneController.placeRobots(gameController.board)
+          
         }
-        
+        gameController.handleNonTargetRobotMove( newPosition, robotIndex)
       }    
           this.selectedPiece = undefined;
       }
