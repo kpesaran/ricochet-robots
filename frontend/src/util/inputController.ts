@@ -43,9 +43,9 @@ export default class InputController {
     const mouse = gameController.sceneController.mouse
     const camera = gameController.sceneController.camera
 
-  rayCaster.setFromCamera(mouse, camera);
+    rayCaster.setFromCamera(mouse, camera);
 
-  const robotIntersects = rayCaster.intersectObjects(gameController.sceneController.robotPieces);
+    const robotIntersects = rayCaster.intersectObjects(gameController.sceneController.robotPieces);
 
     if (robotIntersects.length > 0) {
     console.log(robotIntersects)
@@ -60,7 +60,30 @@ export default class InputController {
       }
       // Place the robot
       else if (this.selectedPiece) {
-        // gameController.placeNonTargetRobot(intersectPoint, this.selectedPiece)
+         
+        rayCaster.setFromCamera(mouse, camera);
+        // Ensures robot will be moved to position on plane
+        const gridIntersects = rayCaster.intersectObject(gameController.sceneController.gridPlane!);
+        if (gridIntersects.length > 0) {
+
+          const intersectPoint = gridIntersects[0]!.point;
+          const placedCol = Math.round(intersectPoint.x + 7.5)
+          const placedRow = Math.round(intersectPoint.z + 7.5)
+        
+        // find robot by position 
+          let robotIndex
+          for (let i = 0; i < gameController.sceneController.robotPieces.length; i++) {
+          
+            if (this.selectedPiece === gameController.sceneController.robotPieces[i]) {
+              robotIndex = i
+          }
+        }
+        if (robotIndex) {
+          gameController.board.robotPositions[robotIndex] = { row: placedRow, column: placedCol }
+          gameController.sceneController.placeRobots(gameController.board)
+        }
+        
+      }    
           this.selectedPiece = undefined;
       }
   } 
@@ -79,9 +102,6 @@ export default class InputController {
       if (gridIntersects.length > 0) {
           
         const intersectPoint = gridIntersects[0]!.point;
-        console.log(intersectPoint)
-        const placedRow = Math.round(intersectPoint.x + 7.5)
-        const placedCol = Math.round(intersectPoint.z + 7.5)
 
 
         
