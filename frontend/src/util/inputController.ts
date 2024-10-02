@@ -60,7 +60,7 @@ export default class InputController {
 
     rayCaster.setFromCamera(mouse, camera);
 
-    const robotIntersects = rayCaster.intersectObjects(gameController.sceneController.robotPieces);
+    const robotIntersects = rayCaster.intersectObjects(gameController.sceneController.robotPieces.slice(1));
 
     if (robotIntersects.length > 0) {
       
