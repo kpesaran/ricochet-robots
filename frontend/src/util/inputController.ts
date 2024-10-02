@@ -79,10 +79,7 @@ export default class InputController {
               robotIndex = i
           }
         }
-        if (robotIndex) {
-          gameController.board.robotPositions[robotIndex] = { row: placedRow, column: placedCol }
-          
-        }
+
         gameController.handleNonTargetRobotMove( newPosition, robotIndex)
       }    
           this.selectedPiece = undefined;
