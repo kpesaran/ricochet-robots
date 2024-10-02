@@ -51,8 +51,9 @@ export class Board {
       { row: 0, column: 2},
       { row: 0, column: 3},
     ];
+    
   }
-
+  
   findTargetCell() {
     for (let row = 0; row < this.cells.length; row++) {
       if (this.cells[row]) {

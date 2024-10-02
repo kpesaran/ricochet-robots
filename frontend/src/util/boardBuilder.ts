@@ -66,6 +66,7 @@ export class BoardBuilder {
       board.robotPositions[botIndex] = position;
     }
   }
+
  
   generateEdgeWalls(){
     //edge pieces

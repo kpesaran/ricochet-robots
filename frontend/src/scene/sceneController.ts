@@ -39,8 +39,6 @@ export class SceneController {
         this.scene.add(this.camera);
         this.rayCaster = new THREE.Raycaster()
         this.mouse = new THREE.Vector2(0,0)
-        
-
         // Renderer
         this.renderer = new THREE.WebGLRenderer()
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas!, alpha: true });
@@ -65,9 +63,7 @@ export class SceneController {
         this.setUpLights()
         // this.lightPaths()
         this.setUpAxesHelpers()
-        
         this.setUpEventListeners()
-     
         // this.tick = this.tick.bind(this);
         this.tick()
     }
@@ -78,20 +74,6 @@ export class SceneController {
         this.generateTargetChip({ row: 12, column: 14 })
         this.placeCellMeshes()
         this.setUpGridPlane();
-
-        // Grid Plane
-        const planeGeometry = new THREE.PlaneGeometry(this.gridSize, this.gridSize); 
-
-        const planeMaterial = new THREE.MeshBasicMaterial({
-            color: 0x000000,
-            transparent: true,
-            opacity: .10
-        });
-
-        const gridPlane = new THREE.Mesh(planeGeometry, planeMaterial);
-        gridPlane.rotation.x = -Math.PI / 2;
-        gridPlane.position.y = .2;
-        this.scene.add(gridPlane);
 
         // Center - Squre 
         const centerSquareGeom = new THREE.BoxGeometry(2, 1, 2) 
@@ -126,31 +108,32 @@ export class SceneController {
         this.scene.add(gridHelper);
     }
 
-    generateTargetChip(position: Position) {
+    generateTargetChip(position: Position | null) {
         if (position) {
-          const gridChipsGeom = new THREE.BufferGeometry()
-          const positions = new Float32Array(3)
-          const x = (position.row) - 8.5
-          const y = .2
-          const z = (position.column) - 8.5
-          positions[0] = x
-          positions[1] = y
-          positions[2] = z
-        gridChipsGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3)) 
-      // particlesGeometry.setAttribute('color', new THREE.BufferAttribute(gridChipsColors,3)) 
-        const gridChipsMat = new THREE.PointsMaterial({
-        size: 1,
-          sizeAttenuation: true 
-      })
-        gridChipsMat.color = new THREE.Color('red')
-      // particlesMaterial.vertexColors = true
-        gridChipsMat.transparent = true
-        gridChipsMat.alphaMap = this.symbol1
-        gridChipsMat.depthWrite = false
-        const gridChips = new THREE.Points(gridChipsGeom, gridChipsMat)
-        this.scene.add(gridChips)
+            const gridChipsGeom = new THREE.BufferGeometry()
+            const positions = new Float32Array(3)
+            const x = (position.row) - 8.5
+            const y = .2
+            const z = (position.column) - 8.5
+            positions[0] = x
+            positions[1] = y
+            positions[2] = z
+            gridChipsGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3)) 
+            // particlesGeometry.setAttribute('color', new THREE.BufferAttribute(gridChipsColors,3)) 
+            const gridChipsMat = new THREE.PointsMaterial({
+                size: 1,
+                sizeAttenuation: true 
+            })
+            gridChipsMat.color = new THREE.Color('red')
+            // particlesMaterial.vertexColors = true
+            gridChipsMat.transparent = true
+            gridChipsMat.alphaMap = this.symbol1
+            gridChipsMat.depthWrite = false
+            const gridChips = new THREE.Points(gridChipsGeom, gridChipsMat)
+            this.scene.add(gridChips)
         }
-      }
+    }
+    
     setUpLights() {
         const ambientLight = new THREE.AmbientLight('#ffffff', 4);
         this.scene.add(ambientLight);
@@ -284,7 +267,6 @@ export class SceneController {
 
     placeCellMeshes() {
         // const cellGeometry = new THREE.BoxGeometry(.7, .3, .7); 
-        
         this.board.cells.forEach((row,row_idx) => {
             row.forEach((cell,col_idx) => {
                 const cellPiece = new CellPiece(cell, { row: row_idx, column: col_idx })
@@ -295,7 +277,6 @@ export class SceneController {
     }
 
     destroyRobotMeshes() {
-        
         this.robotPieces.forEach(robotMesh => {
             robotMesh.geometry.dispose()
             // If robotMesh.material is an array of materials
@@ -373,22 +354,20 @@ export class SceneController {
         
         if (this.robotPieces.length > 0) {
             
-          const robotIntersects = 
-                this.rayCaster.intersectObjects(this.robotPieces.slice(1))  
+            const robotIntersects = this.rayCaster.intersectObjects(this.robotPieces.slice(1))  
                 
             if (robotIntersects.length > 0) {
-            this.robotPieces.forEach(piece => piece.scale.set(1, 1, 1));
-            const selectedPiece = robotIntersects[0]!.object
-            selectedPiece.scale.set(1.5, 2, 1.5)
-
-          }
-          else {
-            this.robotPieces.forEach(piece => piece.scale.set(1, 1, 1));
-          }
+                this.robotPieces.forEach(piece => piece.scale.set(1, 1, 1));
+                const selectedPiece = robotIntersects[0]!.object
+                selectedPiece.scale.set(1.5, 2, 1.5)
+            }
+            else {
+                this.robotPieces.forEach(piece => piece.scale.set(1, 1, 1));
+            }
         } 
         // For orbit controls damping 
         this.controls.update()
         this.renderer.render(this.scene, this.camera)
         window.requestAnimationFrame(this.tick)
-      }
+    }
 }
