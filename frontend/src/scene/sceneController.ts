@@ -374,7 +374,7 @@ export class SceneController {
         if (this.robotPieces.length > 0) {
             
           const robotIntersects = 
-                this.rayCaster.intersectObjects(this.robotPieces)  
+                this.rayCaster.intersectObjects(this.robotPieces.slice(1))  
                 
             if (robotIntersects.length > 0) {
             this.robotPieces.forEach(piece => piece.scale.set(1, 1, 1));
