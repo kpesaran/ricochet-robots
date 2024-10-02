@@ -85,6 +85,7 @@ export class BoardBuilder {
     //SW quadrant
     this.withWall(Direction.South, { row: 10, column: 0 }) 
     this.withWall(Direction.East, { row: 15, column: 4 })
+    return this
 
   }
   generatePairedWalls() {
@@ -122,6 +123,7 @@ export class BoardBuilder {
     this.withWall(Direction.East, { row: 15, column: 2 })
 
     // 
+    return this
 
   }
 
@@ -130,8 +132,6 @@ export class BoardBuilder {
 
   public build() {
     let board = new Board();
-    this.generateEdgeWalls()
-    this.generatePairedWalls()
     this.addWalls(board);
     this.addRobots(board);
 

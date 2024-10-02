@@ -16,7 +16,7 @@ export class GameController {
     
     constructor() {
         const newBoard = new BoardBuilder()
-        this.board = newBoard.build()
+        this.board = newBoard.generateEdgeWalls().generatePairedWalls().build()
         this.inputController = new InputController(this)
         this.sceneController = new SceneController('canvas.webgl', this.board)
         this.UIController = new UIController()
