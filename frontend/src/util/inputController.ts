@@ -78,8 +78,8 @@ export default class InputController {
             if (this.selectedPiece === gameController.sceneController.robotPieces[i]) {
               robotIndex = i
           }
-        }
-
+          }
+          
         gameController.handleNonTargetRobotMove( newPosition, robotIndex)
       }    
           this.selectedPiece = undefined;

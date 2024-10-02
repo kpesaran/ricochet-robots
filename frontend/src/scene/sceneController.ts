@@ -2,9 +2,8 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Position } from '../board/position';
 import { Board } from '../board/board';
-// import { Board } from '../board/board';
-import { Color }  from '../board/color'
 import WallPiece from './wallPiece';
+import RobotPiece from './RobotPiece';
 
 export class SceneController {
     scene: THREE.Scene;
@@ -321,7 +320,6 @@ export class SceneController {
             }
             this.scene.remove(robotMesh)
         })
-
     }
 
     placeRobots(board: Board) {
@@ -329,36 +327,10 @@ export class SceneController {
             this.destroyRobotMeshes()
             this.robotPieces = []
         }
-        const robotGeom = new THREE.CylinderGeometry(.01, .3, 1)
         for (let i = 0; i < board.robots.length; i++) {
-            let robotColor: string | undefined
-            const robot = board.robots[i]
-            if (robot && robot.color) {
-                switch (robot.color) {
-                    case Color.Blue:
-                        robotColor = 'blue'
-                        break;
-                    case Color.Green:
-                        robotColor = 'green'
-                        break;
-                    case Color.Yellow:
-                        robotColor = 'yellow'
-                        break;
-                    // !!!
-                    // case Color.Red:
-                    //     robotColor = 'red'
-                    //     break;
-                }
-            }
-          const robotMesh = new THREE.Mesh(robotGeom, new THREE.MeshBasicMaterial({
-            color: robotColor
-          }))
-          const robotPosition = this.board.robotPositions[i];
-            if (robotPosition) {
-                robotMesh.position.set(robotPosition.column-7.5, .5 , robotPosition.row-7.5)
-          }
-          this.scene.add(robotMesh)
-            this.robotPieces.push(robotMesh)
+            const robotPiece = new RobotPiece(this.board.robots[i]!, this.board.robotPositions[i]!);
+            this.scene.add(robotPiece.mesh!)
+            this.robotPieces.push(robotPiece.mesh!)
         }
     }
     updateTargetRobot() {

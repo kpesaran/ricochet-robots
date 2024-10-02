@@ -11,7 +11,6 @@ export class BoardBuilder {
 
   constructor() {
     this.robots = []
-    // come back and check north with row 0
     this.walls = []
   }
 
