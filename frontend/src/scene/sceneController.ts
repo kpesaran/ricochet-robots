@@ -3,7 +3,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Position } from '../board/position';
 import { Board } from '../board/board';
 import WallPiece from './wallPiece';
-import RobotPiece from './RobotPiece';
+import RobotPiece from './robotPiece'
+import CellPiece from './cellPiece';
 
 export class SceneController {
     scene: THREE.Scene;
@@ -282,28 +283,15 @@ export class SceneController {
     }
 
     placeCellMeshes() {
-        const cellGeometry = new THREE.BoxGeometry(.7, .3,.7); 
-        for (let i = 0; i < this.gridSize; i++){
-            for (let j = 0; j < this.gridSize; j++) {
-                const cellMaterial = new THREE.MeshStandardMaterial({
-                    // "rgb(30, 100, 70)")
-                    // color: new THREE.Color("rgb(30, 100, 130)"),
-                    color: new THREE.Color("rgb(30, 0, 10)"),
-                    roughness: .3,
-                    metalness: 1
-                });
-                const cellMesh = new THREE.Mesh(cellGeometry, cellMaterial);
-                // if (i === 15 && j == 15) {
-                //     cellMaterial.color = new THREE.Color('white')
-                // }
-                cellMesh.receiveShadow = true
-                cellMesh.position.x = i + -7.5 
-                cellMesh.position.z = j + -7.5   
-                cellMesh.position.y = -.1
-                this.cells.push(cellMesh)
-                this.scene.add(cellMesh)    
-            }
-        }
+        // const cellGeometry = new THREE.BoxGeometry(.7, .3, .7); 
+        
+        this.board.cells.forEach((row,row_idx) => {
+            row.forEach((cell,col_idx) => {
+                const cellPiece = new CellPiece(cell, { row: row_idx, column: col_idx })
+                this.cells.push(cellPiece.mesh!)
+                this.scene.add(cellPiece.mesh!)
+            })
+        })
     }
 
     destroyRobotMeshes() {
