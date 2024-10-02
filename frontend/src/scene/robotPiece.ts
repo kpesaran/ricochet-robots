@@ -45,7 +45,8 @@ export default class RobotPiece {
     private setMesh(pos: Position) {
         this.mesh = new THREE.Mesh
             (this.geometry, this.material)
-        this.mesh.position.set(pos.column-7.5, .5 , pos.row-7.5)
+        this.mesh.position.set(pos.column - 7.5, .5, pos.row - 7.5)
+        this.mesh.castShadow = true;
     }
 
 }

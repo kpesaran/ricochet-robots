@@ -45,6 +45,8 @@ export class SceneController {
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas!, alpha: true });
         this.renderer.setSize(this.sizes.width, this.sizes.height);
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.renderer.shadowMap.enabled = true; 
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         // Orbital Controls
         this.controls = new OrbitControls(this.camera, this.canvas);
         this.controls.enableDamping = true;
@@ -64,7 +66,7 @@ export class SceneController {
         this.setUpAxesHelpers()
         
         this.setUpEventListeners()
-        
+     
         // this.tick = this.tick.bind(this);
         this.tick()
     }
@@ -150,8 +152,10 @@ export class SceneController {
       }
     setUpLights() {
         const ambientLight = new THREE.AmbientLight('#ffffff', 4);
-        const directionalLight = new THREE.DirectionalLight('#ffffff',1)
         this.scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight('#ffffff', 2)
+        directionalLight.castShadow = true;
+       
         directionalLight.position.y = 1
         this.scene.add(directionalLight)
         const pointLight = new THREE.PointLight('cyan', 13);
@@ -283,14 +287,16 @@ export class SceneController {
             for (let j = 0; j < this.gridSize; j++) {
                 const cellMaterial = new THREE.MeshStandardMaterial({
                     // "rgb(30, 100, 70)")
-                    color: new THREE.Color("rgb(30, 100, 130)"),
+                    // color: new THREE.Color("rgb(30, 100, 130)"),
+                    color: new THREE.Color("rgb(30, 0, 10)"),
                     roughness: .3,
                     metalness: 1
                 });
                 const cellMesh = new THREE.Mesh(cellGeometry, cellMaterial);
-                if (i === 15 && j == 15) {
-                    cellMaterial.color = new THREE.Color('white')
-                }
+                // if (i === 15 && j == 15) {
+                //     cellMaterial.color = new THREE.Color('white')
+                // }
+                cellMesh.receiveShadow = true
                 cellMesh.position.x = i + -7.5 
                 cellMesh.position.z = j + -7.5   
                 cellMesh.position.y = -.1

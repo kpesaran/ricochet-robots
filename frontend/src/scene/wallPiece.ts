@@ -43,5 +43,6 @@ export default class WallPiece {
             this.mesh.position.set(pos.column - 7, 0.1, pos.row - 7.5);
             this.mesh.rotation.y = Math.PI * 0.5;
         }
+        this.mesh.castShadow = true;
 }
     }
