@@ -4,7 +4,7 @@ import { BoardBuilder } from "../util/boardBuilder"
 import { SceneController } from "../scene/sceneController"
 import InputController from "../util/inputController"
 import UIController from "../util/uiController"
-import RobotStateHistory from "../util/RobotStateHistory"
+import RobotStateHistory from "../util/robotStateHistory"
 import { Position } from "../board/position"
 
 export class GameController {

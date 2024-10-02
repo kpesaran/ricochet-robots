@@ -103,9 +103,6 @@ export default class InputController {
       if (gridIntersects.length > 0) {
           
         const intersectPoint = gridIntersects[0]!.point;
-
-
-        
         this.selectedPiece.position.copy(intersectPoint);
         this.selectedPiece.position.y = .5
         

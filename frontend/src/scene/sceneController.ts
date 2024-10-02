@@ -263,21 +263,21 @@ export class SceneController {
     setUpGridPlane() {
         const gridSize = this.gridSize
         
+        const planeGeometry = new THREE.PlaneGeometry(gridSize, gridSize); 
+
+        const planeMaterial = new THREE.MeshBasicMaterial({
+        color: 0x000000,
+        transparent: true,
+        opacity: .10
+        });
     
-    const planeGeometry = new THREE.PlaneGeometry(gridSize, gridSize); 
-    
-    const planeMaterial = new THREE.MeshBasicMaterial({
-      color: 0x000000,
-      transparent: true,
-      opacity: .10
-    });
-    
-    const gridPlane = new THREE.Mesh(planeGeometry, planeMaterial);
-    gridPlane.rotation.x = -Math.PI / 2;
+        const gridPlane = new THREE.Mesh(planeGeometry, planeMaterial);
+        gridPlane.rotation.x = -Math.PI / 2;
         gridPlane.position.y = 0;
         this.scene.add(gridPlane)
         this.gridPlane = gridPlane
     }
+
     placeCellMeshes() {
         const cellGeometry = new THREE.BoxGeometry(.7, .3,.7); 
         for (let i = 0; i < this.gridSize; i++){
@@ -402,10 +402,7 @@ export class SceneController {
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     }
     
-    tick = () => {
-        
-        
-        // raycaster
+    tick = () => { 
         this.rayCaster.setFromCamera(this.mouse, this.camera)
         
         if (this.robotPieces.length > 0) {
