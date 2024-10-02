@@ -29,9 +29,10 @@ export default class CellPiece {
             metalness: 1
         });
     }
+    
     setMesh(pos: Position) {
         this.mesh = new THREE.Mesh(this.geometry, this.material)
         this.mesh.position.set(pos.row + -7.5, -.1, pos.column + -7.5)
         this.mesh.receiveShadow = true
-}
+    }
     }

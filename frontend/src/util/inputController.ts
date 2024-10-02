@@ -35,6 +35,21 @@ export default class InputController {
     gameController.sceneController.updateMousePosition(x, y);
     if (this.selectedPiece) {
       this.moveRobot(gameController)
+
+    }
+    const rayCaster = gameController.sceneController.rayCaster
+    const mouse = gameController.sceneController.mouse
+    const camera = gameController.sceneController.camera
+
+    rayCaster.setFromCamera(mouse, camera);
+
+    const robotIntersects = rayCaster.intersectObjects(gameController.sceneController.robotPieces.slice(1));
+
+    if (robotIntersects.length > 0) {
+      document.body.style.cursor = "pointer";
+    }
+    else {
+      document.body.style.cursor = "default";
     }
   }
 
@@ -48,19 +63,18 @@ export default class InputController {
     const robotIntersects = rayCaster.intersectObjects(gameController.sceneController.robotPieces);
 
     if (robotIntersects.length > 0) {
-    console.log(robotIntersects)
+      
       // Select the robot
       if (!this.selectedPiece) {
         const intersectedObject = robotIntersects[0]!.object
         if (intersectedObject instanceof THREE.Mesh) {
           
           this.selectedPiece = intersectedObject
-          console.log(this.selectedPiece)
         }
       }
       // Place the robot
       else if (this.selectedPiece) {
-        
+        document.body.style.cursor = "default";
         rayCaster.setFromCamera(mouse, camera);
         // Ensures robot will be moved to position on plane
         const gridIntersects = rayCaster.intersectObject(gameController.sceneController.gridPlane!);
@@ -91,7 +105,6 @@ export default class InputController {
     const rayCaster = gameController.sceneController.rayCaster
     const mouse = gameController.sceneController.mouse
     const camera = gameController.sceneController.camera
-    console.log(mouse.y)
     if (this.selectedPiece) {
       
       rayCaster.setFromCamera(mouse, camera);
