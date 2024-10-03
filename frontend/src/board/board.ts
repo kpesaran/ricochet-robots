@@ -3,7 +3,7 @@ import { Color } from './color';
 import { Robot } from './robot';
 import type { Position } from './position';
 import { Direction } from './direction';
-// import { Direction } from './direction'
+
 
 /*
  * The height and width of the board
