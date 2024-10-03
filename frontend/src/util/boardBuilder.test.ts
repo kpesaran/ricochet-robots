@@ -59,3 +59,11 @@ test(
     expect(board.cells[15]?.[15]?.walls).toStrictEqual([Direction.East, Direction.South]);
   }
 )
+
+test("Builder adds targetCell appropriately", () => {
+  let board = new BoardBuilder()
+    .withTargetCell({ row: 5, column: 5 })
+    .build()
+  
+  expect(board.cells[5]?.[5]?.isTarget).toStrictEqual(true)
+})

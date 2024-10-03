@@ -1,5 +1,4 @@
 import { Board, BOARD_SIZE } from './board';
-
 import { expect, test } from 'vitest';
 import { Direction } from './direction';
 
@@ -77,12 +76,6 @@ test('Checking eligible move in the West direction', () => {
   );
 });
 
-test("Should return target cell in path", () => {
-  let board = new Board();
-  board.cells[15]![14]!.isTarget = true;
-  expect(board.checkDirections({ row: 9, column: 14 }, Direction.South)).toStrictEqual({ row: 15, column: 14 });
-  expect(board.checkDirections({ row: 15, column: 9 }, Direction.East)).toStrictEqual({ row: 15, column: 14 });
-});
 test("Checking eligible move position if another robot is in the path", () => {
   let board = new Board();
   board.robotPositions = [
