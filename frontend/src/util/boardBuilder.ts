@@ -1,16 +1,19 @@
 import { Board } from '../board/board';
 import { Robot } from '../board/robot';
+import { Cell } from '../board/cell';
 import { Direction } from '../board/direction';
- 
-import type { Position } from '../board/position';
+ import type { Position } from '../board/position';
+
 
 export class BoardBuilder {
   robots: [Robot, Position][];
   walls: [Direction, Position][];
+  targetCell: Position | null
 
   constructor() {
     this.robots = []
     this.walls = []
+    this.targetCell = null
   }
 
   public withRobot(newRobot: Robot, newPosition: Position): BoardBuilder {
@@ -65,12 +68,24 @@ export class BoardBuilder {
       board.robotPositions[botIndex] = position;
     }
   }
+  
+  public withTargetCell(newPosition: Position) {
+    this.targetCell = newPosition
+    return this
+  }
+
+  private addTargetCell(board: Board) {
+    if (this.targetCell) {
+      board.cells[this.targetCell.row]![this.targetCell.column]!.isTarget = true 
+    }
+  }
 
   public build() {
     let board = new Board();
 
     this.addWalls(board);
     this.addRobots(board);
+    this.addTargetCell(board)
 
     return board;
   }
