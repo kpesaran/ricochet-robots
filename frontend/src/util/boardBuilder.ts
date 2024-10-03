@@ -1,6 +1,5 @@
 import { Board } from '../board/board';
 import { Robot } from '../board/robot';
-import { Cell } from '../board/cell';
 import { Direction } from '../board/direction';
  import type { Position } from '../board/position';
 

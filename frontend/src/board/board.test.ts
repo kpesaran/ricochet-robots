@@ -1,5 +1,4 @@
 import { Board, BOARD_SIZE } from './board';
-
 import { expect, test } from 'vitest';
 import { Direction } from './direction';
 
