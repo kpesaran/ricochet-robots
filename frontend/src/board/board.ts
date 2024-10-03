@@ -14,6 +14,7 @@ export class Board {
   cells: Cell[][] ;
   robots: [Robot, Robot, Robot, Robot];
   robotPositions: [Position, Position, Position, Position];
+  openPositions: Position[]
 
   constructor() {
     let cells = new Array(BOARD_SIZE)
@@ -47,6 +48,8 @@ export class Board {
       { row: 0, column: 2},
       { row: 0, column: 3},
     ];
+    this.openPositions = []
+    
 
   }
 
@@ -132,5 +135,22 @@ export class Board {
     }
 
     return legalMove 
+  }
+
+
+  generateOpenPositions(boardSize: number) {
+    for (let row = 0; row < boardSize; row++) {
+      for (let col = 0; col < boardSize; col++) {
+        // if cell is not obstructed add position
+
+        if (!this.cells[row]![col]?.isObstructed && !this.cells[row]![col]?.isTarget) {
+          this.openPositions.push({row: row, column: col})
+        }
+      }
+    }
+  }
+  getRandomPosition() {
+    const randomIndex = Math.floor(Math.random() * this.openPositions.length)
+    return this.openPositions.splice(randomIndex, 1)[0]
   }
 }

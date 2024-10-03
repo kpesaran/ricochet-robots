@@ -1,16 +1,18 @@
 import { Board } from '../board/board';
 import { Robot } from '../board/robot';
 import { Direction } from '../board/direction';
- 
 import type { Position } from '../board/position';
 
 export class BoardBuilder {
   robots: [Robot, Position][];
   walls: [Direction, Position][];
+  openPositions: Position[]
+
 
   constructor() {
     this.robots = []
     this.walls = []
+    this.openPositions = []
   }
 
   public withRobot(newRobot: Robot, newPosition: Position): BoardBuilder {
