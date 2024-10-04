@@ -6,6 +6,7 @@ import WallPiece from './wallPiece';
 import RobotPiece from './robotPiece'
 import CellPiece from './cellPiece';
 import targetChipPiece from './targetChip';
+import CenterCube from './centerCube';
 
 export class SceneController {
     scene: THREE.Scene;
@@ -72,20 +73,13 @@ export class SceneController {
     setUpBoard() {
         this.placeWalls(this.board)
         this.placeRobots(this.board)
-        this.placeTargetChip({ row: 0, column: 0 })
+        this.placeTargetChip({ row: 0, column: 7 })
         this.placeCellMeshes()
         this.setUpGridPlane();
-
-        // Center - Squre 
-        const centerSquareGeom = new THREE.BoxGeometry(2, 1, 2) 
-        const centerSquareMat = new THREE.MeshStandardMaterial({
-            color: 'grey',
-            metalness: .1,
-            roughness: .5
-        })
-
-        const centerSquareMesh = new THREE.Mesh(centerSquareGeom, centerSquareMat)
-        this.scene.add(centerSquareMesh)
+        const centerCube = new CenterCube()
+        if (centerCube.mesh) {
+            this.scene.add(centerCube.mesh)
+        }
 
         // Center - Chip
         const centerSymbolGeom = new THREE.BoxGeometry(1, 1, 1)
@@ -129,7 +123,6 @@ export class SceneController {
         this.scene.add(ambientLight);
         const directionalLight = new THREE.DirectionalLight('#ffffff', 2)
         directionalLight.castShadow = true;
-       
         directionalLight.position.y = 1
         this.scene.add(directionalLight)
         const pointLight = new THREE.PointLight('cyan', 13);

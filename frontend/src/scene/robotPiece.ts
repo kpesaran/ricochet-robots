@@ -14,7 +14,6 @@ export default class RobotPiece {
         this.setGeometry()
         this.setMaterial()
         this.setMesh(pos) 
-        
     } 
 
     private setGeometry() {
