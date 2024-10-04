@@ -24,7 +24,6 @@ export class GameController {
     }
     // Methods to update game state based on user choices
     resetGame() {
-        const newBoard = new BoardBuilder()
         // use original state and wipe history
         this.boardHistory.initialBoardState(this.board)
         this.boardHistory = new RobotStateHistory()

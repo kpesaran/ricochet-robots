@@ -32,6 +32,8 @@ export default class RobotStateHistory {
             board.robotPositions = this.history[0]
         } 
     }
+    
+    
 
     private copyRobotPositions(robotPositions: [Position,Position,Position,Position]):[Position,Position,Position,Position] {
         
