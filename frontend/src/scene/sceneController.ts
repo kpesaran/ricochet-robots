@@ -7,6 +7,7 @@ import RobotPiece from './robotPiece'
 import CellPiece from './cellPiece';
 import targetChipPiece from './targetChip';
 import CenterCube from './centerCube';
+import CenterChip from './centerChip';
 
 export class SceneController {
     scene: THREE.Scene;
@@ -77,21 +78,10 @@ export class SceneController {
         this.placeCellMeshes()
         this.setUpGridPlane();
         const centerCube = new CenterCube()
-        if (centerCube.mesh) {
-            this.scene.add(centerCube.mesh)
-        }
+        this.scene.add(centerCube.mesh!)
+        const centerChip = new CenterChip(this.symbol1)
+        this.scene.add(centerChip.mesh!)
 
-        // Center - Chip
-        const centerSymbolGeom = new THREE.BoxGeometry(1, 1, 1)
-        const centerSymbolMat = new THREE.MeshStandardMaterial({
-            color: 'red',
-            alphaMap: this.symbol1,
-            alphaTest: .001,
-            transparent: true,
-        })
-        const centerSymbolMesh = new THREE.Mesh (centerSymbolGeom, centerSymbolMat)
-        this.scene.add(centerSymbolMesh)
-        centerSymbolMesh.position.set(0,1,0)
     }
 
     setUpAxesHelpers() {
