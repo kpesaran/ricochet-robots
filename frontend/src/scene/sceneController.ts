@@ -5,6 +5,7 @@ import { Board } from '../board/board';
 import WallPiece from './wallPiece';
 import RobotPiece from './robotPiece'
 import CellPiece from './cellPiece';
+import targetChipPiece from './targetChip';
 
 export class SceneController {
     scene: THREE.Scene;
@@ -71,7 +72,7 @@ export class SceneController {
     setUpBoard() {
         this.placeWalls(this.board)
         this.placeRobots(this.board)
-        this.generateTargetChip({ row: 12, column: 14 })
+        this.placeTargetChip({ row: 0, column: 0 })
         this.placeCellMeshes()
         this.setUpGridPlane();
 
@@ -108,29 +109,18 @@ export class SceneController {
         this.scene.add(gridHelper);
     }
 
-    generateTargetChip(position: Position | null) {
+    placeTargetChip(position: Position) {
         if (position) {
-            const gridChipsGeom = new THREE.BufferGeometry()
-            const positions = new Float32Array(3)
-            const x = (position.row) - 8.5
-            const y = .2
-            const z = (position.column) - 8.5
-            positions[0] = x
-            positions[1] = y
-            positions[2] = z
-            gridChipsGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3)) 
-            // particlesGeometry.setAttribute('color', new THREE.BufferAttribute(gridChipsColors,3)) 
-            const gridChipsMat = new THREE.PointsMaterial({
-                size: 1,
-                sizeAttenuation: true 
-            })
-            gridChipsMat.color = new THREE.Color('red')
-            // particlesMaterial.vertexColors = true
-            gridChipsMat.transparent = true
-            gridChipsMat.alphaMap = this.symbol1
-            gridChipsMat.depthWrite = false
-            const gridChips = new THREE.Points(gridChipsGeom, gridChipsMat)
-            this.scene.add(gridChips)
+            const gridChip = new targetChipPiece(position, this.symbol1)
+         
+            if (gridChip.point) {
+                    this.scene.add(gridChip.point);
+            }
+            else {
+                console.error("gridChip.point is undefined.");
+            }
+          
+            
         }
     }
     
