@@ -1,5 +1,6 @@
 // Responsible for handling event listeners for user inputs  
 
+import { Direction } from "../board/direction";
 import { GameController } from "../game/gameController";
 import * as THREE from 'three'
 
@@ -17,16 +18,16 @@ export default class InputController {
   handleKeydown(event: KeyboardEvent, gameController: GameController) {
     switch (event.key) {
       case 'ArrowUp':
-        gameController.slideNorth();
+        gameController.slideTargetRobot(Direction.North);
         break;
       case 'ArrowDown':
-        gameController.slideSouth();
+        gameController.slideTargetRobot(Direction.South);
         break;
       case 'ArrowLeft':
-        gameController.slideWest();
+        gameController.slideTargetRobot(Direction.West);
         break;
       case 'ArrowRight':
-        gameController.slideEast();
+        gameController.slideTargetRobot(Direction.East);
         break;
     }
   }
@@ -36,7 +37,6 @@ export default class InputController {
     gameController.sceneController.updateMousePosition(x, y);
     if (this.selectedPiece) {
       this.moveRobot(gameController)
-
     }
     const rayCaster = gameController.sceneController.rayCaster
     const mouse = gameController.sceneController.mouse

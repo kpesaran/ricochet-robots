@@ -3,6 +3,7 @@ import { Position } from '../../board/position';
 import { Direction } from '../../board/direction';
 
 
+
 export default class WallPiece {
     material: THREE.Material | undefined;
     geometry: THREE.BoxGeometry | undefined;
