@@ -299,7 +299,23 @@ export class SceneController {
                 }
             }
         }
-
+    
+  moveRobot(selectedPiece: THREE.Mesh) {
+    const rayCaster = this.rayCaster
+    if (selectedPiece) {
+      
+      rayCaster.setFromCamera(this.mouse, this.camera);
+      // Ensures robot will be moved to position on plane
+        const gridIntersects = rayCaster.intersectObject(this.gridPlane!);
+      if (gridIntersects.length > 0) {
+          
+        const intersectPoint = gridIntersects[0]!.point;
+        selectedPiece.position.copy(intersectPoint);
+        selectedPiece.position.y = .5
+        
+        }
+    }
+  }
     
     updateMousePosition(x: number, y: number) {
         this.mouse.x = x;

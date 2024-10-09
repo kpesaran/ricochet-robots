@@ -18,8 +18,8 @@ export class GameController {
     constructor() {
         const newBoard = new BoardBuilder()
         this.board = newBoard.generateEdgeWalls().generatePairedWalls().build()
-        this.inputController = new InputController(this)
         this.sceneController = new SceneController('canvas.webgl', this.board)
+        this.inputController = new InputController(this, this.sceneController)
         this.UIController = new UIController()
         this.boardHistory = new RobotStateHistory()
     }

@@ -3,17 +3,19 @@
 import { Direction } from "../board/direction";
 import { GameController } from "../game/gameController";
 import * as THREE from 'three'
+import { SceneController } from "../scene/sceneController";
 
 
 export default class InputController {
   selectedPiece: THREE.Mesh| undefined
-  constructor(gameController: GameController) {
+  constructor(gameController: GameController, sceneController: SceneController) {
     document.addEventListener('keydown', (event) => this.handleKeydown(event, gameController));
-    document.addEventListener('mousemove', (event) => this.handleMouseMove(event, gameController));
+    document.addEventListener('mousemove', (event) => this.handleMouseMove(event, gameController, sceneController));
     document.addEventListener('mousedown', () => this.handleMouseDown(gameController))
     document.getElementById('reverse-move-button')!.addEventListener('click', () => gameController.reverseLastMove())
     document.getElementById('reset-button')!.addEventListener('click', () => gameController.resetGame())
     window.addEventListener('resize', () => gameController.sceneController.onResize());
+    
 
   }
     
@@ -33,12 +35,12 @@ export default class InputController {
         break;
     }
   }
-  handleMouseMove(event: MouseEvent, gameController: GameController) {
+  handleMouseMove(event: MouseEvent, gameController: GameController, sceneController: SceneController) {
     let x = (event.clientX / gameController.sceneController.sizes.width) * 2 - 1;
     let y = -(event.clientY / gameController.sceneController.sizes.height) * 2 + 1;
     gameController.sceneController.updateMousePosition(x, y);
     if (this.selectedPiece) {
-      this.moveRobot(gameController)
+      sceneController.moveRobot(this.selectedPiece)
     }
     const rayCaster = gameController.sceneController.rayCaster
     const mouse = gameController.sceneController.mouse
@@ -104,22 +106,22 @@ export default class InputController {
   } 
   }
   
-  moveRobot(gameController: GameController) {
-    const rayCaster = gameController.sceneController.rayCaster
-    const mouse = gameController.sceneController.mouse
-    const camera = gameController.sceneController.camera
-    if (this.selectedPiece) {
+  // moveRobot(gameController: GameController, selectedPiece: THREE.Mesh) {
+  //   const rayCaster = gameController.sceneController.rayCaster
+  //   const mouse = gameController.sceneController.mouse
+  //   const camera = gameController.sceneController.camera
+  //   if (selectedPiece) {
       
-      rayCaster.setFromCamera(mouse, camera);
-      // Ensures robot will be moved to position on plane
-        const gridIntersects = rayCaster.intersectObject(gameController.sceneController.gridPlane!);
-      if (gridIntersects.length > 0) {
+  //     rayCaster.setFromCamera(mouse, camera);
+  //     // Ensures robot will be moved to position on plane
+  //       const gridIntersects = rayCaster.intersectObject(gameController.sceneController.gridPlane!);
+  //     if (gridIntersects.length > 0) {
           
-        const intersectPoint = gridIntersects[0]!.point;
-        this.selectedPiece.position.copy(intersectPoint);
-        this.selectedPiece.position.y = .5
+  //       const intersectPoint = gridIntersects[0]!.point;
+  //       selectedPiece.position.copy(intersectPoint);
+  //       selectedPiece.position.y = .5
         
-        }
-    }
-  }
+  //       }
+  //   }
+  // }
 }
