@@ -66,7 +66,6 @@ export class SceneController {
         this.setUpLights()
         // this.lightPaths()
         this.setUpAxesHelpers()
-        this.setUpEventListeners()
         // this.tick = this.tick.bind(this);
         this.tick()
     }
@@ -284,7 +283,7 @@ export class SceneController {
     } 
     
     private placeWalls(board: Board) {
-        
+
         for (let row = 0; row < board.cells.length; row++) {
         
             for (let col = 0; col < board.cells[row]!.length; col++) {
@@ -301,9 +300,7 @@ export class SceneController {
             }
         }
 
-    setUpEventListeners() {
-        window.addEventListener('resize', () => this.onResize());
-    }
+    
     updateMousePosition(x: number, y: number) {
         this.mouse.x = x;
         this.mouse.y = y;
