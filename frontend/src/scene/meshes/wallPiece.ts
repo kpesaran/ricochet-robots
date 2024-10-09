@@ -19,7 +19,7 @@ export default class WallPiece {
     }
 
     private setGeometry() {
-        this.geometry = new THREE.BoxGeometry(1, 0.4, 0.05);
+        this.geometry = new THREE.BoxGeometry(1, 0.4, 0.2);
     }
 
     private setMaterial() {

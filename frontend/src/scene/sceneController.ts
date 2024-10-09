@@ -110,7 +110,7 @@ export class SceneController {
     }
     
     private setUpLights() {
-        const ambientLight = new THREE.AmbientLight('#ffffff', 4);
+        const ambientLight = new THREE.AmbientLight('#ffffff', .3);
         this.scene.add(ambientLight);
         const directionalLight = new THREE.DirectionalLight('#ffffff', 2)
         directionalLight.castShadow = true;
