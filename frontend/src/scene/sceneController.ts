@@ -8,6 +8,7 @@ import CellPiece from './meshes/cellPiece';
 import targetChipPiece from './points/targetChip';
 import CenterCube from './meshes/centerCube';
 import CenterChip from './meshes/centerChip';
+import { Textures } from './textures';
 
 export class SceneController {
     scene: THREE.Scene;
@@ -68,6 +69,7 @@ export class SceneController {
         this.setUpAxesHelpers()
         // this.tick = this.tick.bind(this);
         this.tick()
+        
     }
 
     setUpBoard() {
@@ -105,7 +107,7 @@ export class SceneController {
     }
     
     private setUpLights() {
-        const ambientLight = new THREE.AmbientLight('#ffffff', 4);
+        const ambientLight = new THREE.AmbientLight('#ffffff', 1);
         this.scene.add(ambientLight);
         const directionalLight = new THREE.DirectionalLight('#ffffff', 2)
         directionalLight.castShadow = true;
@@ -283,7 +285,19 @@ export class SceneController {
     } 
     
     private placeWalls(board: Board) {
-
+        const textures: Textures = {
+            wallARMTexture: this.textureLoader.load(
+                '/textures/wall/cracked_concrete_wall_arm_1k.jpg'
+            ),
+            wallColorTexture: this.textureLoader.load('/textures/wall/cracked_concrete_wall_diff_1k.jpg'),
+            wallTextureDisp: this.textureLoader.load('/textures/wall/cracked_concrete_wall_disp_1k.jpg'),
+            wallNormalTexture: this.textureLoader.load('/textures/wall/cracked_concrete_wall_nor_gl_1k.jpg')
+        };
+        
+        textures.wallColorTexture.colorSpace = THREE.SRGBColorSpace;
+        
+        
+        
         for (let row = 0; row < board.cells.length; row++) {
         
             for (let col = 0; col < board.cells[row]!.length; col++) {
@@ -291,7 +305,7 @@ export class SceneController {
                 if (board.cells[row]![col]!.walls.length > 0) {
         
                     for (const direction of board.cells[row]![col]!.walls) {
-                            const wallPiece = new WallPiece(direction, {row: row, column: col})
+                            const wallPiece = new WallPiece(direction, {row: row, column: col}, textures )
                         
                             this.scene.add(wallPiece.mesh!)
                         }

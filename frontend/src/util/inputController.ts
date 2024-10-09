@@ -36,15 +36,15 @@ export default class InputController {
     }
   }
   handleMouseMove(event: MouseEvent, gameController: GameController, sceneController: SceneController) {
-    let x = (event.clientX / gameController.sceneController.sizes.width) * 2 - 1;
-    let y = -(event.clientY / gameController.sceneController.sizes.height) * 2 + 1;
-    gameController.sceneController.updateMousePosition(x, y);
+    let x = (event.clientX / sceneController.sizes.width) * 2 - 1;
+    let y = -(event.clientY / sceneController.sizes.height) * 2 + 1;
+    sceneController.updateMousePosition(x, y);
     if (this.selectedPiece) {
       sceneController.moveRobot(this.selectedPiece)
     }
-    const rayCaster = gameController.sceneController.rayCaster
-    const mouse = gameController.sceneController.mouse
-    const camera = gameController.sceneController.camera
+    const rayCaster = sceneController.rayCaster
+    const mouse = sceneController.mouse
+    const camera = sceneController.camera
 
     rayCaster.setFromCamera(mouse, camera);
 
@@ -99,7 +99,7 @@ export default class InputController {
           }
           }
           
-        gameController.handleNonTargetRobotMove( newPosition, robotIndex)
+        gameController.handleNonTargetRobotMove(newPosition, robotIndex)
       }    
           this.selectedPiece = undefined;
       }

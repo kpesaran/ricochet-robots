@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { Position } from '../../board/position';
 import { Direction } from '../../board/direction';
+import { Textures } from '../textures';
 
 
 
@@ -8,8 +9,10 @@ export default class WallPiece {
     material: THREE.Material | undefined;
     geometry: THREE.BoxGeometry | undefined;
     mesh: THREE.Mesh | undefined;
+    texture: Textures
     
-    constructor(direction: Direction, pos: Position) {
+    constructor(direction: Direction, pos: Position, texture: Textures) {
+        this.texture = texture
         this.setGeometry()
         this.setMaterial()
         this.setMesh(direction, pos)
@@ -20,7 +23,13 @@ export default class WallPiece {
     }
 
     private setMaterial() {
-        this.material = new THREE.MeshStandardMaterial({ color: 'white' });
+        this.material = new THREE.MeshStandardMaterial({
+            map: this.texture.wallColorTexture,
+            aoMap: this.texture.wallARMTexture,
+            roughnessMap: this.texture.wallColorTexture,
+            metalnessMap: this.texture.wallColorTexture,
+            normalMap: this.texture.wallNormalTexture
+        });
         }
 
     private setMesh(direction: Direction, pos: Position) {
