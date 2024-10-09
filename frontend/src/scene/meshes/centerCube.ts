@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { Textures } from '../textures';
 
 
 export default class CenterCube {
@@ -7,9 +8,9 @@ export default class CenterCube {
     mesh: THREE.Mesh | undefined;
 
     
-    constructor() {
+    constructor(wallTextures: Textures | undefined) {
         this.setGeometry()
-        this.setMaterial()
+        this.setMaterial(wallTextures!)
         this.setMesh()
     }
 
@@ -17,12 +18,14 @@ export default class CenterCube {
         this.geometry = new THREE.BoxGeometry(2, 1, 2) 
     }
 
-    private setMaterial() {
+    private setMaterial(wallTextures: Textures) {
         this.material = new THREE.MeshStandardMaterial({
-            color: 'grey',
-            metalness: .1,
-            roughness: .1
-        })
+            map: wallTextures.wallColorTexture,
+            aoMap: wallTextures.wallARMTexture,
+            roughnessMap: wallTextures.wallColorTexture,
+            metalnessMap: wallTextures.wallColorTexture,
+            normalMap: wallTextures.wallNormalTexture
+        });
     }
     
     private setMesh() {

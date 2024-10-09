@@ -28,6 +28,7 @@ export class SceneController {
     rayCaster: THREE.Raycaster
     mouse: THREE.Vector2
     gridPlane: THREE.Object3D | undefined
+    wallTextures: Textures | undefined
     
     constructor(canvas: string, board: Board) {
         this.board = board
@@ -62,6 +63,8 @@ export class SceneController {
         this.cellArea = 1
         // Cells 
         this.cells = []
+        // Load Textures
+        this.loadTextures()
         // Set Up The Scene
         this.setUpBoard()
         this.setUpLights()
@@ -78,7 +81,7 @@ export class SceneController {
         this.placeTargetChip({ row: 0, column: 7 })
         this.placeCellMeshes()
         this.setUpGridPlane();
-        const centerCube = new CenterCube()
+        const centerCube = new CenterCube(this.wallTextures)
         this.scene.add(centerCube.mesh!)
         const centerChip = new CenterChip(this.symbol1)
         this.scene.add(centerChip.mesh!)
@@ -107,7 +110,7 @@ export class SceneController {
     }
     
     private setUpLights() {
-        const ambientLight = new THREE.AmbientLight('#ffffff', 1);
+        const ambientLight = new THREE.AmbientLight('#ffffff', 4);
         this.scene.add(ambientLight);
         const directionalLight = new THREE.DirectionalLight('#ffffff', 2)
         directionalLight.castShadow = true;
@@ -283,8 +286,8 @@ export class SceneController {
         const robotMesh = this.robotPieces[0]
         robotMesh?.position.set(robotPosition.column-7.5, .5 , robotPosition.row-7.5)
     } 
-    
-    private placeWalls(board: Board) {
+
+    private loadTextures() {
         const textures: Textures = {
             wallARMTexture: this.textureLoader.load(
                 '/textures/wall/cracked_concrete_wall_arm_1k.jpg'
@@ -293,10 +296,11 @@ export class SceneController {
             wallTextureDisp: this.textureLoader.load('/textures/wall/cracked_concrete_wall_disp_1k.jpg'),
             wallNormalTexture: this.textureLoader.load('/textures/wall/cracked_concrete_wall_nor_gl_1k.jpg')
         };
-        
         textures.wallColorTexture.colorSpace = THREE.SRGBColorSpace;
-        
-        
+        this.wallTextures = textures
+    }
+    
+    private placeWalls(board: Board) {
         
         for (let row = 0; row < board.cells.length; row++) {
         
@@ -305,7 +309,7 @@ export class SceneController {
                 if (board.cells[row]![col]!.walls.length > 0) {
         
                     for (const direction of board.cells[row]![col]!.walls) {
-                            const wallPiece = new WallPiece(direction, {row: row, column: col}, textures )
+                            const wallPiece = new WallPiece(direction, {row: row, column: col}, this.wallTextures )
                         
                             this.scene.add(wallPiece.mesh!)
                         }
