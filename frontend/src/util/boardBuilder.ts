@@ -12,7 +12,6 @@ export class BoardBuilder {
   constructor() {
     this.robots = []
     this.walls = []
-    this.generateRandomPairedWalls()
   }
 
   public withRobot(newRobot: Robot, newPosition: Position): BoardBuilder {
