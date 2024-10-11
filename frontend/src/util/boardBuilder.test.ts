@@ -59,3 +59,60 @@ test(
     expect(board.cells[15]?.[15]?.walls).toStrictEqual([Direction.East, Direction.South]);
   }
 )
+
+test('returns the original and adacent wall position for a given direction', () => {
+  let board = new BoardBuilder()
+  const northDirection = board.wallPositionsToCheck(Direction.North, { row: 2, column: 3 });
+  expect(northDirection).toEqual([
+    [Direction.North, { row: 2, column: 3 }],
+    [Direction.South, { row: 1, column: 3 }]
+  ]);
+
+
+  const southDirection = board.wallPositionsToCheck(Direction.South, { row: 2, column: 3 });
+  expect(southDirection).toEqual([
+    [Direction.South, { row: 2, column: 3 }],
+    [Direction.North, { row: 3, column: 3 }]
+  ]);
+
+  const eastDirection = board.wallPositionsToCheck(Direction.East, { row: 2, column: 3 });
+  expect(eastDirection).toEqual([
+    [Direction.East, { row: 2, column: 3 }],
+    [Direction.West, { row: 2, column: 4 }]
+  ]);
+
+  const westDirection = board.wallPositionsToCheck(Direction.West, { row: 2, column: 3 });
+  expect(westDirection).toEqual([
+    [Direction.West, { row: 2, column: 3 }],
+    [Direction.East, { row: 2, column: 2 }]
+  ]);
+});
+
+test('correctly identifies duplicate walls', () => {
+  let board = new BoardBuilder()
+
+  board.walls =  [
+    [Direction.North, { row: 3, column: 3 }],
+    [Direction.West, { row: 5, column: 5 }]
+  ];
+  
+  const wallsToCheck = board.wallPositionsToCheck(Direction.North, { row: 3, column: 3 });
+  const isDuplicate = board.duplicateWall(wallsToCheck);
+  expect(isDuplicate).toBe(true);
+
+  const downCellsouthWall = board.wallPositionsToCheck(Direction.South, { row: 2, column: 3 });
+  const correspondingSouthWallCheck = board.duplicateWall(downCellsouthWall)
+  expect(correspondingSouthWallCheck).toStrictEqual(true)
+
+  const leftCellEastWall = board.wallPositionsToCheck(Direction.East, { row: 5, column: 4 })
+  const correspondingEastWallCheck = board.duplicateWall(leftCellEastWall)
+  expect(correspondingEastWallCheck).toBe(true)
+  
+  const nonDuplicateWallsToCheck = board.wallPositionsToCheck(Direction.South, { row: 4, column: 4 });
+  const nonDuplicate = board.duplicateWall(nonDuplicateWallsToCheck);
+  expect(nonDuplicate).toBe(false);
+});
+
+  
+
+  
