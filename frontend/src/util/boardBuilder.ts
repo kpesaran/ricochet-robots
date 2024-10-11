@@ -53,6 +53,46 @@ export class BoardBuilder {
     return this
   }
 
+  generateRandomEdgeWalls() {
+
+    this.placeEdgeWallsNS(0, BOARD_SIZE / 2 - 2, 0)
+    this.placeEdgeWallsNS(0, BOARD_SIZE / 2 - 2, BOARD_SIZE -1 ) 
+    this.placeEdgeWallsNS(BOARD_SIZE/2, BOARD_SIZE - 2, 0)
+    this.placeEdgeWallsNS(BOARD_SIZE/2, BOARD_SIZE - 2,BOARD_SIZE -1) 
+
+    this.placeEdgeWallsEW(0, BOARD_SIZE / 2 - 2, 0)
+    this.placeEdgeWallsEW(0, BOARD_SIZE / 2 - 2, BOARD_SIZE -1)
+    this.placeEdgeWallsEW(BOARD_SIZE / 2, BOARD_SIZE - 2, 0)
+    this.placeEdgeWallsEW(BOARD_SIZE / 2, BOARD_SIZE - 2, BOARD_SIZE -1)
+
+  }
+
+  private placeEdgeWallsEW(rowStart: number, rowEnd: number, column: number) {
+    
+    while (true) {
+      const randomRow = this.getRandomInt(rowStart, rowEnd);
+      const collisionsToCheck = this.wallPositionsToCheck(Direction.South, { row: randomRow, column })
+      
+      if (!this.duplicateWall(collisionsToCheck)) {
+        this.withWall(Direction.South, { row: randomRow, column })
+        break
+      }
+    }
+  }
+  private placeEdgeWallsNS(colStart: number, colEnd: number, row: number) {
+    while (true) {
+
+      const randomCol = this.getRandomInt(colStart, colEnd);
+      const collisionsToCheck = this.wallPositionsToCheck(Direction.South, { row, column: randomCol,  })
+      
+      if (!this.duplicateWall(collisionsToCheck)) {
+        this.withWall(Direction.East, { row, column: randomCol })
+        break
+      }
+
+    }
+  }
+
   private placePairWallsInQuadrant( rowStart: number, colStart: number, rowEnd: number, colEnd: number) {
     {
       const wallsNS = [Direction.North, Direction.South]
