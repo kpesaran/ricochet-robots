@@ -51,7 +51,7 @@ export class BoardBuilder {
     this.placePairWallsInQuadrant(wallsNorthSouth, wallsEastWest, 1, BOARD_SIZE / 2 - 1, BOARD_SIZE / 2, BOARD_SIZE - 2)
     // SE
     this.placePairWallsInQuadrant(wallsNorthSouth,wallsEastWest, BOARD_SIZE / 2, BOARD_SIZE - 2, BOARD_SIZE / 2, BOARD_SIZE - 2)
-    console.log(this.walls)
+
     return this
   }
 
@@ -62,10 +62,57 @@ export class BoardBuilder {
         const randomCol = this.getRandomInt(colStart, colEnd);
         const randomIdx1 = Math.floor(Math.random() * wallsNS.length);
         const randomIdx2 = Math.floor(Math.random() * wallsEW.length);
-    
-        this.withWall(wallsNS[randomIdx1]!,{ row: randomRow, column: randomCol }).withWall(wallsEW[randomIdx2]!, { row: randomRow, column: randomCol });
+
+        const nsWallCheck = this.wallPositionsToCheck(wallsNS[randomIdx1]!, { row: randomRow, column: randomCol });
+        const ewWallCheck = this.wallPositionsToCheck(wallsEW[randomIdx2]!, { row: randomRow, column: randomCol });
+
+        if (!this.duplicateWall(nsWallCheck) && !this.duplicateWall(ewWallCheck)) {
+            this.withWall(wallsNS[randomIdx1]!, { row: randomRow, column: randomCol })
+            .withWall(wallsEW[randomIdx2]!, { row: randomRow, column: randomCol })
+          }
+          else {
+            i -= 1
+        }  
       }
     }
+  }
+
+  wallPositionsToCheck(wallDirection: Direction,positionProspect: Position) {
+    const postitionsToCheck: [Direction, Position][] = []
+    postitionsToCheck.push([wallDirection, positionProspect])
+    
+    switch(wallDirection) {
+      case Direction.North:
+        postitionsToCheck.push([Direction.South ,{ row: positionProspect.row - 1, column: positionProspect.column }]);
+        break;
+      case Direction.South:
+        postitionsToCheck.push([Direction.North, { row: positionProspect.row + 1, column: positionProspect.column }]);
+        break
+      case Direction.East:
+        postitionsToCheck.push([Direction.West ,{ row: positionProspect.row, column: positionProspect.column + 1 }]);
+        break;
+      case Direction.West:
+        postitionsToCheck.push([Direction.East ,{ row: positionProspect.row, column: positionProspect.column - 1 }]);;
+        break;
+    }
+    return postitionsToCheck
+  }
+
+  duplicateWall(postitionsToCheck: [Direction, Position][]) {
+    
+    for (let [wallDirection, { row, column }] of postitionsToCheck) {
+      const alreadyExists = this.walls.some(([existingDirection, existingPosition]) => {
+        return (
+          existingDirection === wallDirection
+          && row === existingPosition.row
+          && column === existingPosition.column
+        )
+      })
+      if (alreadyExists) {
+        return true
+      }
+    }
+    return false 
   }
 
   private getRandomInt(min: number, max: number):number {
