@@ -40,23 +40,23 @@ export class BoardBuilder {
   }
 
   public generateRandomPairedWalls() {
-    const wallsNorthSouth = [Direction.North, Direction.South]
-    const wallsEastWest = [Direction.West, Direction.East]
-
+    
     // NW
-    this.placePairWallsInQuadrant(wallsNorthSouth, wallsEastWest, 1,  BOARD_SIZE / 2 - 1, 1, BOARD_SIZE / 2 - 1)
+    this.placePairWallsInQuadrant(1,  BOARD_SIZE / 2 - 1, 1, BOARD_SIZE / 2 - 1)
     // SW
-    this.placePairWallsInQuadrant(wallsNorthSouth, wallsEastWest, BOARD_SIZE / 2, BOARD_SIZE - 2, 1, BOARD_SIZE / 2 - 1)
+    this.placePairWallsInQuadrant( BOARD_SIZE / 2, BOARD_SIZE - 2, 1, BOARD_SIZE / 2 - 1)
     // NE
-    this.placePairWallsInQuadrant(wallsNorthSouth, wallsEastWest, 1, BOARD_SIZE / 2 - 1, BOARD_SIZE / 2, BOARD_SIZE - 2)
+    this.placePairWallsInQuadrant( 1, BOARD_SIZE / 2 - 1, BOARD_SIZE / 2, BOARD_SIZE - 2)
     // SE
-    this.placePairWallsInQuadrant(wallsNorthSouth,wallsEastWest, BOARD_SIZE / 2, BOARD_SIZE - 2, BOARD_SIZE / 2, BOARD_SIZE - 2)
+    this.placePairWallsInQuadrant(BOARD_SIZE / 2, BOARD_SIZE - 2, BOARD_SIZE / 2, BOARD_SIZE - 2)
 
     return this
   }
 
-  private placePairWallsInQuadrant(wallsNS: Direction[], wallsEW: Direction[], rowStart: number, colStart: number, rowEnd: number, colEnd: number) {
+  private placePairWallsInQuadrant( rowStart: number, colStart: number, rowEnd: number, colEnd: number) {
     {
+      const wallsNS = [Direction.North, Direction.South]
+      const wallsEW = [Direction.West, Direction.East]
       for (let i = 0; i < 3; i++) {
         const randomRow = this.getRandomInt(rowStart, rowEnd );
         const randomCol = this.getRandomInt(colStart, colEnd);
