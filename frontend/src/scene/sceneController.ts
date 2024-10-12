@@ -63,7 +63,7 @@ export class SceneController {
         this.robotPieces = []
         this.gridSize = 16
         this.cellArea = 1
-        this.debug = new Debug()
+        this.debug = new Debug(this)
         // Cells 
         this.cells = []
         // Load Textures
@@ -79,13 +79,14 @@ export class SceneController {
     }
 
     setUpBoard() {
-        this.placeWalls(this.board)
+        const wallPieces = this.placeWalls(this.board)
         this.placeRobots(this.board)
         this.placeTargetChip({ row: 0, column: 7 })
         this.placeCellMeshes()
         this.setUpGridPlane();
         const centerCube = new CenterCube(this.wallTextures)
         this.scene.add(centerCube.mesh!)
+        this.debug.setupWallStyleControls(centerCube, wallPieces  )
         const centerChip = new CenterChip(this.symbol1)
         this.scene.add(centerChip.mesh!)
     }
@@ -243,13 +244,16 @@ export class SceneController {
     }
 
     private placeCellMeshes() {
+        const cellPieces : CellPiece[] = []
         this.board.cells.forEach((row,row_idx) => {
             row.forEach((cell,col_idx) => {
                 const cellPiece = new CellPiece(cell, { row: row_idx, column: col_idx })
+                cellPieces.push(cellPiece)
                 this.cells.push(cellPiece.mesh!)
                 this.scene.add(cellPiece.mesh!)
             })
         })
+        this.debug.setupBoardStyleControl(cellPieces)
     }
 
     private destroyRobotMeshes() {
@@ -304,7 +308,7 @@ export class SceneController {
     }
     
     private placeWalls(board: Board) {
-        
+        const wallPieces: WallPiece[] = []
         for (let row = 0; row < board.cells.length; row++) {
         
             for (let col = 0; col < board.cells[row]!.length; col++) {
@@ -313,13 +317,15 @@ export class SceneController {
         
                     for (const direction of board.cells[row]![col]!.walls) {
                             const wallPiece = new WallPiece(direction, {row: row, column: col}, this.wallTextures )
-                        
+                            wallPieces.push(wallPiece)
                             this.scene.add(wallPiece.mesh!)
                         }
                     }
                 }
-            }
         }
+        return wallPieces
+    }
+    
     
   moveRobot(selectedPiece: THREE.Mesh) {
     const rayCaster = this.rayCaster
