@@ -9,7 +9,7 @@ export default class Debug {
     ui: GUI
     sceneController: SceneController
     background: HTMLHtmlElement | null;
-    backgroundColor: string
+    backgroundColor: string;
     constructor(sceneController: SceneController) {
         this.ui = new GUI()
         this.sceneController = sceneController
@@ -23,6 +23,11 @@ export default class Debug {
             }
         });
     }
+    public setUpLightStyleControls(ambientLight: THREE.AmbientLight, directionalLight: THREE.DirectionalLight) {
+        this.ui.add(ambientLight, 'intensity').min(.1).max(10).step(.1)
+        this.ui.add(directionalLight, 'intensity').min(.1).max(10).step(.1)
+    }
+
     public setupWallStyleControls(centerCube: CenterCube, wallPieces: WallPiece[]) {
        
         const material = centerCube.material as THREE.MeshStandardMaterial;

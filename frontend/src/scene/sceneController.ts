@@ -116,6 +116,7 @@ export class SceneController {
     private setUpLights() {
         const ambientLight = new THREE.AmbientLight('#ffffff', .3);
         this.scene.add(ambientLight);
+       
         const directionalLight = new THREE.DirectionalLight('#ffffff', 2)
         directionalLight.castShadow = true;
         directionalLight.position.y = 1
@@ -125,6 +126,7 @@ export class SceneController {
         pointLight.position.set(4, 3, 6.6); 
         pointLight.castShadow = true
         this.scene.add(pointLight)
+        this.debug.setUpLightStyleControls(ambientLight, directionalLight)
     }
     // findPathPositions(startingPos: Position, endingPositions: Position[]): Position[]  {
     //     const cellsToLight: Position[] = []
