@@ -151,4 +151,9 @@ export class Board {
 
     return legalMove 
   }
+  updateRobotPosition(newPosition: Position, robotIndex: number) {
+    this.robotPositions[robotIndex]!.column = newPosition.column
+    this.robotPositions[robotIndex]!.row = newPosition.row
+  }
+
 }
