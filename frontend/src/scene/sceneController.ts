@@ -350,6 +350,13 @@ export class SceneController {
         } 
         return null
     }
+
+    checkNonTargetRobotIntersections() {
+       
+        this.rayCaster.setFromCamera(this.mouse, this.camera);
+    
+        return this.rayCaster.intersectObjects(this.robotPieces.slice(1));
+    }
     
     moveRobot(selectedPiece: THREE.Mesh) {
         const rayCaster = this.rayCaster

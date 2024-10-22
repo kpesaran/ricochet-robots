@@ -9,13 +9,14 @@ import { SceneController } from "../scene/sceneController";
 export default class InputController {
   selectedPiece: THREE.Mesh | undefined
   constructor(gameController: GameController, sceneController: SceneController) {
+
     document.addEventListener('keydown', (event) => this.handleKeydown(event, gameController));
-    document.addEventListener('mousemove', (event) => this.handleMouseMove(event, gameController, sceneController));
+    document.addEventListener('mousemove', (event) => this.handleMouseMove(event, sceneController));
     document.addEventListener('mousedown', () => this.handleMouseDown(gameController, sceneController))
     document.getElementById('reverse-move-button')!.addEventListener('click', () => gameController.reverseLastMove())
     document.getElementById('reset-button')!.addEventListener('click', () => gameController.resetGame())
     window.addEventListener('resize', () => gameController.sceneController.onResize());
-   
+  
   }
   
   handleKeydown(event: KeyboardEvent, gameController: GameController) {
@@ -34,20 +35,15 @@ export default class InputController {
         break;
     }
   }
-  handleMouseMove = (event: MouseEvent, gameController: GameController, sceneController: SceneController) => {
+  handleMouseMove = (event: MouseEvent, sceneController: SceneController) => {
     let x = (event.clientX / sceneController.sizes.width) * 2 - 1;
     let y = -(event.clientY / sceneController.sizes.height) * 2 + 1;
     sceneController.updateMousePosition(x, y);
     if (this.selectedPiece) {
       sceneController.moveRobot(this.selectedPiece)
     }
-    const rayCaster = sceneController.rayCaster
-    const mouse = sceneController.mouse
-    const camera = sceneController.camera
 
-    rayCaster.setFromCamera(mouse, camera);
-
-    const robotIntersects = rayCaster.intersectObjects(gameController.sceneController.robotPieces.slice(1));
+    const robotIntersects = sceneController.checkNonTargetRobotIntersections()
 
     if (robotIntersects.length > 0) {
       document.body.style.cursor = "pointer";
@@ -58,14 +54,8 @@ export default class InputController {
   }
 
   handleMouseDown(gameController: GameController, sceneController: SceneController) {
-    
-    const rayCaster = gameController.sceneController.rayCaster
-    const mouse = gameController.sceneController.mouse
-    const camera = gameController.sceneController.camera
 
-    rayCaster.setFromCamera(mouse, camera);
-
-    const robotIntersects = rayCaster.intersectObjects(gameController.sceneController.robotPieces.slice(1));
+    const robotIntersects = sceneController.checkNonTargetRobotIntersections()
 
     if (robotIntersects.length > 0) {
       
