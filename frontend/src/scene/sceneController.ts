@@ -327,21 +327,43 @@ export class SceneController {
         }
         return wallPieces
     }
+    // For non target robot movement
+    placeSelectedRobot(selectedPiece: THREE.Mesh) {
+        this.rayCaster.setFromCamera(this.mouse, this.camera);
+        // Ensures robot will be moved to position on plane
+        const gridIntersects = this.rayCaster.intersectObject(this.gridPlane!);
+        if (gridIntersects.length > 0) {
+
+          const intersectPoint = gridIntersects[0]!.point;
+          const placedCol = Math.round(intersectPoint.x + 7.5)
+          const placedRow = Math.round(intersectPoint.z + 7.5)
+          const newPosition = {row: placedRow, column: placedCol}
+        
+          let robotIndex: number | null = null
+          for (let i = 0; i < this.robotPieces.length; i++) {
+          
+            if (selectedPiece === this.robotPieces[i]) {
+              robotIndex = i
+            }
+            } 
+            console.log(newPosition)
+            return { newPosition, robotIndex };
+        } 
+        return null
+    }
     
-    
-  moveRobot(selectedPiece: THREE.Mesh) {
-    const rayCaster = this.rayCaster
-    if (selectedPiece) {
+    moveRobot(selectedPiece: THREE.Mesh) {
+        console.log(selectedPiece)
+        const rayCaster = this.rayCaster
+        if (selectedPiece) {
       
-      rayCaster.setFromCamera(this.mouse, this.camera);
+        rayCaster.setFromCamera(this.mouse, this.camera);
       // Ensures robot will be moved to position on plane
         const gridIntersects = rayCaster.intersectObject(this.gridPlane!);
-      if (gridIntersects.length > 0) {
-          
-        const intersectPoint = gridIntersects[0]!.point;
-        selectedPiece.position.copy(intersectPoint);
-        selectedPiece.position.y = .5
-        
+        if (gridIntersects.length > 0) {
+            const intersectPoint = gridIntersects[0]!.point;
+            selectedPiece.position.copy(intersectPoint);
+            selectedPiece.position.y = .5 
         }
     }
   }
