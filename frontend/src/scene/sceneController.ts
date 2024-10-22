@@ -345,15 +345,13 @@ export class SceneController {
             if (selectedPiece === this.robotPieces[i]) {
               robotIndex = i
             }
-            } 
-            console.log(newPosition)
-            return { newPosition, robotIndex };
+        } 
+        return { newPosition, robotIndex };
         } 
         return null
     }
     
     moveRobot(selectedPiece: THREE.Mesh) {
-        console.log(selectedPiece)
         const rayCaster = this.rayCaster
         if (selectedPiece) {
       

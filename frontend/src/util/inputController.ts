@@ -35,7 +35,6 @@ export default class InputController {
     }
   }
   handleMouseMove = (event: MouseEvent, gameController: GameController, sceneController: SceneController) => {
-    console.log(this.selectedPiece)
     let x = (event.clientX / sceneController.sizes.width) * 2 - 1;
     let y = -(event.clientY / sceneController.sizes.height) * 2 + 1;
     sceneController.updateMousePosition(x, y);
