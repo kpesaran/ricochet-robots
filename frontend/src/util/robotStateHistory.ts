@@ -10,13 +10,11 @@ export default class RobotStateHistory {
     }
 
     public addState(board: Board) {
-        
         this.history.push(this.copyRobotPositions(board.robotPositions))
-        console.log(this.history)
     }
 
     public undoState(board: Board) {
-        console.log(this.history)
+ 
         if (this.history.length > 0) {
             const prevState = this.history.pop()
             
@@ -32,11 +30,9 @@ export default class RobotStateHistory {
             board.robotPositions = this.history[0]
         } 
     }
-    
-    
 
     private copyRobotPositions(robotPositions: [Position,Position,Position,Position]):[Position,Position,Position,Position] {
-        
+
         let copiedRobotPositions: [Position, Position, Position, Position] = robotPositions.map(pos => ({
             row: pos.row,
             column: pos.column

@@ -42,9 +42,7 @@ export default class InputController {
     if (this.selectedPiece) {
       sceneController.moveRobot(this.selectedPiece)
     }
-
     const robotIntersects = sceneController.checkNonTargetRobotIntersections()
-
     if (robotIntersects.length > 0) {
       document.body.style.cursor = "pointer";
     }
@@ -58,7 +56,6 @@ export default class InputController {
     const robotIntersects = sceneController.checkNonTargetRobotIntersections()
 
     if (robotIntersects.length > 0) {
-      
       // Select the robot
       if (!this.selectedPiece) {
         const intersectedObject = robotIntersects[0]!.object
@@ -72,6 +69,7 @@ export default class InputController {
         const placementResult = sceneController.placeSelectedRobot(this.selectedPiece)
 
         if (placementResult) {
+          // Update gamestate 
           gameController.handleNonTargetRobotMove(placementResult.newPosition, placementResult.robotIndex)
         }
         this.selectedPiece = undefined;
