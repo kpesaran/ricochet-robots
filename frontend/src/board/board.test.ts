@@ -122,3 +122,58 @@ test("Checking eligibleMove method handles walls correctly", () => {
   expect(board.checkDirections({ row: 1, column: 8 }, Direction.West)).toStrictEqual({ row: 1, column: 1 });
   expect(board.checkDirections({ row: 0, column: 1 }, Direction.South)).toStrictEqual({ row: 1, column: 1 });
 });
+
+test("Checking open positions", () => {
+  let board = new Board()
+  board.cells[4]![4]!.isTarget = true 
+  board.generateOpenPositions(BOARD_SIZE)
+  //testing if center obstructed positions not included
+  const centerPositions = [{ row: 7, column: 7 }, { row: 7, column: 8 }, { row: 8, column: 7 }, { row: 8, column: 8 }]
+
+  centerPositions.forEach(position => {
+    expect(board.openPositions).not.toContainEqual(position)
+  })
+
+  // Testing if target cell not included
+  expect(board.openPositions).not.toContainEqual({ row: 4, column: 4 })
+  
+  // Testing for proper open positions
+  expect(board.openPositions).toContainEqual({ row: 0, column: 0 });
+  expect(board.openPositions).toContainEqual({ row: 15, column: 15 });
+})
+
+test('getRandomPosition should return a valid open position and remove it from openPositions array', () => {
+  let board = new Board()
+  board.openPositions = [
+    { row: 0, column: 0 },
+    { row: 1, column: 1 },
+    { row: 2, column: 2 },
+  ]
+  const randomPosition = board.getRandomPosition()
+  console.log(randomPosition)
+  expect([{ row: 0, column: 0 }, { row: 1, column: 1 }, { row: 2, column: 2 }]).toContainEqual(randomPosition)
+  
+  expect(board.openPositions).not.toContainEqual(randomPosition)
+
+  expect(board.openPositions.length).toStrictEqual(2)
+
+})
+
+
+// //   private generateOpenPositions() {
+//   for (let row = 0; row < BOARD_SIZE; row++) {
+//     for (let col = 0; col < BOARD_SIZE; col++) {
+//       // if cell is not obstructed add position
+
+//       if (!this.cells[row]![col]?.isObstructed || !this.cells[row]![col]?.isTarget) {
+//         this.openPositions.push({row: row, column: col})
+//       }
+//     }
+//   }
+// }
+// getRandomPosition() {
+//   const randomIndex = Math.floor(Math.random() * BOARD_SIZE)
+//   return this.openPositions.splice(randomIndex, 1)[0]
+// }
+
+// }

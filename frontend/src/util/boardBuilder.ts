@@ -9,11 +9,13 @@ export class BoardBuilder {
   robots: [Robot, Position][];
   walls: [Direction, Position][];
   targetCell: Position | null
+  openPositions: Position[]
 
   constructor() {
     this.robots = []
     this.walls = []
     this.targetCell = null
+    this.openPositions = []
   }
 
   public withRobot(newRobot: Robot, newPosition: Position): BoardBuilder {
