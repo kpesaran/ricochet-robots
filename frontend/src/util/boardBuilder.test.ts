@@ -60,6 +60,15 @@ test(
   }
 )
 
+
+test("Builder adds targetCell appropriately", () => {
+  let board = new BoardBuilder()
+    .withTargetCell({ row: 5, column: 5 })
+    .build()
+  
+  expect(board.cells[5]?.[5]?.isTarget).toStrictEqual(true)
+})
+
 test('returns the original and adacent wall position for a given direction', () => {
   let board = new BoardBuilder()
   const northDirection = board.wallPositionsToCheck(Direction.North, { row: 2, column: 3 });
@@ -112,7 +121,3 @@ test('correctly identifies duplicate walls', () => {
   const nonDuplicate = board.duplicateWall(nonDuplicateWallsToCheck);
   expect(nonDuplicate).toBe(false);
 });
-
-  
-
-  
