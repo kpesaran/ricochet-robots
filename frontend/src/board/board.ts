@@ -3,7 +3,7 @@ import { Color } from './color';
 import { Robot } from './robot';
 import type { Position } from './position';
 import { Direction } from './direction';
-// import { Direction } from './direction'
+
 
 /*
  * The height and width of the board
@@ -14,6 +14,8 @@ export class Board {
   cells: Cell[][] ;
   robots: [Robot, Robot, Robot, Robot];
   robotPositions: [Position, Position, Position, Position];
+
+
 
   constructor() {
     let cells = new Array(BOARD_SIZE)
@@ -33,6 +35,8 @@ export class Board {
     cells[8][7].isObstructed = true;
     cells[8][8].isObstructed = true;
 
+ 
+
     this.cells = cells;
     this.robots = [
       new Robot(Color.Red),
@@ -47,7 +51,21 @@ export class Board {
       { row: 0, column: 2},
       { row: 0, column: 3},
     ];
-
+    
+  }
+  
+  findTargetCell() {
+    for (let row = 0; row < this.cells.length; row++) {
+      if (this.cells[row]) {
+        const len = this.cells[row]?.length || 0
+        for (let col = 0; col < len; col++) {
+          if (this.cells[row]?.[col]?.isTarget) {
+            return { row: row, column: col };
+          }
+        }
+      }
+    }
+    return null
   }
 
   findMoves() {
@@ -133,4 +151,9 @@ export class Board {
 
     return legalMove 
   }
+  updateRobotPosition(newPosition: Position, robotIndex: number) {
+    this.robotPositions[robotIndex]!.column = newPosition.column
+    this.robotPositions[robotIndex]!.row = newPosition.row
+  }
+
 }
