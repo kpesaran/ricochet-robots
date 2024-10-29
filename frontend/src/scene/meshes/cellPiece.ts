@@ -24,9 +24,9 @@ export default class CellPiece {
         this.material = new THREE.MeshStandardMaterial({
             // "rgb(30, 100, 70)")
             // color: new THREE.Color("rgb(30, 100, 130)"),
-            color: new THREE.Color("rgb(30, 0, 10)"),
+            color: new THREE.Color("rgb(120, 120, 120)"),
             roughness: .3,
-            metalness: 1
+            metalness: .7
         });
     }
     

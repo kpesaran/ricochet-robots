@@ -120,10 +120,10 @@ export class SceneController {
     }
     
     private setUpLights() {
-        const ambientLight = new THREE.AmbientLight('#ffffff', .3);
+        const ambientLight = new THREE.AmbientLight('#ffffff', 2.3);
         this.scene.add(ambientLight);
        
-        const directionalLight = new THREE.DirectionalLight('#ffffff', 2)
+        const directionalLight = new THREE.DirectionalLight('#ffffff', 1.9)
         directionalLight.castShadow = true;
         directionalLight.position.y = 1
         this.scene.add(directionalLight)
