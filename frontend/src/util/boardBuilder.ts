@@ -3,13 +3,14 @@ import { Robot } from '../board/robot';
 import { Direction } from '../board/direction';
 import type { Position } from '../board/position';
 import { BOARD_SIZE } from '../board/board';
+import { Color } from '../board/color'
 
 
 export class BoardBuilder {
   robots: [Robot, Position][];
   walls: [Direction, Position][];
   targetCell: Position | null
-  
+
   constructor() {
     this.robots = []
     this.walls = []
@@ -42,15 +43,14 @@ export class BoardBuilder {
   }
 
   public generateRandomPairedWalls() {
-    
     // NW
-    this.placePairWallsInQuadrant(1,  BOARD_SIZE / 2 - 1, 1, BOARD_SIZE / 2 - 1)
-    // SW
-    this.placePairWallsInQuadrant( BOARD_SIZE / 2, BOARD_SIZE - 2, 1, BOARD_SIZE / 2 - 1)
+    this.placePairWallsInQuadrant(1,  1, BOARD_SIZE /2 - 1 , BOARD_SIZE/ 2 - 1)
     // NE
-    this.placePairWallsInQuadrant( 1, BOARD_SIZE / 2 - 1, BOARD_SIZE / 2, BOARD_SIZE - 2)
-    // SE
-    this.placePairWallsInQuadrant(BOARD_SIZE / 2, BOARD_SIZE - 2, BOARD_SIZE / 2, BOARD_SIZE - 2)
+    this.placePairWallsInQuadrant( BOARD_SIZE / 2, BOARD_SIZE - 2, 1, BOARD_SIZE / 2 - 1)
+    // // SW
+    this.placePairWallsInQuadrant( BOARD_SIZE / 2, 1, BOARD_SIZE - 1, BOARD_SIZE / 2 - 1)
+    // // SE
+    this.placePairWallsInQuadrant(BOARD_SIZE / 2 , BOARD_SIZE / 2, BOARD_SIZE - 1, BOARD_SIZE - 1)
 
     return this
   }
@@ -67,6 +67,7 @@ export class BoardBuilder {
     this.placeEdgeWallsEW(BOARD_SIZE / 2, BOARD_SIZE - 2, 0)
     this.placeEdgeWallsEW(BOARD_SIZE / 2, BOARD_SIZE - 2, BOARD_SIZE -1)
 
+    return this
   }
 
   private placeEdgeWallsEW(rowStart: number, rowEnd: number, column: number) {
@@ -97,9 +98,12 @@ export class BoardBuilder {
 
   private placePairWallsInQuadrant( rowStart: number, colStart: number, rowEnd: number, colEnd: number) {
     {
+      let retryLimit = 20
       const wallsNS = [Direction.North, Direction.South]
       const wallsEW = [Direction.West, Direction.East]
+      let attempt = 0
       for (let i = 0; i < 3; i++) {
+        
         const randomRow = this.getRandomInt(rowStart, rowEnd );
         const randomCol = this.getRandomInt(colStart, colEnd);
         const randomIdx1 = Math.floor(Math.random() * wallsNS.length);
@@ -115,6 +119,10 @@ export class BoardBuilder {
           else {
             i -= 1
         }  
+        attempt += 1
+        if (attempt === retryLimit) {
+          break
+        }
       }
     }
   }
@@ -195,6 +203,7 @@ export class BoardBuilder {
   }
 
   private addTargetCell(board: Board) {
+    
     if (this.targetCell) {
       board.cells[this.targetCell.row]![this.targetCell.column]!.isTarget = true 
     }
@@ -258,14 +267,36 @@ export class BoardBuilder {
 
     // 
     return this
-
   }
+  generateRandomPiecePlacement(board: Board) {
+    const openPositions = board.generateOpenPositions(BOARD_SIZE)
+    const targetChipPosition = board.getRandomOpenPosition(openPositions)
+    this.withTargetCell(targetChipPosition!)
 
-
-
-
+    const robotColors = [Color.Blue, Color.Red, Color.Green, Color.Yellow]
+    
+    board.shuffleRobots()
+    
+    for (let i = 0; i < 4; i++) {
+      this.withRobot(new Robot(robotColors[i]!), board.getRandomOpenPosition(openPositions)!)
+    }
+    this.generateRandomEdgeWalls()
+    this.generateRandomPairedWalls()
+    return this
+  }
+   
   public build() {
     let board = new Board();
+    this.addWalls(board);
+    this.addRobots(board);
+    this.addTargetCell(board)
+
+    return board;
+  }
+  
+  public buildRandom() {
+    let board = new Board();
+    this.generateRandomPiecePlacement(board)
     this.addWalls(board);
     this.addRobots(board);
     this.addTargetCell(board)

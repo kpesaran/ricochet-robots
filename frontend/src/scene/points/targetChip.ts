@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { Position } from '../../board/position';
+import { Color } from '../../board/color';
 
 
 export default class targetChipPiece {
@@ -9,10 +10,10 @@ export default class targetChipPiece {
     position: Position
 
     
-    constructor(position: Position, symbol1: THREE.Texture) {
+    constructor(position: Position, symbol1: THREE.Texture, color: Color) {
         this.position = position
         this.setBufferGeometry()
-        this.setMaterial(symbol1)
+        this.setMaterial(symbol1, color)
         this.setPoint()
     }
 
@@ -28,12 +29,12 @@ export default class targetChipPiece {
         this.bufferGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3)) 
     }
 
-    private setMaterial(texture: THREE.Texture) {
+    private setMaterial(texture: THREE.Texture, color: Color) {
         const gridChipsMat = new THREE.PointsMaterial({
             size: 1,
             sizeAttenuation: true 
         })
-        gridChipsMat.color = new THREE.Color('red')
+        gridChipsMat.color = new THREE.Color(color)
         // particlesMaterial.vertexColors = true
         gridChipsMat.transparent = true
         gridChipsMat.alphaMap = texture

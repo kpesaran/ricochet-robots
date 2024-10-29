@@ -81,14 +81,20 @@ export class SceneController {
     setUpBoard() {
         const wallPieces = this.placeWalls(this.board)
         this.placeRobots(this.board)
-        this.placeTargetChip({ row: 0, column: 7 })
+        this.placeTargetChip(this.board.findTargetCell()!)
         this.placeCellMeshes()
         this.setUpGridPlane();
         const centerCube = new CenterCube(this.wallTextures)
         this.scene.add(centerCube.mesh!)
         this.debug.setupWallStyleControls(centerCube, wallPieces  )
-        const centerChip = new CenterChip(this.symbol1)
+        const centerChip = new CenterChip(this.symbol1, this.board.getTargetRobotColor()!)
         this.scene.add(centerChip.mesh!)
+    }
+
+    newGame() {
+        this.placeRobots(this.board)
+        this.placeWalls(this.board)
+        this.placeTargetChip(this.board.findTargetCell()!)
     }
 
     private setUpAxesHelpers() {
@@ -102,7 +108,7 @@ export class SceneController {
 
     private placeTargetChip(position: Position) {
         if (position) {
-            const gridChip = new targetChipPiece(position, this.symbol1)
+            const gridChip = new targetChipPiece(position, this.symbol1, this.board.getTargetRobotColor()!)
          
             if (gridChip.point) {
                     this.scene.add(gridChip.point);

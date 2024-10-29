@@ -15,6 +15,7 @@ export default class InputController {
     document.addEventListener('mousedown', () => this.handleMouseDown(gameController, sceneController))
     document.getElementById('reverse-move-button')!.addEventListener('click', () => gameController.reverseLastMove())
     document.getElementById('reset-button')!.addEventListener('click', () => gameController.resetGame())
+    document.getElementById('new-game')?.addEventListener('click', () => gameController.newGame())
     window.addEventListener('resize', () => gameController.sceneController.onResize());
   
   }

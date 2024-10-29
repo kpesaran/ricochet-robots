@@ -39,10 +39,10 @@ export class Board {
 
     this.cells = cells;
     this.robots = [
+      new Robot(Color.Blue),
       new Robot(Color.Red),
       new Robot(Color.Yellow),
       new Robot(Color.Green),
-      new Robot(Color.Blue),
     ];
 
     this.robotPositions = [
@@ -53,7 +53,18 @@ export class Board {
     ];
     
   }
-  
+
+  shuffleRobots() {
+    for (let i = this.robots.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.robots[i], this.robots[j]] = [this.robots[j]!, this.robots[i]!];
+    }
+  }
+
+  getTargetRobotColor() {
+    return this.robots[0].color
+  }
+   
   findTargetCell() {
     for (let row = 0; row < this.cells.length; row++) {
       if (this.cells[row]) {
@@ -78,25 +89,15 @@ export class Board {
   }
 
   checkDirections(startPos: Position, direction: Direction) : null | Position {
-    // Gets the position of the target robot
-    // Checks the north, south, east, and west path
-    // Path ends if
-    // - it is the last cell in the direction
-    // - or the cell is obstructed with either another robot, a wall, or the center pieces
-    
 
     let legalMove: Position | null = null 
     let row = startPos.row
     let col = startPos.column
  
     while (row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE) {
-     
-      // check if target, add position
 
       let robotEncountered = false 
-      // robots 
       this.robotPositions.forEach(robot => {
-        // designated robot does not check its own position
         if (robot.row === startPos.row && robot.column === startPos.column) {
           return 
         }
@@ -151,9 +152,32 @@ export class Board {
 
     return legalMove 
   }
+
   updateRobotPosition(newPosition: Position, robotIndex: number) {
     this.robotPositions[robotIndex]!.column = newPosition.column
     this.robotPositions[robotIndex]!.row = newPosition.row
+  }
+
+  getRandomOpenPosition(openPositions: Position[]) {
+    const randomIndex = Math.floor(Math.random() * openPositions.length)
+    console.log(randomIndex)
+
+    return openPositions.splice(randomIndex, 1)[0]
+  }
+
+  generateOpenPositions(boardSize: number) {
+    const openPositions = []
+    for (let row = 0; row < boardSize; row++) {
+      for (let col = 0; col < boardSize; col++) {
+        // if cell is not obstructed add position
+
+        if (!this.cells[row]![col]?.isObstructed && !this.cells[row]![col]?.isTarget) {
+          openPositions.push({row: row, column: col})
+        }
+      }
+    }
+    console.log(openPositions)
+    return openPositions
   }
 
 }

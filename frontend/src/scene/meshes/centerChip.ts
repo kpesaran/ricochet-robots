@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-
+import { Color } from '../../board/color';
 
 export default class CenterChip {
     material: THREE.Material | undefined;
@@ -7,9 +7,9 @@ export default class CenterChip {
     mesh: THREE.Mesh | undefined;
 
     
-    constructor(symbol: THREE.Texture) {
+    constructor(symbol: THREE.Texture, color: Color) {
         this.setGeometry()
-        this.setMaterial(symbol)
+        this.setMaterial(symbol, color)
         this.setMesh()
     }
 
@@ -17,9 +17,10 @@ export default class CenterChip {
         this.geometry = new THREE.BoxGeometry(1, 1, 1)
     }
 
-    private setMaterial(symbol: THREE.Texture) {
+    private setMaterial(symbol: THREE.Texture, color: Color) {
+        
         this.material = new THREE.MeshStandardMaterial({
-            color: 'red',
+            color: color,
             alphaMap: symbol,
             alphaTest: .001,
             transparent: true,
