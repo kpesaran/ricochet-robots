@@ -1,0 +1,57 @@
+<!doctype html>>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ricochet Robots</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="menu-screen">
+      
+      <div id = "menu-screen-elements">
+        <h2>Ricochet Robots</h2>
+        <button onclick="closeMainMenu()" id = "menu-screen-button">NEW GAME</button>
+      </div>
+    </div>
+    <h1>Ricochet Robots</h1>
+    <div class = 'game-controls-container'>
+      <div id = 'buttons'>
+        
+        <button id ='instructions-btn'>Instructions</button>
+        <button id ='reset-button'>
+          
+            Reset Game 
+          </button>
+          <button id ='reverse-move-button'>
+            Undo Move
+          </button>
+          
+          <button id ='new-game'>New Game</button>
+          
+          <button id ='show-min-moves-btn'>Show Shortest Path Move Count</button>
+          <button id ='show-shortest-path-btn'>Visualize Shortest Path</button>
+      </div>
+      <p class="heading" id = 'count-heading-txt'>Move Count:
+        <span id = 'move-count' >0</span>
+      </p>
+    <canvas class="webgl"></canvas>
+    
+    <script type="module" src="src/main.js"></script>
+    </div>
+  </body>
+  <script>
+    function closeMainMenu() {
+      
+      const mainMenuElement = document.getElementById("menu-screen")
+      
+      if (mainMenuElement.style.display === "none") {
+        element.style.display = "flex"; // Show the element
+    } else {
+        mainMenuElement.style.display = "none"; // Hide the element
+    }
+    }
+  </script>
+</html>
