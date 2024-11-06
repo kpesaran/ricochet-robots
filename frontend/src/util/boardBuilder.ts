@@ -300,6 +300,7 @@ export class BoardBuilder {
     this.addWalls(board);
     this.addRobots(board);
     this.addTargetCell(board)
+    console.log(this.targetCell)
 
     return board;
   }

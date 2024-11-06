@@ -37,7 +37,7 @@ export class GameController {
         this.sceneController.debug.dispose()
         const newBoard = new BoardBuilder()
         this.board = newBoard.buildRandom()
-        this.sceneController = new SceneController('canvas.webgl',this.board)
+        this.sceneController = new SceneController('canvas.webgl', this.board)
         this.UIController.resetCount()
     }
 
@@ -47,9 +47,18 @@ export class GameController {
         this.sceneController.placeRobots(this.board)
     }
 
+    checkWinCondition() {
+        return this.board.checkRobotAtTarget()
+    }
+
     gameWon() {
-        if (this.board.checkRobotAtTarget()) {
-            
+        const mainMenuElement = window.document.getElementById("menu-screen")
+  
+        if (mainMenuElement!.style.display === "none") {
+            mainMenuElement!.style.display = "flex";
+        }
+        else {
+            mainMenuElement!.style.display = "none"; 
         }
     }
 
@@ -75,15 +84,11 @@ export class GameController {
             this.UIController.increaseMoveCount()
         }
         if (this.board.checkRobotAtTarget()) {
-            console.log('Game won')
-            const mainMenuElement = window.document.getElementById("menu-screen")
-      
-            if (mainMenuElement!.style.display === "none") {
-            mainMenuElement!.style.display = "flex";
-    } else {
-        mainMenuElement!.style.display = "none"; 
-    }
+            this.gameWon()
+            return
         }
+        console.log(newPos)
+        
     }
  
     handleNonTargetRobotMove(newPosition: Position, robotIndex: number | null) {

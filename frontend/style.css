@@ -80,7 +80,7 @@ button:active {
   z-index: 9999; ;
   opacity: 90%;
   background-color: rgb(0, 0, 0);
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
 }
@@ -97,7 +97,7 @@ button:active {
   opacity: 80%;
 }
 #instructions-overlay {
-  display: flex;
+  display: none;
   position: fixed;
   top: 0;
   left: 0;

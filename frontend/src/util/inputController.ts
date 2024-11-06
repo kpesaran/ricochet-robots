@@ -16,11 +16,29 @@ export default class InputController {
     document.addEventListener('mousedown', () => this.handleMouseDown(gameController, sceneController))
     document.getElementById('reverse-move-btn')!.addEventListener('click', () => gameController.reverseLastMove())
     document.getElementById('reset-btn')!.addEventListener('click', () => gameController.resetGame())
-    document.getElementById('new-game')?.addEventListener('click', () => gameController.newGame())
+    document.getElementById('new-game-btn')?.addEventListener('click', () => gameController.newGame())
     window.addEventListener('resize', () => gameController.sceneController.onResize());
     document.getElementById('instructions-btn')!.addEventListener('click', () => gameController.UIController.toggleInstructions())
     document.getElementById('close-instructions-btn')!.addEventListener('click', () => gameController.UIController.toggleInstructions())
+
+    document.getElementById('show-shortest-path-btn')!.addEventListener('click', () => this.showShortestPath())
+    document.getElementById('show-min-moves-btn')!.addEventListener('click', () => this.getMinMoveCount())
   }
+
+  getMinMoveCount() {
+    // Send a request to webAssembly to get the  minimum move count (or use length of path of cells)
+
+    return
+  }
+
+  showShortestPath() { 
+
+    // Send a request to webAssembly to get list of non target robot moves and target-moves. 
+    // sceneController.showShortestPath()
+    return
+  }
+
+
   
   handleKeydown(event: KeyboardEvent, gameController: GameController) {
     switch (event.key) {
@@ -37,7 +55,12 @@ export default class InputController {
         gameController.slideTargetRobot(Direction.East);
         break;
     }
+    if (gameController.checkWinCondition()) {
+      gameController.gameWon()
+    }
   }
+
+
   handleMouseMove = (event: MouseEvent, sceneController: SceneController) => {
     let x = (event.clientX / sceneController.sizes.width) * 2 - 1;
     let y = -(event.clientY / sceneController.sizes.height) * 2 + 1;

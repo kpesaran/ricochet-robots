@@ -10,10 +10,9 @@
   <body>
     <div id="app"></div>
     <div id="menu-screen">
-      
       <div id = "menu-screen-elements">
-        <h2>Ricochet Robots</h2>
-        <button onclick="closeMainMenu()" id = "menu-screen-btn">NEW GAME</button>
+        <h2>You Won in <span id = 'final-score'>5 </span> </h2>
+        <button onclick="closeMainMenu()" id = "menu-screen-btn">NEW GAME</button>  
       </div>
     </div>
     <h1>Ricochet Robots</h1>
@@ -30,13 +29,13 @@
             Undo Move
           </button>
           
-          <button id ='new-game'>New Game</button>
+          <button id ='new-game-btn'>New Game</button>
           
           <button id ='show-min-moves-btn'>Show Shortest Path Move Count</button>
           <button id ='show-shortest-path-btn'>Visualize Shortest Path</button>
       </div>
       <p class="heading" id = 'count-heading-txt'>Move Count:
-        <span id = 'move-count' >0</span>
+        <span id= 'move-count' >0</span>
       </p>
       <div id="instructions-overlay" class="overlay">
         <div class="instructions-content">

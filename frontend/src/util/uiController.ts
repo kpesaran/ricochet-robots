@@ -26,9 +26,11 @@ export default class UIController {
         this.moveCount = 0
         document.getElementById('move-count')!.textContent = `${this.moveCount}`;
     }
+    updateFinalScore() {
+        document.getElementById('final-score')!.textContent = 'hi'
+    }
 
     toggleInstructions() {
-        console.log('toggle instructions')
         const instructions = window.document.getElementById('instructions-overlay')
         if (instructions?.style.display === 'none' || !instructions?.style.display) {
             instructions!.style.display = 'flex'
