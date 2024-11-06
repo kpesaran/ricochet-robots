@@ -6,6 +6,7 @@ import * as THREE from 'three'
 import { SceneController } from "../scene/sceneController";
 
 
+
 export default class InputController {
   selectedPiece: THREE.Mesh | undefined
   constructor(gameController: GameController, sceneController: SceneController) {
@@ -13,11 +14,12 @@ export default class InputController {
     document.addEventListener('keydown', (event) => this.handleKeydown(event, gameController));
     document.addEventListener('mousemove', (event) => this.handleMouseMove(event, sceneController));
     document.addEventListener('mousedown', () => this.handleMouseDown(gameController, sceneController))
-    document.getElementById('reverse-move-button')!.addEventListener('click', () => gameController.reverseLastMove())
-    document.getElementById('reset-button')!.addEventListener('click', () => gameController.resetGame())
+    document.getElementById('reverse-move-btn')!.addEventListener('click', () => gameController.reverseLastMove())
+    document.getElementById('reset-btn')!.addEventListener('click', () => gameController.resetGame())
     document.getElementById('new-game')?.addEventListener('click', () => gameController.newGame())
     window.addEventListener('resize', () => gameController.sceneController.onResize());
-  
+    document.getElementById('instructions-btn')!.addEventListener('click', () => gameController.UIController.toggleInstructions())
+    document.getElementById('close-instructions-btn')!.addEventListener('click', () => gameController.UIController.toggleInstructions())
   }
   
   handleKeydown(event: KeyboardEvent, gameController: GameController) {

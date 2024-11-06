@@ -96,6 +96,51 @@ button:active {
   border-radius: 25%;
   opacity: 80%;
 }
+#instructions-overlay {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8); 
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  margin: 0;
+}
+.instructions-content {
+  background-color: #313131;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 800px;
+  width: 90%;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #fdfdfd; 
+}
+
+.instructions-content p {
+  font-size: 24px;
+}
+
+.instructions-content ul {
+  list-style-type: square;
+  padding-left: 30px;
+  padding-right: 30px;
+  font-size: 20px;
+}
+.instructions-content button {
+  align-self: center;
+}
+
+.instructions-content button:hover {
+  background-color: #111010; 
+  color: #fcfcfc;
+}
 
 #buttons {
   display: flex;

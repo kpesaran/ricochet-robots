@@ -13,19 +13,20 @@
       
       <div id = "menu-screen-elements">
         <h2>Ricochet Robots</h2>
-        <button onclick="closeMainMenu()" id = "menu-screen-button">NEW GAME</button>
+        <button onclick="closeMainMenu()" id = "menu-screen-btn">NEW GAME</button>
       </div>
     </div>
     <h1>Ricochet Robots</h1>
     <div class = 'game-controls-container'>
       <div id = 'buttons'>
         
-        <button id ='instructions-btn'>Instructions</button>
-        <button id ='reset-button'>
-          
+        <button id ='instructions-btn' onclick="()=>{
+          document.getElementById('instructions-overlay').style.display = 'display';
+        }">Instructions</button>
+        <button id ='reset-btn'>
             Reset Game 
           </button>
-          <button id ='reverse-move-button'>
+          <button id ='reverse-move-btn'>
             Undo Move
           </button>
           
@@ -37,6 +38,20 @@
       <p class="heading" id = 'count-heading-txt'>Move Count:
         <span id = 'move-count' >0</span>
       </p>
+      <div id="instructions-overlay" class="overlay">
+        <div class="instructions-content">
+          <h2>Ricochet Robots Game Instructions</h2>
+          <p><strong>Objective:</strong> Move the target robot to the target cell (the cell with the chip matching the center chip) using as few moves as possible.</p>
+          <p><strong>Movements:</strong> Use the arrow keys to move the target robot, and click to place non-target robots on the grid to help guide it.</p>
+          <ul>
+            <li>Use arrow keys to move the target robot. It continues moving until it hits a wall or another robot.</li>
+            <li>Click to place non-target robots on the grid. Each placement counts as a move.</li>
+          </ul>
+          <p><strong>Goal:</strong> Reach the target cell with minimal moves</p>
+          <button id = 'close-instructions-btn'
+          >Close</button>
+        </div>
+      </div>
     <canvas class="webgl"></canvas>
     
     <script type="module" src="src/main.js"></script>
