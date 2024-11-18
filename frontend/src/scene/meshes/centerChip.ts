@@ -31,6 +31,11 @@ export default class CenterChip {
         this.mesh =  new THREE.Mesh(this.geometry, this.material) 
         this.mesh.position.set(0,1,0)
     }
+    public updateColor(color: Color) {
+        if (this.material instanceof THREE.MeshStandardMaterial) {
+            this.material.color = new THREE.Color(color);
+        }
+    }
 
 }
 

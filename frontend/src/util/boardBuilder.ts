@@ -287,6 +287,7 @@ export class BoardBuilder {
    
   public build() {
     let board = new Board();
+    this.withTargetCell({row:0,column:4})
     this.addWalls(board);
     this.addRobots(board);
     this.addTargetCell(board)
@@ -300,7 +301,7 @@ export class BoardBuilder {
     this.addWalls(board);
     this.addRobots(board);
     this.addTargetCell(board)
-    console.log(this.targetCell)
+    
 
     return board;
   }

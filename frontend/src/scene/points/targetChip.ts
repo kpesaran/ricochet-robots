@@ -26,13 +26,31 @@ export default class targetChipPiece {
         positions[0] = x
         positions[1] = y
         positions[2] = z
-        this.bufferGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3)) 
+        this.bufferGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    }
+
+    updatePosition(position: Position) {
+        const positions = new Float32Array(15)
+        const x = (position.row) - 7.5
+        const y = .2
+        const z = (position.column) - 7.5
+        positions[0] = x
+        positions[1] = y
+        positions[2] = z
+        this.bufferGeometry?.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+        gsap.to(this.point!.position, {
+            x: x,
+            y: y,
+            z: z,
+            duration: 1
+        })
+        this.position = position
     }
 
     private setMaterial(texture: THREE.Texture, color: Color) {
         const gridChipsMat = new THREE.PointsMaterial({
             size: 1,
-            sizeAttenuation: true 
+            sizeAttenuation: true
         })
         gridChipsMat.color = new THREE.Color(color)
         // particlesMaterial.vertexColors = true
@@ -46,8 +64,16 @@ export default class targetChipPiece {
     private setPoint() {
         this.point = new THREE.Points(this.bufferGeometry, this.material)
     }
+    private updateColor(color: Color) {
+        if (this.material instanceof THREE.PointsMaterial) {
+            this.material.color = new THREE.Color(color)
+        }
     }
 
-
+    public updateTargetChip(position: Position, color: Color) {
+        this.updateColor(color)
+        this.updatePosition(position)
+    }
+}
 
 

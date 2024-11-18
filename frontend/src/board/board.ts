@@ -1,4 +1,4 @@
-import { Cell } from './cell';
+    import { Cell } from './cell';
 import { Color } from './color';
 import { Robot } from './robot';
 import type { Position } from './position';
@@ -48,7 +48,7 @@ export class Board {
     this.robotPositions = [
       { row: 0, column: 0 },
       { row: 0, column: 1 },
-      { row: 0, column: 2 },
+      { row: 5, column: 0 },
       { row: 0, column: 3 },
     ];
     
@@ -58,6 +58,7 @@ export class Board {
     for (let i = this.robots.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [this.robots[i], this.robots[j]] = [this.robots[j]!, this.robots[i]!];
+      
     }
   }
   checkRobotAtTarget() {

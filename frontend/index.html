@@ -11,8 +11,14 @@
     <div id="app"></div>
     <div id="menu-screen">
       <div id = "menu-screen-elements">
-        <h2>You Won in <span id = 'final-score'>5 </span> </h2>
-        <button onclick="closeMainMenu()" id = "menu-screen-btn">NEW GAME</button>  
+        <h2>Ricochet Robots</h2>
+        
+        <button id = "back-to-board-game-menu-screen-btn">BACK TO BOARD</button>
+        <button id = "reset-game-menu-screen-btn">RESET GAME</button>  
+        <button id = "new-game-menu-screen-btn">NEW GAME</button>  
+        <button id = "instructions-menu-screen-btn">Instructions</button>
+        <h3>You won in <span class = 'final-score'></span>moves</h3>
+        <p>Check if its the shortest path here:</p>
       </div>
     </div>
     <h1>Ricochet Robots</h1>
@@ -56,16 +62,4 @@
     <script type="module" src="src/main.js"></script>
     </div>
   </body>
-  <script>
-    function closeMainMenu() {
-      
-      const mainMenuElement = document.getElementById("menu-screen")
-      
-      if (mainMenuElement.style.display === "none") {
-        element.style.display = "flex"; // Show the element
-    } else {
-        mainMenuElement.style.display = "none"; // Hide the element
-    }
-    }
-  </script>
 </html>

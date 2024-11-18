@@ -4,25 +4,55 @@ import { Direction } from "../board/direction";
 import { GameController } from "../game/gameController";
 import * as THREE from 'three'
 import { SceneController } from "../scene/sceneController";
+import UIController from "./uiController";
 
 
 
 export default class InputController {
   selectedPiece: THREE.Mesh | undefined
-  constructor(gameController: GameController, sceneController: SceneController) {
+  constructor(gameController: GameController, sceneController: SceneController, UIController: UIController) {
 
     document.addEventListener('keydown', (event) => this.handleKeydown(event, gameController));
+    
     document.addEventListener('mousemove', (event) => this.handleMouseMove(event, sceneController));
-    document.addEventListener('mousedown', () => this.handleMouseDown(gameController, sceneController))
-    document.getElementById('reverse-move-btn')!.addEventListener('click', () => gameController.reverseLastMove())
-    document.getElementById('reset-btn')!.addEventListener('click', () => gameController.resetGame())
-    document.getElementById('new-game-btn')?.addEventListener('click', () => gameController.newGame())
-    window.addEventListener('resize', () => gameController.sceneController.onResize());
-    document.getElementById('instructions-btn')!.addEventListener('click', () => gameController.UIController.toggleInstructions())
-    document.getElementById('close-instructions-btn')!.addEventListener('click', () => gameController.UIController.toggleInstructions())
+    
+    document.addEventListener('mousedown', () => this.handleMouseDown(gameController, sceneController));
+    
+    document.getElementById('reverse-move-btn')!.addEventListener('click', () => gameController.reverseLastMove());
 
-    document.getElementById('show-shortest-path-btn')!.addEventListener('click', () => this.showShortestPath())
-    document.getElementById('show-min-moves-btn')!.addEventListener('click', () => this.getMinMoveCount())
+    document.getElementById('reset-btn')!.addEventListener('click', () => gameController.resetGame());
+    
+    document.getElementById('new-game-btn')?.addEventListener('click', () => gameController.newGame());
+
+    window.addEventListener('resize', () => gameController.sceneController.onResize());
+
+    document.getElementById('instructions-btn')!.addEventListener('click', () => gameController.UIController.toggleInstructions());
+
+    document.getElementById('close-instructions-btn')!.addEventListener('click', () => gameController.UIController.toggleInstructions());
+
+    document.getElementById('show-shortest-path-btn')!.addEventListener('click', () => this.showShortestPath());
+
+    document.getElementById('show-min-moves-btn')!.addEventListener('click', () => this.getMinMoveCount());
+
+    // Menu Screen Buttons 
+
+    document.getElementById("reset-game-menu-screen-btn")!.addEventListener('click', () => {
+      gameController.resetGame()
+      UIController.toggleMainMenu()
+    })
+
+    document.getElementById("back-to-board-game-menu-screen-btn")?.addEventListener('click', () => {
+      UIController.toggleMainMenu()
+    })
+
+    document.getElementById("new-game-menu-screen-btn")?.addEventListener('click', () => {
+      gameController.newGame()
+      UIController.toggleMainMenu()
+    })
+      
+    document.getElementById("instructions-menu-screen-btn")?.addEventListener('click', () => {
+      UIController.toggleInstructions()
+    })
   }
 
   getMinMoveCount() {
@@ -37,6 +67,9 @@ export default class InputController {
     // sceneController.showShortestPath()
     return
   }
+
+
+  
 
 
   
@@ -55,9 +88,7 @@ export default class InputController {
         gameController.slideTargetRobot(Direction.East);
         break;
     }
-    if (gameController.checkWinCondition()) {
-      gameController.gameWon()
-    }
+    
   }
 
 

@@ -14,14 +14,17 @@ export class GameController {
     inputController: InputController
     UIController: UIController
     boardHistory: RobotStateHistory
+    menuOpen: Boolean
     
     constructor() {
         const newBoard = new BoardBuilder()
-        this.board = newBoard.buildRandom()
+       
+        this.board = newBoard.build()
         this.sceneController = new SceneController('canvas.webgl', this.board)
-        this.inputController = new InputController(this, this.sceneController)
         this.UIController = new UIController()
+        this.inputController = new InputController(this, this.sceneController, this.UIController)
         this.boardHistory = new RobotStateHistory()
+        this.menuOpen = false
     }
     // Methods to update game state based on user choices
     resetGame() {
@@ -29,15 +32,25 @@ export class GameController {
         this.boardHistory = new RobotStateHistory()
         this.sceneController.placeRobots(this.board)
         this.UIController.resetCount()
+        // if (this.menuOpen) {
+            
+        //     this.menuOpen = false
+        // }
+        
+        
     }
 
     newGame() {
         this.boardHistory = new RobotStateHistory()
-        this.sceneController.destroy()
-        this.sceneController.debug.dispose()
+        // this.sceneController.destroy()
+        
+        // this.sceneController.debug.dispose()
+        // this.sceneController.destroyRobotMeshes()
         const newBoard = new BoardBuilder()
         this.board = newBoard.buildRandom()
-        this.sceneController = new SceneController('canvas.webgl', this.board)
+        // this.sceneController = new SceneController('canvas.webgl', this.board)
+        this.sceneController.updateBoardPositions(this.board)
+        
         this.UIController.resetCount()
     }
 
@@ -51,15 +64,9 @@ export class GameController {
         return this.board.checkRobotAtTarget()
     }
 
-    gameWon() {
-        const mainMenuElement = window.document.getElementById("menu-screen")
-  
-        if (mainMenuElement!.style.display === "none") {
-            mainMenuElement!.style.display = "flex";
-        }
-        else {
-            mainMenuElement!.style.display = "none"; 
-        }
+    handleWin() {
+        this.UIController.toggleMainMenu()
+        
     }
 
     slideTargetRobot(direction: Direction) {
@@ -83,12 +90,10 @@ export class GameController {
             this.sceneController.updateTargetRobot()
             this.UIController.increaseMoveCount()
         }
-        if (this.board.checkRobotAtTarget()) {
-            this.gameWon()
+        if (this.checkWinCondition()) {
+            this.handleWin()
             return
         }
-        console.log(newPos)
-        
     }
  
     handleNonTargetRobotMove(newPosition: Position, robotIndex: number | null) {

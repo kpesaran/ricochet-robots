@@ -13,7 +13,9 @@ import CenterChip from './meshes/centerChip';
 import { Textures } from './textures';
 
 
-import { cameraGoesUpDown } from '../util/animate';
+// import { cameraGoesUpDown } from '../util/animate';
+import { Direction } from '../board/direction';
+
 
 export class SceneController {
     scene: THREE.Scene;
@@ -27,6 +29,7 @@ export class SceneController {
     // need to change
     symbol1: THREE.Texture
     robotPieces: THREE.Mesh[]
+    wallPieces: WallPiece[][][] | undefined
     cellArea: number
     gridSize: number
     cells: THREE.Mesh[]
@@ -37,6 +40,8 @@ export class SceneController {
     debug: Debug
     accumulatedAngle: number
     isSpinning: boolean;
+    centerChip: CenterChip | undefined
+    targetChip: targetChipPiece | undefined 
     
     constructor(canvas: string, board: Board) {
         this.board = board
@@ -69,7 +74,6 @@ export class SceneController {
         this.robotPieces = []
         this.gridSize = 16
         this.cellArea = 1
-        
         this.debug = new Debug(this)
         // Cells 
         this.cells = []
@@ -84,6 +88,7 @@ export class SceneController {
         this.tick()
         this.accumulatedAngle = 0
         this.isSpinning = false
+        
     }
     
     getRandomColor() {
@@ -94,6 +99,52 @@ export class SceneController {
         }
         return color;
     }
+
+    updateBoardPositions(board: Board) {
+        this.board = board;
+        this.updateWallPositions(board)
+        this.placeRobots(board);
+        const newTargetColor = board.robots[0]!.color
+        this.centerChip?.updateColor(newTargetColor)
+        this.targetChip?.updateTargetChip(board.findTargetCell()!, newTargetColor)
+        this.updateWallPositions(board)
+    }
+
+    private updateWallPositions(board: Board) {
+        if (this.wallPieces) {
+            this.wallPieces.forEach(row => {
+                row?.forEach(cell => {
+                    cell?.forEach(wallPiece => {
+                        if (wallPiece?.mesh) {
+                            this.scene.remove(wallPiece.mesh);
+                            wallPiece.mesh.geometry.dispose();
+                            if (wallPiece.mesh.material instanceof THREE.Material) {
+                                wallPiece.mesh.material.dispose();
+                            }
+                        }
+                    });
+                });
+            });
+        }
+        this.wallPieces = [];
+
+        // Create new walls
+        board.cells.forEach((row, rowIdx) => {
+            this.wallPieces![rowIdx] = [];
+            row.forEach((cell, colIdx) => {
+                this.wallPieces![rowIdx]![colIdx] = [];
+                cell.walls.forEach((direction: Direction, wallIdx: number) => {
+                    const wallPiece = new WallPiece(direction, 
+                        { row: rowIdx, column: colIdx }, 
+                        this.wallTextures,
+                        wallIdx
+                    );
+                    this.wallPieces![rowIdx]![colIdx]!.push(wallPiece);
+                    this.scene.add(wallPiece.mesh!);
+                });
+            });
+        });
+}
 
     setUpBoard() {
         this.scene.traverse((child) =>
@@ -111,21 +162,60 @@ export class SceneController {
                     }
                 }
         })
-        
+        const targetCell = this.board.findTargetCell()
+
         const wallPieces = this.placeWalls(this.board)
         this.placeRobots(this.board)
-        this.placeTargetChip(this.board.findTargetCell()!)
+        this.placeTargetChip(targetCell!)
         this.placeCellMeshes()
         this.setUpGridPlane();
         const centerCube = new CenterCube(this.wallTextures)
         this.scene.add(centerCube.mesh!)
-        this.debug.setupWallStyleControls(centerCube, wallPieces  )
+        this.debug.setupWallStyleControls(centerCube, wallPieces.flat(2))
         const centerChip = new CenterChip(this.symbol1, this.board.getTargetRobotColor()!)
+        this.centerChip = centerChip
         this.scene.add(centerChip.mesh!)
         
-        
+        const tl = gsap.timeline()
+        const offsetDistance = 5
         this.controls.enabled = false;
-        cameraGoesUpDown(this.camera,this.controls)
+
+        tl.to(this.camera.position, {
+            x: this.robotPieces[0]!.position.x - offsetDistance * Math.sin(this.robotPieces[0]!.rotation.y),
+            z: this.robotPieces[0]!.position.z - offsetDistance * Math.cos(this.robotPieces[0]!.rotation.y),
+            y: this.robotPieces[0]!.position.y + 2, // Adjust height if needed
+            duration: 3,
+            delay: 1,
+            onUpdate: () => {
+                this.camera.lookAt(new THREE.Vector3(0, 0, 0)); // Center of the scene
+            },
+
+        });
+        
+        tl.to(this.camera.position, {
+            x: targetCell!.row - 7.5,
+            z: targetCell!.column - 7.5,
+            y: 4,
+            duration:1,
+            delay: 1,
+            onUpdate: () => {
+                this.camera.lookAt(targetCell!.row - 7.5, 0, targetCell!.column)
+            }
+            
+        })
+     
+        tl.to(this.camera.position, {
+            z: 0,
+            y: 13,
+            x: 0,
+            duration: 1,
+            ease: "circ.inOut",
+            onUpdate: () => {
+                this.camera.lookAt(0,0,0)
+            } 
+        })
+        
+        this.controls.enabled = true
     }
 
     private setUpAxesHelpers() {
@@ -138,8 +228,9 @@ export class SceneController {
     }
 
     private placeTargetChip(position: Position) {
-            const gridChip = new targetChipPiece(position!, this.symbol1, this.board.getTargetRobotColor()!)
-            this.scene.add(gridChip.point!);
+        const gridChip = new targetChipPiece(position!, this.symbol1, this.board.getTargetRobotColor()!)
+        this.targetChip = gridChip
+        this.scene.add(gridChip.point!);
 
     }
     
@@ -202,7 +293,7 @@ export class SceneController {
             // }
             // Light South
     //         if (endingPos.row > startingPos.row) {
-    //             console.log(endingPos,currRow)
+    //             (endingPos,currRow)
     //             while (currRow <= endingPos.row) {
     //                 currRow += 1
     //                 if (currRow <= this.gridSize) {
@@ -288,7 +379,7 @@ export class SceneController {
         this.debug.setupBoardStyleControl(cellPieces)
     }
 
-    private destroyRobotMeshes() {
+    destroyRobotMeshes() {
         this.robotPieces.forEach(robotMesh => {
             robotMesh.geometry.dispose()
             // If robotMesh.material is an array of materials
@@ -308,6 +399,7 @@ export class SceneController {
             this.scene.remove(robotMesh)
         })
     }
+
     destroy() {
         // Add this method to properly clean up when the scene is no longer needed
         this.scene.traverse((child) => {
@@ -320,7 +412,6 @@ export class SceneController {
                 }
             }
         });
-        
         this.controls.dispose();
         this.renderer.dispose();
     }
@@ -336,6 +427,7 @@ export class SceneController {
             this.robotPieces.push(robotPiece.mesh!)
         }
     }
+
     updateTargetRobot() {
         const robotPosition = this.board.robotPositions[0]
         const robotMesh = this.robotPieces[0]
@@ -361,17 +453,19 @@ export class SceneController {
     }
     
     private placeWalls(board: Board) {
-        const wallPieces: WallPiece[] = []
+        const wallPieces: WallPiece[][][] = []
+        this.wallPieces = []
         for (let row = 0; row < board.cells.length; row++) {
-        
+            this.wallPieces[row] = []
             for (let col = 0; col < board.cells[row]!.length; col++) {
-                
+                this.wallPieces[row]![col] = []
                 if (board.cells[row]![col]!.walls.length > 0) {
-        
-                    for (const direction of board.cells[row]![col]!.walls) {
-                            const wallPiece = new WallPiece(direction, {row: row, column: col}, this.wallTextures )
-                            wallPieces.push(wallPiece)
-                            this.scene.add(wallPiece.mesh!)
+                
+                    for (let idx = 0; idx < board.cells[row]![col]!.walls.length; idx++) {
+                        const direction = board.cells![row]![col]?.walls[idx]
+                            const wallPiece = new WallPiece(direction!, {row: row, column: col}, this.wallTextures , idx)
+                            this.wallPieces[row]![col]!.push(wallPiece)
+                            this.scene.add(wallPiece.mesh!)   
                         }
                     }
                 }
