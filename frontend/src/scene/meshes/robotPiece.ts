@@ -38,6 +38,8 @@ export default class RobotPiece {
 
         this.material = new THREE.MeshStandardMaterial({
             color: robotColor,
+            metalness: .5,
+            roughness: .4
         })
     }
           
@@ -46,6 +48,8 @@ export default class RobotPiece {
             (this.geometry, this.material)
         this.mesh.position.set(pos.column - 7.5, .5, pos.row - 7.5)
         this.mesh.castShadow = true;
+        this.mesh.receiveShadow = true;
+        
     }
 
 }

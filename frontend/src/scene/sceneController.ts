@@ -42,6 +42,7 @@ export class SceneController {
     isSpinning: boolean;
     centerChip: CenterChip | undefined
     targetChip: targetChipPiece | undefined 
+    pointLight: THREE.PointLight | undefined
     
     constructor(canvas: string, board: Board) {
         this.board = board
@@ -102,12 +103,58 @@ export class SceneController {
 
     updateBoardPositions(board: Board) {
         this.board = board;
+        const tl = gsap.timeline()
         this.updateWallPositions(board)
+        this.controls.enabled = false
+       
+        this.cells.forEach((cell,index) => {
+            
+            gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
+                r: 1,
+                g: .05,
+                b: Math.random()/3,
+                duration: .2,
+                repeat: 1,
+                yoyo: true,
+                ease: 'circle',
+                delay: index * 0.0005 
+            });
+        })
+       
         this.placeRobots(board);
-        const newTargetColor = board.robots[0]!.color
+        const newTargetColor = board.getTargetColor()
         this.centerChip?.updateColor(newTargetColor)
+        if (this.targetChip) {
+            this.targetChip?.updateTargetChip(board.findTargetCell()!, newTargetColor)
+        }
+        else {
+            const targetCell = this.board.findTargetCell()
+            if (targetCell) {
+                this.placeTargetChip(targetCell)
+            }
+        }
         this.targetChip?.updateTargetChip(board.findTargetCell()!, newTargetColor)
         this.updateWallPositions(board)
+        this.pointLight!.color = new THREE.Color(board.robots[0].color)
+        tl.to(this.camera.position, {
+            x: 50,
+            y: 0,
+            z: 0,
+            duration: 1,
+        })
+        
+        tl.to(this.camera.position, {
+            x: 0,
+            y: 14,
+            z: 0,
+            duration: 2,
+            ease: 'bounce',
+            onUpdate: () => {
+                this.camera.lookAt(new THREE.Vector3(0, 0, 0))
+            }
+        })
+       this.controls.enabled = true 
+
     }
 
     private updateWallPositions(board: Board) {
@@ -166,7 +213,10 @@ export class SceneController {
 
         const wallPieces = this.placeWalls(this.board)
         this.placeRobots(this.board)
-        this.placeTargetChip(targetCell!)
+        if (targetCell) {
+            this.placeTargetChip(targetCell)
+        }
+        
         this.placeCellMeshes()
         this.setUpGridPlane();
         const centerCube = new CenterCube(this.wallTextures)
@@ -180,42 +230,61 @@ export class SceneController {
         const offsetDistance = 5
         this.controls.enabled = false;
 
+        this.cells.forEach((cell,index) => {
+            gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
+                r: 0,
+                g: Math.random(),
+                b: 0.35,
+                duration: 1.0,
+                yoyo: true,
+                repeat: 5,
+                delay: index * 0.005 ,
+                onComplete: () => {
+        
+                }
+            });
+        })
+
         tl.to(this.camera.position, {
             x: this.robotPieces[0]!.position.x - offsetDistance * Math.sin(this.robotPieces[0]!.rotation.y),
-            z: this.robotPieces[0]!.position.z - offsetDistance * Math.cos(this.robotPieces[0]!.rotation.y),
-            y: this.robotPieces[0]!.position.y + 2, // Adjust height if needed
-            duration: 3,
-            delay: 1,
+            z: -15,
+            y: this.robotPieces[0]!.position.y, 
+            duration: 1.5,
             onUpdate: () => {
-                this.camera.lookAt(new THREE.Vector3(0, 0, 0)); // Center of the scene
+                this.camera.lookAt(new THREE.Vector3(0, 0, 0)); 
             },
 
         });
         
         tl.to(this.camera.position, {
-            x: targetCell!.row - 7.5,
-            z: targetCell!.column - 7.5,
-            y: 4,
-            duration:1,
-            delay: 1,
+            x: 11.5,
+            z: 10,
+            y: 2,
+            duration: 2.5,
+            ease: 'ease-out',
             onUpdate: () => {
-                this.camera.lookAt(targetCell!.row - 7.5, 0, targetCell!.column)
+                this.camera.lookAt(targetCell!.row + 7.5, 0, targetCell!.column)
             }
-            
         })
-     
         tl.to(this.camera.position, {
-            z: 0,
-            y: 13,
             x: 0,
-            duration: 1,
-            ease: "circ.inOut",
+            y: 14, 
+            z: 30,
+            duration:1.5,
             onUpdate: () => {
-                this.camera.lookAt(0,0,0)
-            } 
+                this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+            }})
+      
+        tl.to(this.camera.position, {
+            x: 0,
+            y: 14,
+            z: 0,
+            duration: 1,
+            ease: 'bounce',
+            onUpdate: () => {
+                this.camera.lookAt(new THREE.Vector3(0, 0, 0))
+            }
         })
-        
-        this.controls.enabled = true
     }
 
     private setUpAxesHelpers() {
@@ -225,6 +294,8 @@ export class SceneController {
         // GridHelper
         const gridHelper = new THREE.GridHelper(16, 16,'white','white');
         this.scene.add(gridHelper);
+        
+        this.controls.enabled = true
     }
 
     private placeTargetChip(position: Position) {
@@ -235,124 +306,32 @@ export class SceneController {
     }
     
     private setUpLights() {
-        const ambientLight = new THREE.AmbientLight('#ffffff', 2.3);
+        const ambientLight = new THREE.AmbientLight('#ffffff', 1);
         this.scene.add(ambientLight);
        
-        const directionalLight = new THREE.DirectionalLight('#ffffff', 1.9)
+        const directionalLight = new THREE.DirectionalLight('#ffffff', 3.8)
+        directionalLight.position.x = -10
+        directionalLight.position.z = -10
+        directionalLight.position.y = 7
         directionalLight.castShadow = true;
-        directionalLight.position.y = 1
+        directionalLight.shadow.camera.near = .1;
+        directionalLight.shadow.camera.far = 45;
+        directionalLight.lookAt(0, 0, 0)
         this.scene.add(directionalLight)
-        const pointLight = new THREE.PointLight('cyan', 13);
+
+        const pointLight = new THREE.PointLight(this.board.robots[0].color, 8);
+
         // target light
-        pointLight.position.set(4, 3, 6.6); 
+        pointLight.position.set(0, 3, 0); 
         pointLight.castShadow = true
+        this.pointLight = pointLight
         this.scene.add(pointLight)
         this.debug.setUpLightStyleControls(ambientLight, directionalLight)
     }
-    // findPathPositions(startingPos: Position, endingPositions: Position[]): Position[]  {
-    //     const cellsToLight: Position[] = []
-        
-    //     endingPositions.forEach(endingPos => {
-            
-            
-    //         let currRow = startingPos.row
-    //         let currCol = startingPos.column
-           
-            //Light East
-            // if (endingPos.column < startingPos.column) {
-               
-            //     while (currCol >= endingPos.column) {
-            //         currCol -= 1
-            //         if (currCol >= 0) {
-                      
-            //             cellsToLight.push({ row: currRow, column: currCol })
-            //         }
-            //         if (currCol > 100) {
-            //             break
-            //         }
-            //     }
-                
-            // }
-            //Light West
-            // else if (endingPos.column > startingPos.column) {
-               
-            //     while (currCol <= endingPos.column) {
-            //         currCol += 1
-                 
-            //         if (currCol < this.gridSize) {
 
-            //             cellsToLight.push({ row: currRow, column: currCol })
-            //         }
-                   
-                   
-            //         if (currCol > 100) {
-            //             break
-            //         }
-            //     }
-                
-            // }
-            // Light South
-    //         if (endingPos.row > startingPos.row) {
-    //             (endingPos,currRow)
-    //             while (currRow <= endingPos.row) {
-    //                 currRow += 1
-    //                 if (currRow <= this.gridSize) {
-
-    //                     cellsToLight.push({ row: currRow, column: currCol })
-    //                 }
-                   
-    //                 if (currRow > 100 || currRow < -100 ||currCol > 100 || currCol < -100 ) {
-    //                     break
-    //                 }
-    //             }
-               
-    //         }
-    //         if (endingPos.row < startingPos.row) {
-    //             console.log(currRow)
-    //             while (currRow > endingPos.row) {
-    //                 currRow -= 1
-    //                 if (currRow >= 0) {
-    //                     console.log(currRow, currCol, 'you')
-    //                     cellsToLight.push({ row: currRow, column: currCol })
-    //                 }
-    //                 if (currRow > 100 || currRow < -100 ||currCol > 100 || currCol < -100 ) {
-    //                     break
-    //                 }
-    //             }
-    //     }
-    //     //     // Light North
-            
-    //     })
-    //     console.log('path positios:' ,cellsToLight)
-    //     return cellsToLight
-    // }
-    // lightPaths() {
-    //     //
-    //     const cellsToLight: Position[] = this.findPathPositions({ row: 4, column: 4 }, [
-    //         // { row: 4, column: 2 },
-    //         { row: 15, column: 4 },
-    //         { row: 0, column: 4 },
-    //         // { row: 4, column: 15 }
-    //         ],)
-    //     for (let i = 0; i < cellsToLight.length; i++) {
-    //         // switched
-    //         let position_col = cellsToLight[i]!.row
-    //         let position_row = cellsToLight[i]!.column
-    //         let index = (position_row * 16) + (position_col)
-    //         if (this.cells[index]) {
-    //             const mesh = this.cells[index]
-    //             const material = mesh.material as THREE.MeshStandardMaterial;
-    //             material.color = new THREE.Color("rgb(30, 100, 70)")
-    //         }
-    //         console.log(this.cells)
-    //     }
-    //     // remove target lit
-    // }
     setUpGridPlane() {
         const gridSize = this.gridSize
-        
         const planeGeometry = new THREE.PlaneGeometry(gridSize, gridSize); 
-
         const planeMaterial = new THREE.MeshBasicMaterial({
         color: 0x000000,
         transparent: true,
@@ -431,12 +410,13 @@ export class SceneController {
     updateTargetRobot() {
         const robotPosition = this.board.robotPositions[0]
         const robotMesh = this.robotPieces[0]
+        
         gsap.to(robotMesh!.position, {
             x: robotPosition.column - 7.5,
             z: robotPosition.row - 7.5,
-            duration: .7,
-            ease: "power2.out"
-        });
+            duration: .8
+        })
+  
     } 
 
     private loadTextures() {

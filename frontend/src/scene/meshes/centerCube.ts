@@ -23,13 +23,18 @@ export default class CenterCube {
             map: wallTextures.wallColorTexture,
             aoMap: wallTextures.wallARMTexture,
             roughnessMap: wallTextures.wallColorTexture,
+            roughness: .734,
+            metalness: .525,
             metalnessMap: wallTextures.wallColorTexture,
-            normalMap: wallTextures.wallNormalTexture
+            normalMap: wallTextures.wallNormalTexture,
+            color: new THREE.Color("#303030")
         });
+        
     }
     
     private setMesh() {
         this.mesh =  new THREE.Mesh(this.geometry, this.material) 
+        
         this.mesh.receiveShadow = true
         this.mesh.castShadow = true 
     }

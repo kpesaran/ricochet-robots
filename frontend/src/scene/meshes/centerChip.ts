@@ -24,6 +24,7 @@ export default class CenterChip {
             alphaMap: symbol,
             alphaTest: .001,
             transparent: true,
+            
         })
     }   
     

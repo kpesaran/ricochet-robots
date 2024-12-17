@@ -31,6 +31,7 @@ export default class UIController {
     }
 
     toggleInstructions() {
+    
         const instructions = window.document.getElementById('instructions-overlay');
         if (instructions?.style.display === 'none' || !instructions?.style.display) {
             instructions!.style.display = 'flex';
@@ -42,6 +43,7 @@ export default class UIController {
 
     toggleMainMenu() {
         const mainMenuElement = window.document.getElementById("menu-screen");
+        document.getElementById('menu-screen-final-score')!.textContent = `${this.moveCount}`
         
         if (mainMenuElement!.style.display === "none") {
           mainMenuElement!.style.display = "flex"; 

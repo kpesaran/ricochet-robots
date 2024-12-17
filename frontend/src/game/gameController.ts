@@ -35,23 +35,17 @@ export class GameController {
         // if (this.menuOpen) {
             
         //     this.menuOpen = false
-        // }
-        
+        // 
         
     }
 
     newGame() {
+        this.UIController.resetCount()
         this.boardHistory = new RobotStateHistory()
-        // this.sceneController.destroy()
-        
-        // this.sceneController.debug.dispose()
-        // this.sceneController.destroyRobotMeshes()
         const newBoard = new BoardBuilder()
         this.board = newBoard.buildRandom()
-        // this.sceneController = new SceneController('canvas.webgl', this.board)
-        this.sceneController.updateBoardPositions(this.board)
+        this.sceneController.updateBoardPositions(this.board)     
         
-        this.UIController.resetCount()
     }
 
     reverseLastMove() {
@@ -66,7 +60,6 @@ export class GameController {
 
     handleWin() {
         this.UIController.toggleMainMenu()
-        
     }
 
     slideTargetRobot(direction: Direction) {

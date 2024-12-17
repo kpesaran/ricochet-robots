@@ -35,12 +35,16 @@ export default class WallPiece {
                 aoMap: this.texture.wallARMTexture,
                 roughnessMap: this.texture.wallColorTexture,
                 metalnessMap: this.texture.wallColorTexture,
-                normalMap: this.texture.wallNormalTexture
+                normalMap: this.texture.wallNormalTexture,
+                // color: new THREE.Color("#606060"),
+                roughness: .734,
+                metalness: .525,    
             });
         }
         else {
             console.error('Issue with wall texture loading')
         }
+        
     }
 
     private setMesh(direction: Direction, pos: Position) {

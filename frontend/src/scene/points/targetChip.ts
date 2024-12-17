@@ -2,7 +2,6 @@ import * as THREE from 'three'
 import { Position } from '../../board/position';
 import { Color } from '../../board/color';
 
-
 export default class targetChipPiece {
     material: THREE.Material | undefined;
     bufferGeometry: THREE.BufferGeometry | undefined;
@@ -12,12 +11,15 @@ export default class targetChipPiece {
     
     constructor(position: Position, symbol1: THREE.Texture, color: Color) {
         this.position = position
+        
         this.setBufferGeometry()
         this.setMaterial(symbol1, color)
         this.setPoint()
+
     }
 
     private setBufferGeometry() {
+        
         this.bufferGeometry = new THREE.BufferGeometry()
         const positions = new Float32Array(15)
         const x = (this.position.row) - 7.5
@@ -31,19 +33,20 @@ export default class targetChipPiece {
 
     updatePosition(position: Position) {
         const positions = new Float32Array(15)
-        const x = (position.row) - 7.5
+        const x = (position.column) - 7.5
         const y = .2
-        const z = (position.column) - 7.5
+        const z = (position.row) - 7.5
         positions[0] = x
         positions[1] = y
         positions[2] = z
         this.bufferGeometry?.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-        gsap.to(this.point!.position, {
-            x: x,
-            y: y,
-            z: z,
-            duration: 1
-        })
+        // gsap.to(this.point!.position, {
+        //     x: x,
+        //     y: y,
+        //     z: z,
+        //     duration: .1
+        // })
+        // this.point!.position.set(x,y,z)
         this.position = position
     }
 

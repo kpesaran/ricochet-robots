@@ -14,7 +14,7 @@ export class Board {
   cells: Cell[][];
   robots: [Robot, Robot, Robot, Robot];
   robotPositions: [Position, Position, Position, Position];
-
+  // Cacheing versus caluclating 
 
 
   constructor() {
@@ -48,7 +48,7 @@ export class Board {
     this.robotPositions = [
       { row: 0, column: 0 },
       { row: 0, column: 1 },
-      { row: 5, column: 0 },
+      { row: 0, column: 2 },
       { row: 0, column: 3 },
     ];
     
@@ -61,9 +61,14 @@ export class Board {
       
     }
   }
+
+  getTargetColor() {
+    return this.robots[0].color
+  }
+
   checkRobotAtTarget() {
     const targetCell = this.findTargetCell()
-    return this.robotPositions[0].row === targetCell!.column && this.robotPositions[0].column === targetCell!.row
+    return this.robotPositions[0].row === targetCell!.row && this.robotPositions[0].column === targetCell!.column
   }
 
   getTargetRobotColor() {
@@ -73,7 +78,7 @@ export class Board {
   findTargetCell() {
     for (let row = 0; row < this.cells.length; row++) {
       if (this.cells[row]) {
-        const len = this.cells[row]?.length || 0
+        const len = this.cells[row]!.length
         for (let col = 0; col < len; col++) {
           if (this.cells[row]?.[col]?.isTarget) {
             return { row: row, column: col };
@@ -182,7 +187,7 @@ export class Board {
     return openPositions
   }
 
-  positionsToJSON() {
+  boardStateSerielization() {
     const wallPositions: [Position, Direction][] = []
     let targetCell = null
     for (let row = 0; row < this.cells.length; row++) {
