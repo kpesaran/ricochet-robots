@@ -23,6 +23,11 @@ export default class Debug {
             }
         });
     }
+
+    public dispose() {
+        this.ui.destroy();
+    }
+
     public setUpLightStyleControls(ambientLight: THREE.AmbientLight, directionalLight: THREE.DirectionalLight) {
         this.ui.add(ambientLight, 'intensity').min(.1).max(10).step(.1)
         this.ui.add(directionalLight, 'intensity').min(.1).max(10).step(.1)

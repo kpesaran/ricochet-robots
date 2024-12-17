@@ -1,4 +1,4 @@
-import { Cell } from './cell';
+    import { Cell } from './cell';
 import { Color } from './color';
 import { Robot } from './robot';
 import type { Position } from './position';
@@ -11,10 +11,10 @@ import { Direction } from './direction';
 export const BOARD_SIZE = 16;
 
 export class Board {
-  cells: Cell[][] ;
+  cells: Cell[][];
   robots: [Robot, Robot, Robot, Robot];
   robotPositions: [Position, Position, Position, Position];
-
+  // Cacheing versus caluclating 
 
 
   constructor() {
@@ -46,10 +46,10 @@ export class Board {
     ];
 
     this.robotPositions = [
-      { row: 0, column: 0},
-      { row: 0, column: 1},
-      { row: 0, column: 2},
-      { row: 0, column: 3},
+      { row: 0, column: 0 },
+      { row: 0, column: 1 },
+      { row: 0, column: 2 },
+      { row: 0, column: 3 },
     ];
     
   }
@@ -58,7 +58,17 @@ export class Board {
     for (let i = this.robots.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [this.robots[i], this.robots[j]] = [this.robots[j]!, this.robots[i]!];
+      
     }
+  }
+
+  getTargetColor() {
+    return this.robots[0].color
+  }
+
+  checkRobotAtTarget() {
+    const targetCell = this.findTargetCell()
+    return this.robotPositions[0].row === targetCell!.row && this.robotPositions[0].column === targetCell!.column
   }
 
   getTargetRobotColor() {
@@ -68,7 +78,7 @@ export class Board {
   findTargetCell() {
     for (let row = 0; row < this.cells.length; row++) {
       if (this.cells[row]) {
-        const len = this.cells[row]?.length || 0
+        const len = this.cells[row]!.length
         for (let col = 0; col < len; col++) {
           if (this.cells[row]?.[col]?.isTarget) {
             return { row: row, column: col };
@@ -88,26 +98,26 @@ export class Board {
     }
   }
 
-  checkDirections(startPos: Position, direction: Direction) : null | Position {
+  checkDirections(startPos: Position, direction: Direction): null | Position {
 
-    let legalMove: Position | null = null 
+    let legalMove: Position | null = null
     let row = startPos.row
     let col = startPos.column
  
     while (row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE) {
 
-      let robotEncountered = false 
+      let robotEncountered = false
       this.robotPositions.forEach(robot => {
         if (robot.row === startPos.row && robot.column === startPos.column) {
-          return 
+          return
         }
         if (row === robot.row && col === robot.column) {
-          robotEncountered = true 
+          robotEncountered = true
         }
       })
 
       if (robotEncountered) {
-        break; 
+        break;
       }
 
       // check if obstructed
@@ -115,28 +125,28 @@ export class Board {
         break
       }
 
-      let wallPreventsEntrance = false 
+      let wallPreventsEntrance = false
       // check if wall exists
       if (this.cells[row]?.[col]?.walls?.length! > 0) {
   
         this.cells[row]?.[col]?.walls.forEach(wall => {
           // Wall prevents entrance into next cell
-          if ((direction === Direction.North && wall === Direction.North) || 
+          if ((direction === Direction.North && wall === Direction.North) ||
             (direction === Direction.South && wall === Direction.South) ||
             (direction === Direction.East && wall === Direction.East) ||
             (direction === Direction.West && wall === Direction.West)) {
             wallPreventsEntrance = true
 
             if (!(row === startPos.row && col === startPos.column))
-            legalMove = {row: row, column:col}
-          } 
+              legalMove = { row: row, column: col }
+          }
         })
       }
       if (wallPreventsEntrance) {
         break
       }
       if (!(row === startPos.row && col === startPos.column)) {
-        legalMove = {row: row, column: col}
+        legalMove = { row: row, column: col }
       }
  
       if (direction === Direction.North) {
@@ -150,7 +160,7 @@ export class Board {
       }
     }
 
-    return legalMove 
+    return legalMove
   }
 
   updateRobotPosition(newPosition: Position, robotIndex: number) {
@@ -160,8 +170,6 @@ export class Board {
 
   getRandomOpenPosition(openPositions: Position[]) {
     const randomIndex = Math.floor(Math.random() * openPositions.length)
-    console.log(randomIndex)
-
     return openPositions.splice(randomIndex, 1)[0]
   }
 
@@ -172,12 +180,29 @@ export class Board {
         // if cell is not obstructed add position
 
         if (!this.cells[row]![col]?.isObstructed && !this.cells[row]![col]?.isTarget) {
-          openPositions.push({row: row, column: col})
+          openPositions.push({ row: row, column: col })
         }
       }
     }
-    console.log(openPositions)
     return openPositions
+  }
+
+  boardStateSerielization() {
+    const wallPositions: [Position, Direction][] = []
+    let targetCell = null
+    for (let row = 0; row < this.cells.length; row++) {
+      for (let col = 0; col < this.cells.length; col++) {
+        if (this.cells[row]![col]?.isTarget) {
+          targetCell = { row: row, column: col };
+        }
+        if (this.cells[row]![col]?.walls.length! > 0) {
+          this.cells[row]![col]?.walls.forEach(wall => {
+            wallPositions.push([{ row: row, column: col }, wall]);
+          });
+        }
+      }
+    }
+    return JSON.stringify({ wallPositions, robotPositions: this.robotPositions, targetCell });
   }
 
 }

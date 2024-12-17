@@ -14,14 +14,17 @@ export class GameController {
     inputController: InputController
     UIController: UIController
     boardHistory: RobotStateHistory
+    menuOpen: Boolean
     
     constructor() {
         const newBoard = new BoardBuilder()
-        this.board = newBoard.buildRandom()
+       
+        this.board = newBoard.build()
         this.sceneController = new SceneController('canvas.webgl', this.board)
-        this.inputController = new InputController(this, this.sceneController)
         this.UIController = new UIController()
+        this.inputController = new InputController(this, this.sceneController, this.UIController)
         this.boardHistory = new RobotStateHistory()
+        this.menuOpen = false
     }
     // Methods to update game state based on user choices
     resetGame() {
@@ -29,20 +32,34 @@ export class GameController {
         this.boardHistory = new RobotStateHistory()
         this.sceneController.placeRobots(this.board)
         this.UIController.resetCount()
+        // if (this.menuOpen) {
+            
+        //     this.menuOpen = false
+        // 
+        
     }
 
     newGame() {
+        this.UIController.resetCount()
         this.boardHistory = new RobotStateHistory()
         const newBoard = new BoardBuilder()
         this.board = newBoard.buildRandom()
-        this.sceneController = new SceneController('canvas.webgl', this.board)
-        this.UIController.resetCount()
+        this.sceneController.updateBoardPositions(this.board)     
+        
     }
 
     reverseLastMove() {
         this.UIController.reduceMoveCount()
         this.boardHistory.undoState(this.board)
         this.sceneController.placeRobots(this.board)
+    }
+
+    checkWinCondition() {
+        return this.board.checkRobotAtTarget()
+    }
+
+    handleWin() {
+        this.UIController.toggleMainMenu()
     }
 
     slideTargetRobot(direction: Direction) {
@@ -65,6 +82,10 @@ export class GameController {
             this.board.updateRobotPosition(newPos, 0)
             this.sceneController.updateTargetRobot()
             this.UIController.increaseMoveCount()
+        }
+        if (this.checkWinCondition()) {
+            this.handleWin()
+            return
         }
     }
  

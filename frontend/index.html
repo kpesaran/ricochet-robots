@@ -9,21 +9,60 @@
   </head>
   <body>
     <div id="app"></div>
-    <h1>Ricochet Robots</h1>
+    <div id="menu-screen">
+      <div id = "menu-screen-elements">
+        <h2>Ricochet Robots</h2>
+        
+        <button id = "back-to-board-game-menu-screen-btn">BACK TO BOARD</button>
+        <button id = "reset-game-menu-screen-btn">RESET GAME</button>  
+        <button id = "new-game-menu-screen-btn">NEW GAME</button>  
+        <button id = "instructions-menu-screen-btn">Instructions</button>
+        <h3>You won in <span id = 'menu-screen-final-score'></span>moves</h3>
+          <p>Check if its the shortest path here:</p>
+        </div> 
+        
+      </div>
+    </div>
+    <div class = 'top-bar'>
+      <h1>Ricochet Robots</h1>
+    </div>
     <div class = 'game-controls-container'>
-      <p>Game Controls</p>
-      <div>
-        <button id ='reverse-move-button'>
-          Reverse Move
-        </button>
-        <p>Move Count:
-          <span id = 'move-count' >0</span></p>
-          <button id ='reset-button'>
+      <div id = 'buttons'>
+        
+        <button id ='instructions-btn' onclick="()=>{
+          document.getElementById('instructions-overlay').style.display = 'display';
+        }">Instructions</button>
+        <button id ='reset-btn'>
             Reset Game 
           </button>
-          <button id ='new-game'>New Game</button>
+          <button id ='reverse-move-btn'>
+            Undo Move
+          </button>
+          
+          <button id ='new-game-btn'>New Game</button>
+          
+          <button id ='show-min-moves-btn'>Show Shortest Path Move Count</button>
+          <button id ='show-shortest-path-btn'>Visualize Shortest Path</button>
+      </div>
+      <p class="heading" id = 'count-heading-txt'>Move Count:
+        <span id= 'move-count' >0</span>
+      </p>
+      <div id="instructions-overlay" class="overlay">
+        <div class="instructions-content">
+          <h2>Ricochet Robots Game Instructions</h2>
+          <p><strong>Objective:</strong> Move the target robot to the target cell (the cell with the chip matching the center chip) using as few moves as possible.</p>
+          <p><strong>Movements:</strong> Use the arrow keys to move the target robot, and click to place non-target robots on the grid to help guide it.</p>
+          <ul>
+            <li>Use arrow keys to move the target robot. It continues moving until it hits a wall or another robot.</li>
+            <li>Click to place non-target robots on the grid. Each placement counts as a move.</li>
+          </ul>
+          <p><strong>Goal:</strong> Reach the target cell with minimal moves</p>
+          <button id = 'close-instructions-btn'
+          >Close</button>
+        </div>
       </div>
     <canvas class="webgl"></canvas>
+    
     <script type="module" src="src/main.js"></script>
     </div>
   </body>

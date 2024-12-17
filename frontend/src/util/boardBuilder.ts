@@ -127,7 +127,7 @@ export class BoardBuilder {
     }
   }
 
-  wallPositionsToCheck(wallDirection: Direction,positionProspect: Position) {
+  wallPositionsToCheck(wallDirection: Direction, positionProspect: Position) {
     const postitionsToCheck: [Direction, Position][] = []
     postitionsToCheck.push([wallDirection, positionProspect])
     
@@ -172,7 +172,7 @@ export class BoardBuilder {
   private addWalls(board: Board) {
     for (let [wall, { row, column }] of this.walls) {
       board.cells[row]?.[column]?.addWall(wall);
-
+      // ignoring south and east 
       switch(wall) {
         case Direction.North:
           board.cells[row - 1]?.[column]?.addWall(Direction.South);
@@ -202,8 +202,7 @@ export class BoardBuilder {
     return this
   }
 
-  private addTargetCell(board: Board) {
-    
+  private addTargetCell(board: Board) {  
     if (this.targetCell) {
       board.cells[this.targetCell.row]![this.targetCell.column]!.isTarget = true 
     }
@@ -287,6 +286,7 @@ export class BoardBuilder {
    
   public build() {
     let board = new Board();
+  
     this.addWalls(board);
     this.addRobots(board);
     this.addTargetCell(board)
@@ -300,6 +300,7 @@ export class BoardBuilder {
     this.addWalls(board);
     this.addRobots(board);
     this.addTargetCell(board)
+    
 
     return board;
   }
