@@ -68,6 +68,7 @@ export class SceneController {
         // Orbital Controls
         this.controls = new OrbitControls(this.camera, this.canvas);
         this.controls.enableDamping = true;
+        this.controls.enabled = false
         // Texture Loader 
         this.textureLoader = new THREE.TextureLoader()
         // Target Chip Symbol
@@ -105,7 +106,6 @@ export class SceneController {
         this.board = board;
         const tl = gsap.timeline()
         this.updateWallPositions(board)
-        this.controls.enabled = false
        
         this.cells.forEach((cell,index) => {
             
@@ -153,8 +153,7 @@ export class SceneController {
                 this.camera.lookAt(new THREE.Vector3(0, 0, 0))
             }
         })
-       this.controls.enabled = true 
-
+       
     }
 
     private updateWallPositions(board: Board) {
@@ -228,7 +227,7 @@ export class SceneController {
         
         const tl = gsap.timeline()
         const offsetDistance = 5
-        this.controls.enabled = false;
+        
 
         this.cells.forEach((cell,index) => {
             gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
@@ -295,7 +294,7 @@ export class SceneController {
         const gridHelper = new THREE.GridHelper(16, 16,'white','white');
         this.scene.add(gridHelper);
         
-        this.controls.enabled = true
+        
     }
 
     private placeTargetChip(position: Position) {
