@@ -105,25 +105,11 @@ export class SceneController {
     updateBoardPositions(board: Board) {
         this.board = board;
         const tl = gsap.timeline()
-        this.updateWallPositions(board)
-       
-        this.cells.forEach((cell,index) => {
-            
-            gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
-                r: 1,
-                g: .05,
-                b: Math.random()/3,
-                duration: .2,
-                repeat: 1,
-                yoyo: true,
-                ease: 'circle',
-                delay: index * 0.0005 
-            });
-        })
-       
-        this.placeRobots(board);
+        
         const newTargetColor = board.getTargetColor()
         this.centerChip?.updateColor(newTargetColor)
+
+
         if (this.targetChip) {
             this.targetChip?.updateTargetChip(board.findTargetCell()!, newTargetColor)
         }
@@ -133,14 +119,30 @@ export class SceneController {
                 this.placeTargetChip(targetCell)
             }
         }
-        this.targetChip?.updateTargetChip(board.findTargetCell()!, newTargetColor)
-        this.updateWallPositions(board)
-        this.pointLight!.color = new THREE.Color(board.robots[0].color)
+        this.cells.forEach((cell,index) => {
+            
+            gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
+                r: Math.random(),
+                g: .05,
+                b: Math.random(),
+                duration: 1.5,
+                repeat: 1,
+                yoyo: true,
+                delay: (index * 0.001) 
+            });
+        })
+        tl.call(() => {
+            this.placeRobots(board);
+            this.updateWallPositions(board)
+            this.pointLight!.color = new THREE.Color(board.robots[0].color)
+            
+        })
+        
         tl.to(this.camera.position, {
             x: 50,
             y: 0,
             z: 0,
-            duration: 1,
+            duration: 1
         })
         
         tl.to(this.camera.position, {
@@ -153,6 +155,22 @@ export class SceneController {
                 this.camera.lookAt(new THREE.Vector3(0, 0, 0))
             }
         })
+
+        
+    //    this.cells.forEach((cell,index) => {
+            
+    //         gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
+    //             r: 1,
+    //             g: .05,
+    //             b: Math.random()/3,
+    //             duration: .2,
+    //             repeat: 1,
+    //             yoyo: true,
+    //             ease: 'circle',
+    //             delay: (index * 0.0009) + 3
+    //         });
+    //    })
+       
        
     }
 
@@ -225,65 +243,65 @@ export class SceneController {
         this.centerChip = centerChip
         this.scene.add(centerChip.mesh!)
         
-        const tl = gsap.timeline()
-        const offsetDistance = 5
+        // const tl = gsap.timeline()
+        // const offsetDistance = 5
         
 
-        this.cells.forEach((cell,index) => {
-            gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
-                r: 0,
-                g: Math.random(),
-                b: 0.35,
-                duration: 1.0,
-                yoyo: true,
-                repeat: 5,
-                delay: index * 0.005 ,
-                onComplete: () => {
+        // this.cells.forEach((cell,index) => {
+        //     gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
+        //         r: 0,
+        //         g: Math.random(),
+        //         b: 0.35,
+        //         duration: 1.0,
+        //         yoyo: true,
+        //         repeat: 5,
+        //         delay: index * 0.005 ,
+        //         onComplete: () => {
         
-                }
-            });
-        })
+        //         }
+        //     });
+        // })
 
-        tl.to(this.camera.position, {
-            x: this.robotPieces[0]!.position.x - offsetDistance * Math.sin(this.robotPieces[0]!.rotation.y),
-            z: -15,
-            y: this.robotPieces[0]!.position.y, 
-            duration: 1.5,
-            onUpdate: () => {
-                this.camera.lookAt(new THREE.Vector3(0, 0, 0)); 
-            },
+        // tl.to(this.camera.position, {
+        //     x: this.robotPieces[0]!.position.x - offsetDistance * Math.sin(this.robotPieces[0]!.rotation.y),
+        //     z: -15,
+        //     y: this.robotPieces[0]!.position.y, 
+        //     duration: 1.5,
+        //     onUpdate: () => {
+        //         this.camera.lookAt(new THREE.Vector3(0, 0, 0)); 
+        //     },
 
-        });
+        // });
         
-        tl.to(this.camera.position, {
-            x: 11.5,
-            z: 10,
-            y: 2,
-            duration: 2.5,
-            ease: 'ease-out',
-            onUpdate: () => {
-                this.camera.lookAt(targetCell!.row + 7.5, 0, targetCell!.column)
-            }
-        })
-        tl.to(this.camera.position, {
-            x: 0,
-            y: 14, 
-            z: 30,
-            duration:1.5,
-            onUpdate: () => {
-                this.camera.lookAt(new THREE.Vector3(0, 0, 0));
-            }})
+        // tl.to(this.camera.position, {
+        //     x: 11.5,
+        //     z: 10,
+        //     y: 2,
+        //     duration: 2.5,
+        //     ease: 'ease-out',
+        //     onUpdate: () => {
+        //         this.camera.lookAt(targetCell!.row + 7.5, 0, targetCell!.column)
+        //     }
+        // })
+        // tl.to(this.camera.position, {
+        //     x: 0,
+        //     y: 14, 
+        //     z: 30,
+        //     duration:1.5,
+        //     onUpdate: () => {
+        //         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+        //     }})
       
-        tl.to(this.camera.position, {
-            x: 0,
-            y: 14,
-            z: 0,
-            duration: 1,
-            ease: 'bounce',
-            onUpdate: () => {
-                this.camera.lookAt(new THREE.Vector3(0, 0, 0))
-            }
-        })
+        // tl.to(this.camera.position, {
+        //     x: 0,
+        //     y: 14,
+        //     z: 0,
+        //     duration: 1,
+        //     ease: 'bounce',
+        //     onUpdate: () => {
+        //         this.camera.lookAt(new THREE.Vector3(0, 0, 0))
+        //     }
+        // })
     }
 
     private setUpAxesHelpers() {
