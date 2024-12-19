@@ -1,6 +1,5 @@
 import * as THREE from 'three'
 import { Position } from '../../board/position';
-import { Color } from '../../board/color';
 
 export default class targetChipPiece {
     material: THREE.Material | undefined;
@@ -9,7 +8,7 @@ export default class targetChipPiece {
     position: Position
 
     
-    constructor(position: Position, symbol1: THREE.Texture, color: Color) {
+    constructor(position: Position, symbol1: THREE.Texture, color: THREE.Color) {
         this.position = position
         
         this.setBufferGeometry()
@@ -50,12 +49,12 @@ export default class targetChipPiece {
         this.position = position
     }
 
-    private setMaterial(texture: THREE.Texture, color: Color) {
+    private setMaterial(texture: THREE.Texture, color: THREE.Color) {
         const gridChipsMat = new THREE.PointsMaterial({
             size: 1,
             sizeAttenuation: true
         })
-        gridChipsMat.color = new THREE.Color(color)
+        gridChipsMat.color.set(color)
         // particlesMaterial.vertexColors = true
         gridChipsMat.transparent = true
         gridChipsMat.alphaMap = texture
@@ -67,13 +66,13 @@ export default class targetChipPiece {
     private setPoint() {
         this.point = new THREE.Points(this.bufferGeometry, this.material)
     }
-    private updateColor(color: Color) {
+    private updateColor(color: THREE.Color) {
         if (this.material instanceof THREE.PointsMaterial) {
             this.material.color = new THREE.Color(color)
         }
     }
 
-    public updateTargetChip(position: Position, color: Color) {
+    public updateTargetChip(position: Position, color: THREE.Color) {
         this.updateColor(color)
         this.updatePosition(position)
     }
