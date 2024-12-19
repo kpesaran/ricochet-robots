@@ -8,6 +8,7 @@ export default class UIController {
     constructor() {
         this.moveCount = 0;
     }
+    
 
     increaseMoveCount() {
         this.moveCount += 1

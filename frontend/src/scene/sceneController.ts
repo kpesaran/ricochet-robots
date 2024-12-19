@@ -11,6 +11,7 @@ import targetChipPiece from './points/targetChip';
 import CenterCube from './meshes/centerCube';
 import CenterChip from './meshes/centerChip';
 import { Textures } from './textures';
+import { predefinedColors } from './predefinedColors';
 
 
 // import { cameraGoesUpDown } from '../util/animate';
@@ -104,14 +105,15 @@ export class SceneController {
 
     updateBoardPositions(board: Board) {
         this.board = board;
-        const tl = gsap.timeline()
+        const tl = gsap.timeline({repeat:0})
         
-        const newTargetColor = board.getTargetColor()
-        this.centerChip?.updateColor(newTargetColor)
+        const newTargetColorStr = board.getTargetColor()
+        const newTargetColorRGB = predefinedColors[newTargetColorStr]
+        this.centerChip?.updateColor(newTargetColorRGB)
 
 
         if (this.targetChip) {
-            this.targetChip?.updateTargetChip(board.findTargetCell()!, newTargetColor)
+            this.targetChip?.updateTargetChip(board.findTargetCell()!, newTargetColorRGB)
         }
         else {
             const targetCell = this.board.findTargetCell()
@@ -124,7 +126,7 @@ export class SceneController {
             gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
                 r: Math.random(),
                 g: .05,
-                b: Math.random(),
+                b: .9,
                 duration: 1.5,
                 repeat: 1,
                 yoyo: true,
@@ -134,7 +136,7 @@ export class SceneController {
         tl.call(() => {
             this.placeRobots(board);
             this.updateWallPositions(board)
-            this.pointLight!.color = new THREE.Color(board.robots[0].color)
+            this.pointLight!.color.set(newTargetColorRGB)
             
         })
         
@@ -157,19 +159,22 @@ export class SceneController {
         })
 
         
-    //    this.cells.forEach((cell,index) => {
+        this.cells.forEach((cell, index) => {
+            const randomInt1 = Math.random()/4
+            const randomInt2 = Math.random()/4
+            const randomInt3 = Math.random()/4 
             
-    //         gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
-    //             r: 1,
-    //             g: .05,
-    //             b: Math.random()/3,
-    //             duration: .2,
-    //             repeat: 1,
-    //             yoyo: true,
-    //             ease: 'circle',
-    //             delay: (index * 0.0009) + 3
-    //         });
-    //    })
+            gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
+                r: newTargetColorRGB.r+randomInt1,
+                g: newTargetColorRGB.g+randomInt2,
+                b: newTargetColorRGB.b+randomInt3,
+                duration: .2,
+                repeat: 1,
+                yoyo: true,
+                ease: 'circle',
+                delay: (index * 0.0009) + 3
+            });
+       })
        
        
     }
@@ -239,7 +244,7 @@ export class SceneController {
         const centerCube = new CenterCube(this.wallTextures)
         this.scene.add(centerCube.mesh!)
         this.debug.setupWallStyleControls(centerCube, wallPieces.flat(2))
-        const centerChip = new CenterChip(this.symbol1, this.board.getTargetRobotColor()!)
+        const centerChip = new CenterChip(this.symbol1, predefinedColors[this.board.getTargetRobotColor()]!)
         this.centerChip = centerChip
         this.scene.add(centerChip.mesh!)
         
@@ -316,7 +321,7 @@ export class SceneController {
     }
 
     private placeTargetChip(position: Position) {
-        const gridChip = new targetChipPiece(position!, this.symbol1, this.board.getTargetRobotColor()!)
+        const gridChip = new targetChipPiece(position!, this.symbol1, predefinedColors[this.board.getTargetRobotColor()]!)
         this.targetChip = gridChip
         this.scene.add(gridChip.point!);
 
@@ -386,7 +391,6 @@ export class SceneController {
                     }
                 })
             }
-            //  or robotMesh.material is a single material
             else {
                 if (robotMesh.material && typeof robotMesh.material.dispose === 'function') {
                     robotMesh.material.dispose()

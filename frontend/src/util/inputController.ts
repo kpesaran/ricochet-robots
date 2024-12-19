@@ -11,7 +11,7 @@ import UIController from "./uiController";
 export default class InputController {
   selectedPiece: THREE.Mesh | undefined
   constructor(gameController: GameController, sceneController: SceneController, UIController: UIController) {
-
+  
     document.addEventListener('keydown', (event) => this.handleKeydown(event, gameController));
     
     document.addEventListener('mousemove', (event) => this.handleMouseMove(event, sceneController));
