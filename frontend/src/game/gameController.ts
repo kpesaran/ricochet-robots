@@ -44,7 +44,8 @@ export class GameController {
         this.boardHistory = new RobotStateHistory()
         const newBoard = new BoardBuilder()
         this.board = newBoard.buildRandom()
-        this.sceneController.updateBoardPositions(this.board)     
+        this.sceneController.updateBoardPositions(this.board
+        )     
         
     }
 

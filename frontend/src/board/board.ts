@@ -35,8 +35,6 @@ export class Board {
     cells[8][7].isObstructed = true;
     cells[8][8].isObstructed = true;
 
- 
-
     this.cells = cells;
     this.robots = [
       new Robot(Color.Blue),
@@ -76,6 +74,10 @@ export class Board {
   }
    
   findTargetCell() {
+    if (!this.cells || this.cells.length === 0) {
+      console.error("Error: Grid is not initialized properly.");
+      return null;
+  }
     for (let row = 0; row < this.cells.length; row++) {
       if (this.cells[row]) {
         const len = this.cells[row]!.length
@@ -177,8 +179,7 @@ export class Board {
     const openPositions = []
     for (let row = 0; row < boardSize; row++) {
       for (let col = 0; col < boardSize; col++) {
-        // if cell is not obstructed add position
-
+        
         if (!this.cells[row]![col]?.isObstructed && !this.cells[row]![col]?.isTarget) {
           openPositions.push({ row: row, column: col })
         }
