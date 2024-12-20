@@ -121,18 +121,7 @@ export class SceneController {
                 this.placeTargetChip(targetCell)
             }
         }
-        this.cells.forEach((cell,index) => {
-            
-            gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
-                r: Math.random(),
-                g: .05,
-                b: .9,
-                duration: 1.5,
-                repeat: 1,
-                yoyo: true,
-                delay: (index * 0.001) 
-            });
-        })
+        
         tl.call(() => {
             this.placeRobots(board);
             this.updateWallPositions(board)
@@ -141,23 +130,21 @@ export class SceneController {
         })
         
         tl.to(this.camera.position, {
-            x: 50,
-            y: 0,
+            x: 0,
+            y: 50,
             z: 0,
-            duration: 1
+            duration: 1,
+            ease: 'circle'
         })
-        
         tl.to(this.camera.position, {
             x: 0,
-            y: 14,
+            y: 15,
             z: 0,
             duration: 2,
-            ease: 'bounce',
-            onUpdate: () => {
-                this.camera.lookAt(new THREE.Vector3(0, 0, 0))
-            }
+        
+            ease: 'bounce'
         })
-
+        
         
         this.cells.forEach((cell, index) => {
             const randomInt1 = Math.random()/4
@@ -168,15 +155,13 @@ export class SceneController {
                 r: newTargetColorRGB.r+randomInt1,
                 g: newTargetColorRGB.g+randomInt2,
                 b: newTargetColorRGB.b+randomInt3,
-                duration: .2,
+                duration: 1.5,
                 repeat: 1,
                 yoyo: true,
                 ease: 'circle',
-                delay: (index * 0.0009) + 3
+                delay: (index * 0.005) 
             });
        })
-       
-       
     }
 
     private updateWallPositions(board: Board) {

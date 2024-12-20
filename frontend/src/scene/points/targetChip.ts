@@ -21,9 +21,9 @@ export default class targetChipPiece {
         
         this.bufferGeometry = new THREE.BufferGeometry()
         const positions = new Float32Array(15)
-        const x = (this.position.row) - 7.5
+        const x = (this.position.column) - 7.5
         const y = .2
-        const z = (this.position.column) - 7.5
+        const z = (this.position.row) - 7.5
         positions[0] = x
         positions[1] = y
         positions[2] = z
