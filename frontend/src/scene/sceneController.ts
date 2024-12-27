@@ -129,6 +129,15 @@ export class SceneController {
             this.pointLight!.color.set(newTargetColorRGB)
             
         })
+        this.cells.forEach((cell, index) => {
+
+                    
+            gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
+                r: 1,
+                g: 1,
+                b: 1,
+            });
+        })
         
         tl.to(this.camera.position, {
             x: 0,
@@ -160,7 +169,7 @@ export class SceneController {
                 repeat: 1,
                 yoyo: true,
                 ease: 'circle',
-                delay: (index * 0.005),
+                delay: ((index * 0.005)+.2),
                 onComplete: () => {
                     this.lightUpPaths(0)
                 }

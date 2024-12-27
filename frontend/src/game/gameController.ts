@@ -15,10 +15,11 @@ export class GameController {
     UIController: UIController
     boardHistory: RobotStateHistory
     menuOpen: Boolean
+    controlsLocked: Boolean
     
     constructor() {
         const newBoard = new BoardBuilder()
-       
+        this.controlsLocked = false
         this.board = newBoard.build()
         this.sceneController = new SceneController('canvas.webgl', this.board)
         this.UIController = new UIController()
@@ -91,6 +92,15 @@ export class GameController {
         this.sceneController.placeRobots(this.board)
         this.UIController.increaseMoveCount()
     }
+
+    lockControls() {
+        this.controlsLocked = false 
+    }
+
+    unlockControls() {
+        this.controlsLocked = true
+    }
+
 }
    
     
