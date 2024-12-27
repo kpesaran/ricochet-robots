@@ -75,8 +75,11 @@ export class GameController {
         }
         if (newPos) {
             this.boardHistory.addState(this.board)
+            this.lockControls()
+            console.log(this.isLocked())
             this.board.updateRobotPosition(newPos, robotIndex)
-            this.sceneController.updateRobot(robotIndex)
+            
+            this.sceneController.updateRobot(robotIndex, this)
             this.UIController.increaseMoveCount()
         }
         if (robotIndex === 0 && this.checkWinCondition()) {
@@ -93,11 +96,11 @@ export class GameController {
     }
 
     lockControls() {
-        this.controlsLocked = false 
+        this.controlsLocked = true
     }
 
     unlockControls() {
-        this.controlsLocked = true
+        this.controlsLocked = false
     }
 
     isLocked() {

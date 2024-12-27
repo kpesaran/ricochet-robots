@@ -69,6 +69,9 @@ export default class InputController {
   }
 
   handleKeydown(event: KeyboardEvent, gameController: GameController, sceneController: SceneController) {
+    if (gameController.isLocked()) {
+      return 
+    }
     const robotIndex = sceneController.findRobotPosition(sceneController.selectedPiece!)!
     switch (event.key) {
       case 'ArrowUp':

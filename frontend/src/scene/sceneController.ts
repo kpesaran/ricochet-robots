@@ -12,6 +12,7 @@ import CenterCube from './meshes/centerCube';
 import CenterChip from './meshes/centerChip';
 import { Textures } from './textures';
 import { predefinedColors } from './predefinedColors';
+import { GameController } from '../game/gameController';
 
 
 // import { cameraGoesUpDown } from '../util/animate';
@@ -129,7 +130,7 @@ export class SceneController {
             this.pointLight!.color.set(newTargetColorRGB)
             
         })
-        this.cells.forEach((cell, index) => {
+        this.cells.forEach((cell) => {
 
                     
             gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
@@ -354,7 +355,6 @@ export class SceneController {
                 rowToAdd++;
             }
         }
-        console.log(cellsToLight)
         this.lightUpCells(cellsToLight)   
     }
 
@@ -477,16 +477,20 @@ export class SceneController {
         
     }
 
-    updateRobot(robotIndex: number) {
+    updateRobot(robotIndex: number, gameController: GameController) {
         const robotPosition = this.board.robotPositions[robotIndex]
         const robotMesh = this.robotPieces[robotIndex]
-        
+
         gsap.to(robotMesh!.position, {
             x: robotPosition!.column - 7.5,
             z: robotPosition!.row - 7.5,
-            duration: .8
+            duration: .8,
+            onComplete: () => {
+                this.lightUpPaths(robotIndex)
+                gameController.unlockControls()
+            }
         })
-        this.lightUpPaths(robotIndex)
+        
   
     } 
 
