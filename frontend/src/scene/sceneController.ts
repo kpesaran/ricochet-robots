@@ -187,19 +187,22 @@ export class SceneController {
         }
         this.wallPieces = [];
 
-        // Create new walls
+
         board.cells.forEach((row, rowIdx) => {
             this.wallPieces![rowIdx] = [];
             row.forEach((cell, colIdx) => {
                 this.wallPieces![rowIdx]![colIdx] = [];
                 cell.walls.forEach((direction: Direction, wallIdx: number) => {
-                    const wallPiece = new WallPiece(direction, 
-                        { row: rowIdx, column: colIdx }, 
-                        this.wallTextures,
-                        wallIdx
-                    );
-                    this.wallPieces![rowIdx]![colIdx]!.push(wallPiece);
-                    this.scene.add(wallPiece.mesh!);
+                    if (direction === Direction.North || Direction.East) {
+                        const wallPiece = new WallPiece(direction,
+                            { row: rowIdx, column: colIdx },
+                            this.wallTextures,
+                            wallIdx
+                        );
+                        this.wallPieces![rowIdx]![colIdx]!.push(wallPiece);
+                        this.scene.add(wallPiece.mesh!);
+                    }
+                    
                 });
             });
         });
