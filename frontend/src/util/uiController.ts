@@ -46,10 +46,10 @@ export default class UIController {
         const mainMenuElement = window.document.getElementById("menu-screen");
         document.getElementById('menu-screen-final-score')!.textContent = `${this.moveCount}`
         
-        if (mainMenuElement!.style.display === "none") {
-          mainMenuElement!.style.display = "flex"; 
-      } else {
+        if (mainMenuElement!.style.display === "flex") {
           mainMenuElement!.style.display = "none"; 
+      } else {
+          mainMenuElement!.style.display = "flex"; 
       }
       }
 }

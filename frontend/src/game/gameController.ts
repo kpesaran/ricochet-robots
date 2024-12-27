@@ -78,11 +78,11 @@ export class GameController {
             this.lockControls()
             console.log(this.isLocked())
             this.board.updateRobotPosition(newPos, robotIndex)
-            
             this.sceneController.updateRobot(robotIndex, this)
             this.UIController.increaseMoveCount()
         }
         if (robotIndex === 0 && this.checkWinCondition()) {
+            console.log('hits')
             this.handleWin()
             return
         }
