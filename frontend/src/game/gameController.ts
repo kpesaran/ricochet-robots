@@ -32,7 +32,6 @@ export class GameController {
         this.boardHistory.initialBoardState(this.board)
         this.boardHistory = new RobotStateHistory()
         this.sceneController.placeRobots(this.board)
-
         this.sceneController.lightUpPaths(0)
         this.UIController.resetCount()
     }
@@ -99,6 +98,10 @@ export class GameController {
 
     unlockControls() {
         this.controlsLocked = true
+    }
+
+    isLocked() {
+        return this.controlsLocked
     }
 
 }
