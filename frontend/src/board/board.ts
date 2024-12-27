@@ -65,8 +65,11 @@ export class Board {
   }
 
   checkRobotAtTarget() {
-    const targetCell = this.findTargetCell()
-    return this.robotPositions[0].row === targetCell!.row && this.robotPositions[0].column === targetCell!.column
+    const targetCell = this.findTargetCell();
+    if (targetCell) {
+      return this.robotPositions[0].row === targetCell.row && this.robotPositions[0].column === targetCell.column;
+    }
+    return null;
   }
 
   getTargetRobotColor() {
