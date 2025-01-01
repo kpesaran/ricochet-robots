@@ -46,7 +46,7 @@ export default class UIController {
 
     toggleMainMenu(gameController: GameController) {
         const mainMenuElement = window.document.getElementById("menu-screen");
-        document.getElementById('menu-screen-final-score')!.textContent = `hi`
+        document.getElementById('menu-screen-final-score')!.textContent = `${this.moveCount}`
         
         if (mainMenuElement!.style.display === "flex") {
           gameController.hideMenu()
