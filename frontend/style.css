@@ -12,6 +12,7 @@ html {
 html,
 body
 {
+    font-family:sans-serif;
     overflow: hidden;
 }
 
@@ -27,7 +28,7 @@ body
 h1 {
   color: #fff;
   text-align: center;
-  text-shadow: 3px 3px #ff6347;
+  text-shadow: 1px 3px #ff6347;
   letter-spacing: 2px;
   margin: 20px 0;
 }
@@ -168,7 +169,7 @@ button:hover {
   background-color: #000;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 35px;
   padding: 30px;
   border: 4px solid #fff;
   max-width: 800px;
@@ -180,19 +181,21 @@ button:hover {
 .instructions-content p {
   font-size: 20px;
   line-height: 1.6;
+  margin: 5px;
 }
 
 .instructions-content ul {
   list-style-type: none;
   padding-left: 20px;
   padding-right: 20px;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .instructions-content ul li:before {
   content: ">";
   margin-right: 10px;
   color: #ff6347;
+  
 }
 
 .instructions-content button {
@@ -203,6 +206,9 @@ button:hover {
 .instructions-content button:hover {
   background-color: #ff6347;
   color: #fff;
+}
+#shortest-path-explanation {
+  color: #ff6347;
 }
 
 #buttons {

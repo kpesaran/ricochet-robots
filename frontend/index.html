@@ -49,15 +49,14 @@
       <div id="instructions-overlay" class="overlay">
         <div class="instructions-content">
           <h2>Ricochet Robots Game Instructions</h2>
-          <p><strong>Objective:</strong> Move the target robot to the target cell (the cell with the chip matching the center chip) using as few moves as possible.</p>
-          <p><strong>Movements:</strong> Use the arrow keys to move the target robot, and click to place non-target robots on the grid to help guide it.</p>
+          <p><strong>Objective:</strong> Move the target robot (the robot with the same color as the target cell chip / the center chip) to the target cell <i>using as few moves as possible</i></p>
+          <p><strong>Movements:</strong> Use the arrow keys to move the robots, and follow the same movement rules for both target and non-target robots</p>
           <ul>
-            <li>Use arrow keys to move the target robot. It continues moving until it hits a wall or another robot.</li>
-            <li>Click to place non-target robots on the grid. Each placement counts as a move.</li>
+            <li>Click on a robot (target or non-target) to select it</li>
+            <li>Use the arrow keys to move the selected robot. It continues moving until it hits a wall or another robot</li>
           </ul>
-          <p><strong>Goal:</strong> Reach the target cell with minimal moves</p>
-          <button id = 'close-instructions-btn'
-          >Close</button>
+          <p><strong>Did you find the shortest path?</strong> <i id = 'shortest-path-explanation'>After solving, you can compare your solution to the shortest path to see how efficient your moves were</i></p>
+          <button id="close-instructions-btn">Close</button>
         </div>
       </div>
     <canvas class="webgl"></canvas>
