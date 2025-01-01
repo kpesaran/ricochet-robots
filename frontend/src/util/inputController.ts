@@ -11,12 +11,12 @@ import UIController from "./uiController";
 export default class InputController {
   selectedPiece: THREE.Mesh | undefined
   constructor(gameController: GameController, sceneController: SceneController, UIController: UIController) {
-  
-    document.addEventListener('keydown', (event) => this.handleKeydown(event, gameController));
+
+    document.addEventListener('keydown', (event) => this.handleKeydown(event, gameController, sceneController));
     
     document.addEventListener('mousemove', (event) => this.handleMouseMove(event, sceneController));
     
-    document.addEventListener('mousedown', () => this.handleMouseDown(gameController, sceneController));
+    document.addEventListener('mousedown', () => this.handleMouseDown(sceneController));
     
     document.getElementById('reverse-move-btn')!.addEventListener('click', () => gameController.reverseLastMove());
 
@@ -38,26 +38,23 @@ export default class InputController {
 
     document.getElementById("reset-game-menu-screen-btn")!.addEventListener('click', () => {
       gameController.resetGame()
-      UIController.toggleMainMenu()
+      UIController.toggleMainMenu(gameController)
+      
     })
 
     document.getElementById("back-to-board-game-menu-screen-btn")?.addEventListener('click', () => {
-      UIController.toggleMainMenu()
+
+      UIController.toggleMainMenu(gameController)
     })
 
     document.getElementById("new-game-menu-screen-btn")?.addEventListener('click', () => {
       gameController.newGame()
-      UIController.toggleMainMenu()
-    })
-      
-    document.getElementById("instructions-menu-screen-btn")?.addEventListener('click', () => {
-      UIController.toggleInstructions()
+      UIController.toggleMainMenu(gameController)
     })
   }
 
   getMinMoveCount() {
     // Send a request to webAssembly to get the  minimum move count (or use length of path of cells)
-
     return
   }
 
@@ -68,38 +65,35 @@ export default class InputController {
     return
   }
 
-
-  
-
-
-  
-  handleKeydown(event: KeyboardEvent, gameController: GameController) {
+  handleKeydown(event: KeyboardEvent, gameController: GameController, sceneController: SceneController) {
+    if (gameController.isLocked()) {
+      console.log(gameController.isLocked())
+      return 
+    }
+    const robotIndex = sceneController.findRobotPosition(sceneController.selectedPiece!)!
     switch (event.key) {
       case 'ArrowUp':
-        gameController.slideTargetRobot(Direction.North);
+        gameController.slideRobot(robotIndex, Direction.North);
         break;
       case 'ArrowDown':
-        gameController.slideTargetRobot(Direction.South);
+        gameController.slideRobot(robotIndex, Direction.South);
         break;
       case 'ArrowLeft':
-        gameController.slideTargetRobot(Direction.West);
+        gameController.slideRobot(robotIndex, Direction.West);
         break;
       case 'ArrowRight':
-        gameController.slideTargetRobot(Direction.East);
+        gameController.slideRobot(robotIndex, Direction.East);
         break;
     }
     
   }
 
-
   handleMouseMove = (event: MouseEvent, sceneController: SceneController) => {
     let x = (event.clientX / sceneController.sizes.width) * 2 - 1;
     let y = -(event.clientY / sceneController.sizes.height) * 2 + 1;
     sceneController.updateMousePosition(x, y);
-    if (this.selectedPiece) {
-      sceneController.moveRobot(this.selectedPiece)
-    }
-    const robotIntersects = sceneController.checkNonTargetRobotIntersections()
+
+    const robotIntersects = sceneController.checkRobotIntersections()
     if (robotIntersects.length > 0) {
       document.body.style.cursor = "pointer";
     }
@@ -108,28 +102,18 @@ export default class InputController {
     }
   }
 
-  handleMouseDown(gameController: GameController, sceneController: SceneController) {
-
-    const robotIntersects = sceneController.checkNonTargetRobotIntersections()
+  handleMouseDown(sceneController: SceneController) {
+    
+    const robotIntersects = sceneController.checkRobotIntersections()
     if (robotIntersects.length > 0) {
-      // Select the robot
-      if (!this.selectedPiece) {
-        const intersectedObject = robotIntersects[0]!.object
-        if (intersectedObject instanceof THREE.Mesh) {
-          this.selectedPiece = intersectedObject
-        }
-      }
-      // Place the robot
-      else if (this.selectedPiece) {
-        document.body.style.cursor = "default";
-        const placementResult = sceneController.placeSelectedRobot(this.selectedPiece)
 
-        if (placementResult) {
-          // Update gamestate 
-          gameController.handleNonTargetRobotMove(placementResult.newPosition, placementResult.robotIndex)
-        }
-        this.selectedPiece = undefined;
-        }    
+      const intersectedObject = robotIntersects[0]!.object
+      if (intersectedObject instanceof THREE.Mesh) {
+          document.body.style.cursor = "pointer";
+        sceneController.setSelectedPiece(intersectedObject)
+        const robotIndex = sceneController.findRobotPosition(sceneController.selectedPiece!)!
+        sceneController.lightUpPaths(robotIndex)
+      }
+      }   
       } 
   }
-}

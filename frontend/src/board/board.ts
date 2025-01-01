@@ -65,8 +65,11 @@ export class Board {
   }
 
   checkRobotAtTarget() {
-    const targetCell = this.findTargetCell()
-    return this.robotPositions[0].row === targetCell!.row && this.robotPositions[0].column === targetCell!.column
+    const targetCell = this.findTargetCell();
+    if (targetCell) {
+      return this.robotPositions[0].row === targetCell.row && this.robotPositions[0].column === targetCell.column;
+    }
+    return null;
   }
 
   getTargetRobotColor() {
@@ -91,17 +94,19 @@ export class Board {
     return null
   }
 
-  findMoves() {
+  findMoves(robotIndex: number) {
     return {
-      north: this.checkDirections(this.robotPositions[0], Direction.North),
-      south: this.checkDirections(this.robotPositions[0], Direction.South),
-      east: this.checkDirections(this.robotPositions[0], Direction.East),
-      west: this.checkDirections(this.robotPositions[0], Direction.West)
+      north: this.checkDirections(this.robotPositions[robotIndex]!, Direction.North),
+      south: this.checkDirections(this.robotPositions[robotIndex]!, Direction.South),
+      east: this.checkDirections(this.robotPositions[robotIndex]!, Direction.East),
+      west: this.checkDirections(this.robotPositions[robotIndex]!, Direction.West)
     }
   }
 
   checkDirections(startPos: Position, direction: Direction): null | Position {
-
+    if (!startPos) {
+      return null
+    }
     let legalMove: Position | null = null
     let row = startPos.row
     let col = startPos.column
@@ -121,7 +126,6 @@ export class Board {
       if (robotEncountered) {
         break;
       }
-
       // check if obstructed
       if (this.cells[row]?.[col]?.isObstructed) {
         break

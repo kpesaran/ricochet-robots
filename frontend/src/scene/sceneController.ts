@@ -12,6 +12,7 @@ import CenterCube from './meshes/centerCube';
 import CenterChip from './meshes/centerChip';
 import { Textures } from './textures';
 import { predefinedColors } from './predefinedColors';
+import { GameController } from '../game/gameController';
 
 
 // import { cameraGoesUpDown } from '../util/animate';
@@ -26,10 +27,11 @@ export class SceneController {
     sizes: WindowSize;
     canvas: HTMLCanvasElement | null;
     controls: OrbitControls;
-    textureLoader: THREE.TextureLoader
+    textureLoader: THREE.TextureLoader;
     // need to change
-    symbol1: THREE.Texture
-    robotPieces: THREE.Mesh[]
+    symbol1: THREE.Texture;
+    robotPieces: THREE.Mesh[];
+    selectedPiece: THREE.Mesh | undefined;
     wallPieces: WallPiece[][][] | undefined
     cellArea: number
     gridSize: number
@@ -128,6 +130,15 @@ export class SceneController {
             this.pointLight!.color.set(newTargetColorRGB)
             
         })
+        this.cells.forEach((cell) => {
+
+                    
+            gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
+                r: 1,
+                g: 1,
+                b: 1,
+            });
+        })
         
         tl.to(this.camera.position, {
             x: 0,
@@ -159,9 +170,13 @@ export class SceneController {
                 repeat: 1,
                 yoyo: true,
                 ease: 'circle',
-                delay: (index * 0.005) 
+                delay: ((index * 0.005)+.2),
+                onComplete: () => {
+                    this.lightUpPaths(0)
+                }
             });
-       })
+        })
+        
     }
 
     private updateWallPositions(board: Board) {
@@ -182,19 +197,22 @@ export class SceneController {
         }
         this.wallPieces = [];
 
-        // Create new walls
+
         board.cells.forEach((row, rowIdx) => {
             this.wallPieces![rowIdx] = [];
             row.forEach((cell, colIdx) => {
                 this.wallPieces![rowIdx]![colIdx] = [];
                 cell.walls.forEach((direction: Direction, wallIdx: number) => {
-                    const wallPiece = new WallPiece(direction, 
-                        { row: rowIdx, column: colIdx }, 
-                        this.wallTextures,
-                        wallIdx
-                    );
-                    this.wallPieces![rowIdx]![colIdx]!.push(wallPiece);
-                    this.scene.add(wallPiece.mesh!);
+                    if (direction === Direction.North || Direction.East) {
+                        const wallPiece = new WallPiece(direction,
+                            { row: rowIdx, column: colIdx },
+                            this.wallTextures,
+                            wallIdx
+                        );
+                        this.wallPieces![rowIdx]![colIdx]!.push(wallPiece);
+                        this.scene.add(wallPiece.mesh!);
+                    }
+                    
                 });
             });
         });
@@ -233,65 +251,11 @@ export class SceneController {
         this.centerChip = centerChip
         this.scene.add(centerChip.mesh!)
         
-        // const tl = gsap.timeline()
-        // const offsetDistance = 5
-        
-
-        // this.cells.forEach((cell,index) => {
-        //     gsap.to((cell.material as THREE.MeshBasicMaterial) .color, {
-        //         r: 0,
-        //         g: Math.random(),
-        //         b: 0.35,
-        //         duration: 1.0,
-        //         yoyo: true,
-        //         repeat: 5,
-        //         delay: index * 0.005 ,
-        //         onComplete: () => {
-        
-        //         }
-        //     });
-        // })
-
-        // tl.to(this.camera.position, {
-        //     x: this.robotPieces[0]!.position.x - offsetDistance * Math.sin(this.robotPieces[0]!.rotation.y),
-        //     z: -15,
-        //     y: this.robotPieces[0]!.position.y, 
-        //     duration: 1.5,
-        //     onUpdate: () => {
-        //         this.camera.lookAt(new THREE.Vector3(0, 0, 0)); 
-        //     },
-
-        // });
-        
-        // tl.to(this.camera.position, {
-        //     x: 11.5,
-        //     z: 10,
-        //     y: 2,
-        //     duration: 2.5,
-        //     ease: 'ease-out',
-        //     onUpdate: () => {
-        //         this.camera.lookAt(targetCell!.row + 7.5, 0, targetCell!.column)
-        //     }
-        // })
-        // tl.to(this.camera.position, {
-        //     x: 0,
-        //     y: 14, 
-        //     z: 30,
-        //     duration:1.5,
-        //     onUpdate: () => {
-        //         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
-        //     }})
       
-        // tl.to(this.camera.position, {
-        //     x: 0,
-        //     y: 14,
-        //     z: 0,
-        //     duration: 1,
-        //     ease: 'bounce',
-        //     onUpdate: () => {
-        //         this.camera.lookAt(new THREE.Vector3(0, 0, 0))
-        //     }
-        // })
+        this.lightUpPaths(0)
+    }
+    setSelectedPiece(newSelection: THREE.Mesh) {
+        this.selectedPiece = newSelection
     }
 
     private setUpAxesHelpers() {
@@ -352,6 +316,103 @@ export class SceneController {
         this.gridPlane = gridPlane
     }
 
+    lightUpPaths(robotIndex: number) {
+ 
+        const canMoveTo = this.board.findMoves(robotIndex)
+        const currPosition = this.board.robotPositions[robotIndex]
+        
+        const cellsToLight: Position[]  = []
+
+
+        if (canMoveTo['east']) {
+            let columnToAdd = canMoveTo['east'].column
+            while (currPosition!.column < columnToAdd) {
+                cellsToLight.push({ row: currPosition!.row, column: columnToAdd })
+                columnToAdd--
+            }
+        }
+        
+        if (canMoveTo['west']) {
+            let columnToAdd = canMoveTo['west'].column;
+            while (currPosition!.column > columnToAdd) { 
+                cellsToLight.push({ row: currPosition!.row, column: columnToAdd });
+                columnToAdd++;
+            }
+        }
+ 
+        if (canMoveTo['south']) {
+            let rowToAdd = canMoveTo['south'].row;
+            while (currPosition!.row < rowToAdd) { 
+                cellsToLight.push({ row: rowToAdd, column: currPosition!.column });
+                rowToAdd--;
+            }
+        }
+
+        if (canMoveTo['north']) {
+            let rowToAdd = canMoveTo['north'].row;
+            while (currPosition!.row > rowToAdd) {
+                cellsToLight.push({ row: rowToAdd, column: currPosition!.column });
+                rowToAdd++;
+            }
+        }
+        this.lightUpCells(cellsToLight)   
+    }
+
+    private lightUpCells(cellsToLight: { row: number; column: number }[]) {
+        
+        this.cells.forEach((cell) => {
+           
+            const cellRow = Math.round(cell.position.z + 7.5); 
+            const cellColumn = Math.round(cell.position.x + 7.5); 
+
+            const isCellToLight = cellsToLight.some(
+                toLight => toLight.row === cellRow && toLight.column === cellColumn
+            );
+    
+            if (isCellToLight) {
+                gsap.to((cell.material as THREE.MeshBasicMaterial).color, {
+                    r: 1,
+                    g: 1,
+                    b: 1,
+                    duration: .7,
+                    ease: 'ease',
+                    onComplete: () => {
+                        
+                        const pathColor = new THREE.Color(1, 1, 1); 
+                        (cell.material as THREE.MeshBasicMaterial).color.set(pathColor);
+                    },
+                });
+                gsap.to(cell.scale, { // Correct property for scaling
+                    x: 1.4,
+                    y: 0.1,
+                    z: 1.4,
+                    duration: .7,
+              
+                })
+              
+            } else {
+    
+                gsap.to((cell.material as THREE.MeshBasicMaterial).color, {
+                    r: 0,
+                    g: 0,
+                    b: 0,
+                    duration: .7,
+                    ease: 'ease'
+              
+                });
+                  gsap.to(cell.scale, {
+                    x: 1.0,
+                    y: 1.0,
+                    z: 1.0,
+                      duration: .5,
+                      ease: 'expo.inOut'
+                });;
+    
+            }
+        });
+    }
+ 
+
     private placeCellMeshes() {
         const cellPieces : CellPiece[] = []
         this.board.cells.forEach((row,row_idx) => {
@@ -368,7 +429,6 @@ export class SceneController {
     destroyRobotMeshes() {
         this.robotPieces.forEach(robotMesh => {
             robotMesh.geometry.dispose()
-            // If robotMesh.material is an array of materials
             if (Array.isArray(robotMesh.material)) {
                 robotMesh.material.forEach(mat => {
                     if (mat && typeof mat.dispose === 'function') {
@@ -410,18 +470,30 @@ export class SceneController {
             const robotPiece = new RobotPiece(this.board.robots[i]!, this.board.robotPositions[i]!);
             this.scene.add(robotPiece.mesh!)
             this.robotPieces.push(robotPiece.mesh!)
+            
         }
+        
+        this.setSelectedPiece(this.robotPieces[0]!)
+        
     }
 
-    updateTargetRobot() {
-        const robotPosition = this.board.robotPositions[0]
-        const robotMesh = this.robotPieces[0]
-        
+    updateRobot(robotIndex: number, gameController: GameController) {
+        const robotPosition = this.board.robotPositions[robotIndex]
+        const robotMesh = this.robotPieces[robotIndex]
+
         gsap.to(robotMesh!.position, {
-            x: robotPosition.column - 7.5,
-            z: robotPosition.row - 7.5,
-            duration: .8
+            x: robotPosition!.column - 7.5,
+            z: robotPosition!.row - 7.5,
+            duration: .8,
+            onComplete: () => {
+                this.lightUpPaths(robotIndex)
+                if (!gameController.isMenuOpen()) {
+                    gameController.unlockControls()
+                }
+                
+            }
         })
+        
   
     } 
 
@@ -468,25 +540,34 @@ export class SceneController {
           const intersectPoint = gridIntersects[0]!.point;
           const placedCol = Math.round(intersectPoint.x + 7.5)
           const placedRow = Math.round(intersectPoint.z + 7.5)
-          const newPosition = {row: placedRow, column: placedCol}
+            const newPosition = { row: placedRow, column: placedCol }
+            const robotIndex = this.findRobotPosition(selectedPiece)
         
-          let robotIndex: number | null = null
-          for (let i = 0; i < this.robotPieces.length; i++) {
-          
-            if (selectedPiece === this.robotPieces[i]) {
-              robotIndex = i
-            }
-        } 
+
         return { newPosition, robotIndex };
         } 
         return null
     }
 
-    checkNonTargetRobotIntersections() {
+   
+
+
+    findRobotPosition(selectedPiece: THREE.Mesh) {
+        let robotIndex: number | null = null
+              for (let i = 0; i < this.robotPieces.length; i++) {
+              
+                if (selectedPiece === this.robotPieces[i]) {
+                  robotIndex = i
+                }
+        } 
+        return robotIndex
+      }
+
+    checkRobotIntersections() {
        
         this.rayCaster.setFromCamera(this.mouse, this.camera);
     
-        return this.rayCaster.intersectObjects(this.robotPieces.slice(1));
+        return this.rayCaster.intersectObjects(this.robotPieces);
     }
     
     moveRobot(selectedPiece: THREE.Mesh) {
@@ -525,7 +606,7 @@ export class SceneController {
         
         if (this.robotPieces.length > 0) {
             
-            const robotIntersects = this.rayCaster.intersectObjects(this.robotPieces.slice(1))  
+            const robotIntersects = this.rayCaster.intersectObjects(this.robotPieces)  
                 
             if (robotIntersects.length > 0) {
                 this.robotPieces.forEach(piece => piece.scale.set(1, 1, 1));
@@ -537,7 +618,6 @@ export class SceneController {
             }
         } 
      
-
         this.controls.update()
         this.renderer.render(this.scene, this.camera)
         window.requestAnimationFrame(this.tick)

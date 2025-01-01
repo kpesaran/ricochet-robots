@@ -15,10 +15,11 @@ export class GameController {
     UIController: UIController
     boardHistory: RobotStateHistory
     menuOpen: Boolean
+    controlsLocked: Boolean
     
     constructor() {
         const newBoard = new BoardBuilder()
-       
+        this.controlsLocked = false
         this.board = newBoard.build()
         this.sceneController = new SceneController('canvas.webgl', this.board)
         this.UIController = new UIController()
@@ -31,12 +32,9 @@ export class GameController {
         this.boardHistory.initialBoardState(this.board)
         this.boardHistory = new RobotStateHistory()
         this.sceneController.placeRobots(this.board)
+        this.sceneController.lightUpPaths(0)
         this.UIController.resetCount()
-        // if (this.menuOpen) {
-            
-        //     this.menuOpen = false
-        // 
-        
+        this.unlockControls()
     }
 
     newGame() {
@@ -44,9 +42,8 @@ export class GameController {
         this.boardHistory = new RobotStateHistory()
         const newBoard = new BoardBuilder()
         this.board = newBoard.buildRandom()
-        this.sceneController.updateBoardPositions(this.board
-        )     
-        
+        this.sceneController.updateBoardPositions(this.board) 
+        this.unlockControls()
     }
 
     reverseLastMove() {
@@ -60,11 +57,12 @@ export class GameController {
     }
 
     handleWin() {
-        this.UIController.toggleMainMenu()
+        this.showMenu()
+        this.UIController.toggleMainMenu(this)
     }
 
-    slideTargetRobot(direction: Direction) {
-        let endingPositions = this.board.findMoves()
+    slideRobot(robotIndex: number, direction: Direction) {
+        let endingPositions = this.board.findMoves(robotIndex)
         let newPos 
         if (direction === Direction.North) {
             newPos = endingPositions.north
@@ -80,11 +78,14 @@ export class GameController {
         }
         if (newPos) {
             this.boardHistory.addState(this.board)
-            this.board.updateRobotPosition(newPos, 0)
-            this.sceneController.updateTargetRobot()
+            this.lockControls()
+            console.log(this.isLocked())
+            this.board.updateRobotPosition(newPos, robotIndex)
+            this.sceneController.updateRobot(robotIndex, this)
             this.UIController.increaseMoveCount()
         }
-        if (this.checkWinCondition()) {
+        if (robotIndex === 0 && this.checkWinCondition()) {
+            console.log('hits')
             this.handleWin()
             return
         }
@@ -96,6 +97,31 @@ export class GameController {
         this.sceneController.placeRobots(this.board)
         this.UIController.increaseMoveCount()
     }
+
+    lockControls() {
+        this.controlsLocked = true
+    }
+
+    unlockControls() {
+        this.controlsLocked = false
+    }
+
+    isLocked() {
+        return this.controlsLocked
+    }
+
+    showMenu() {
+        this.menuOpen = true
+    }
+
+    hideMenu() {
+        this.menuOpen = false 
+    }
+
+    isMenuOpen() {
+        return this.menuOpen
+    }
+
 }
    
     
