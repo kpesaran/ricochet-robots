@@ -1,6 +1,8 @@
 
 // Manages the display of the move count, and probably least moves possible display and newGame 
 
+import { GameController } from "../game/gameController";
+
 
 export default class UIController {
 
@@ -42,13 +44,15 @@ export default class UIController {
         }
     }
 
-    toggleMainMenu() {
+    toggleMainMenu(gameController: GameController) {
         const mainMenuElement = window.document.getElementById("menu-screen");
         document.getElementById('menu-screen-final-score')!.textContent = `${this.moveCount}`
         
         if (mainMenuElement!.style.display === "flex") {
+          gameController.hideMenu()
           mainMenuElement!.style.display = "none"; 
-      } else {
+        } else {
+          gameController.showMenu()
           mainMenuElement!.style.display = "flex"; 
       }
       }

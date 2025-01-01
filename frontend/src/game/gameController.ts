@@ -34,6 +34,7 @@ export class GameController {
         this.sceneController.placeRobots(this.board)
         this.sceneController.lightUpPaths(0)
         this.UIController.resetCount()
+        this.unlockControls()
     }
 
     newGame() {
@@ -42,6 +43,7 @@ export class GameController {
         const newBoard = new BoardBuilder()
         this.board = newBoard.buildRandom()
         this.sceneController.updateBoardPositions(this.board) 
+        this.unlockControls()
     }
 
     reverseLastMove() {
@@ -55,7 +57,8 @@ export class GameController {
     }
 
     handleWin() {
-        this.UIController.toggleMainMenu()
+        this.showMenu()
+        this.UIController.toggleMainMenu(this)
     }
 
     slideRobot(robotIndex: number, direction: Direction) {
@@ -105,6 +108,18 @@ export class GameController {
 
     isLocked() {
         return this.controlsLocked
+    }
+
+    showMenu() {
+        this.menuOpen = true
+    }
+
+    hideMenu() {
+        this.menuOpen = false 
+    }
+
+    isMenuOpen() {
+        return this.menuOpen
     }
 
 }

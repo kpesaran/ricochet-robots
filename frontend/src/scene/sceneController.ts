@@ -487,7 +487,10 @@ export class SceneController {
             duration: .8,
             onComplete: () => {
                 this.lightUpPaths(robotIndex)
-                gameController.unlockControls()
+                if (!gameController.isMenuOpen()) {
+                    gameController.unlockControls()
+                }
+                
             }
         })
         

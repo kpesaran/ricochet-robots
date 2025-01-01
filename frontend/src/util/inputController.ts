@@ -38,26 +38,23 @@ export default class InputController {
 
     document.getElementById("reset-game-menu-screen-btn")!.addEventListener('click', () => {
       gameController.resetGame()
-      UIController.toggleMainMenu()
+      UIController.toggleMainMenu(gameController)
+      
     })
 
     document.getElementById("back-to-board-game-menu-screen-btn")?.addEventListener('click', () => {
-      UIController.toggleMainMenu()
+
+      UIController.toggleMainMenu(gameController)
     })
 
     document.getElementById("new-game-menu-screen-btn")?.addEventListener('click', () => {
       gameController.newGame()
-      UIController.toggleMainMenu()
-    })
-      
-    document.getElementById("instructions-menu-screen-btn")?.addEventListener('click', () => {
-      UIController.toggleInstructions()
+      UIController.toggleMainMenu(gameController)
     })
   }
 
   getMinMoveCount() {
     // Send a request to webAssembly to get the  minimum move count (or use length of path of cells)
-
     return
   }
 
@@ -70,6 +67,7 @@ export default class InputController {
 
   handleKeydown(event: KeyboardEvent, gameController: GameController, sceneController: SceneController) {
     if (gameController.isLocked()) {
+      console.log(gameController.isLocked())
       return 
     }
     const robotIndex = sceneController.findRobotPosition(sceneController.selectedPiece!)!
